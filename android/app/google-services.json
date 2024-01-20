@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "102843868967",
+    "project_id": "heybaby-d341f",
+    "storage_bucket": "heybaby-d341f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102843868967:android:33b53c12148a2bc6322b02",
+        "android_client_info": {
+          "package_name": "com.example.heybaby"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGhWR7Wn_SpSlCr3MIdE6FsuoQTkH5rnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,10 @@
+var a = await _authService.createPerson(
+                      "ANIL", "anilya@garantibbva.com.tr", "Test123456");
+                  // var a = await _authService.anonymSignIn();
+
+
+                    var a = await _authService.signIn(
+                      "anilya@garantibbva.com.tr", "Test123456");,
+
+
+  AuthService _authService = AuthService();

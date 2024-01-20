@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAwtvSmkcBrfal8tXe_cYEQnL7upmTg94U</string>
+	<key>GCM_SENDER_ID</key>
+	<string>102843868967</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.heybaby.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>heybaby-d341f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>heybaby-d341f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:102843868967:ios:03a15c3407ee69ba322b02</string>
+</dict>
+</plist>
