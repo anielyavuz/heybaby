@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heybaby/functions/authFunctions.dart';
+import 'package:heybaby/functions/chatgptService.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/anasayfa.dart';
 import 'package:heybaby/pages/authentication.dart';
@@ -19,9 +19,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  AuthService _authService = AuthService(); // AuthService'ı tanımla
+  AuthService _authService = AuthService();
   int _selectedIndex = 0;
-  Map<String, dynamic>? userData; // Veriyi burada tutuyoruz
+  Map<String, dynamic>? userData;
   bool _shouldFetchUserData = true;
 
   List<String> storyImages = [
@@ -41,16 +41,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Her build anında veriyi çekiyoruz
-    // Her build anında veriyi çekiyoruz
-    // Sadece userData null ise veya güncelleme gerçekleştiyse çağrı yapılır
     if (userData == null || _shouldFetchUserData) {
       _fetchUserData();
     }
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Color.fromARGB(255, 211, 94, 221),
         title: Text("HeyBaby"),
       ),
       body: _buildBody(),
@@ -82,6 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Hesap',
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showChatModalBottomSheet(context);
+        },
+        child: FaIcon(FontAwesomeIcons.question),
       ),
     );
   }
@@ -135,5 +138,75 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // Güncelleme yapılması gerekip gerekmediğini kontrol etmek için bir metod
+  void _showChatModalBottomSheet(BuildContext context) {
+    TextEditingController _chatController = TextEditingController();
+    List<String> chatHistory = [];
+
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Chat with ChatGPT',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: chatHistory.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(chatHistory[index]),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _chatController,
+                          decoration: InputDecoration(
+                            hintText: 'Soru sor...',
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          String userQuestion = _chatController.text;
+                          setState(() {
+                            chatHistory.add('Siz: $userQuestion');
+                          });
+
+                          // ChatGPTService'i kullanarak soruyu gönderip cevabı al
+                          String chatGPTResponse =
+                              await ChatGPTService.sendQuestion(userQuestion);
+
+                          setState(() {
+                            chatHistory.add(chatGPTResponse);
+                          });
+
+                          _chatController.clear();
+                        },
+                        child: Text('Gönder'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }

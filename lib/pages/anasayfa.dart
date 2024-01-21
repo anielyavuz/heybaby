@@ -47,9 +47,16 @@ class AnaSayfa extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 // Resim
-                Image.network(
-                  'https://placekitten.com/300/200',
-                  fit: BoxFit.cover,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Image.network(
+                    'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/Leonardo_Diffusion_XL_A_baby_cartoon_in_the_womb_make_its_age_2.jpg?alt=media&token=f1a7f0dc-b9b5-46e7-891f-ca4a76c78712',
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 // Alıntılar Container'ı
                 Container(
