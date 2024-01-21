@@ -52,7 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
         selectedItemColor: Colors.deepPurple,
         unselectedItemColor: Colors.grey,
         currentIndex: _selectedIndex,
@@ -153,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Chat with ChatGPT',
+                    'Chat with HeyBaby',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
