@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heybaby/pages/storyImages.dart';
 
 class AnaSayfa extends StatelessWidget {
   final List<String> storyImages;
@@ -112,28 +113,6 @@ class AnaSayfa extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class StoryScreen extends StatelessWidget {
-  final List<String> storyImages;
-
-  const StoryScreen({Key? key, required this.storyImages}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // StoryScreen widget'ı için gerekli ekran tasarımı buraya eklenebilir
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Story Screen'),
-      ),
-      body: ListView.builder(
-        itemCount: storyImages.length,
-        itemBuilder: (context, index) {
-          return Image.network(storyImages[index]);
-        },
-      ),
     );
   }
 }
