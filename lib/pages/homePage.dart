@@ -23,6 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   Map<String, dynamic>? userData;
   bool _shouldFetchUserData = true;
+  bool _isActivitiesExpanded = true;
 
   List<String> storyImages = [
     'https://placekitten.com/100/100',
@@ -46,11 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 211, 94, 221),
-        title: Text("HeyBaby"),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: _buildBody(),
       ),
-      body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         selectedItemColor: Colors.deepPurple,
