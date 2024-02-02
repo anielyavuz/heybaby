@@ -16,50 +16,9 @@ class AnaSayfa extends StatelessWidget {
       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Positioned(
-          bottom: 10,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.95,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Yaklaşan Aktiviteler',
-                    style: TextStyle(
-                        fontSize: 20.0, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                ExpansionTile(
-                  title: Text('Yaklaşan Aktiviteler'),
-                  children: [
-                    ListTile(
-                      title: Text('Yürüyüş'),
-                      subtitle: Text('23 Ocak 2024, 15:00'),
-                    ),
-                    ListTile(
-                      title: Text('Kahve Buluşması'),
-                      subtitle: Text('25 Ocak 2024, 18:30'),
-                    ),
-                    ListTile(
-                      title: Text('Kitap Okuma'),
-                      subtitle: Text('27 Ocak 2024, 20:00'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      
         // Story Circles
         Padding(
-          padding: const EdgeInsets.only(top:20),
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
               Container(
@@ -117,17 +76,56 @@ class AnaSayfa extends StatelessWidget {
                 onFunction4Pressed: () {
                   print("Test1");
                 },
-              function1Description: 'Su',
-              function2Description: 'Kilo',
-              function3Description: 'İlaç/Vitamin',
-              function4Description: 'Aktivite',
+                function1Description: 'Su',
+                function2Description: 'Kilo',
+                function3Description: 'İlaç/Vitamin',
+                function4Description: 'Aktivite',
               ),
             ],
           ),
         ),
-        
+
         // SizedBox(height: 10),
-        
+        Positioned(
+          bottom: 10,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.95,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Yaklaşan Aktiviteler',
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                ExpansionTile(
+                  title: Text('Yaklaşan Aktiviteler'),
+                  children: [
+                    ListTile(
+                      title: Text('Yürüyüş'),
+                      subtitle: Text('23 Ocak 2024, 15:00'),
+                    ),
+                    ListTile(
+                      title: Text('Kahve Buluşması'),
+                      subtitle: Text('25 Ocak 2024, 18:30'),
+                    ),
+                    ListTile(
+                      title: Text('Kitap Okuma'),
+                      subtitle: Text('27 Ocak 2024, 20:00'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
