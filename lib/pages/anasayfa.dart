@@ -81,35 +81,39 @@ class AnaSayfa extends StatelessWidget {
         ),
         // Aktiviteler Container'ı
         Container(
-          height: MediaQuery.of(context).size.height * 0.25,
           width: MediaQuery.of(context).size.width * 0.95,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black),
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 5.0),
-                Text(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
                   'Yaklaşan Aktiviteler',
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                 ),
-                ListTile(
-                  title: Text('Yürüyüş'),
-                  subtitle: Text('23 Ocak 2024, 15:00'),
-                ),
-                ListTile(
-                  title: Text('Kahve Buluşması'),
-                  subtitle: Text('25 Ocak 2024, 18:30'),
-                ),
-                ListTile(
-                  title: Text('Kitap Okuma'),
-                  subtitle: Text('27 Ocak 2024, 20:00'),
-                ),
-              ],
-            ),
+              ),
+              ExpansionTile(
+                title: Text('Yaklaşan Aktiviteler'),
+                children: [
+                  ListTile(
+                    title: Text('Yürüyüş'),
+                    subtitle: Text('23 Ocak 2024, 15:00'),
+                  ),
+                  ListTile(
+                    title: Text('Kahve Buluşması'),
+                    subtitle: Text('25 Ocak 2024, 18:30'),
+                  ),
+                  ListTile(
+                    title: Text('Kitap Okuma'),
+                    subtitle: Text('27 Ocak 2024, 20:00'),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ],
