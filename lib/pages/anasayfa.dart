@@ -97,16 +97,12 @@ class AnaSayfa extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
+                ExpansionTile(
+                  title: Text(
                     'Yaklaşan Aktiviteler',
                     style:
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
-                ),
-                ExpansionTile(
-                  title: Text('Yaklaşan Aktiviteler'),
                   children: [
                     ListTile(
                       title: Text('Yürüyüş'),

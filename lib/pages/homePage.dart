@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isActivitiesExpanded = true;
 
   List<String> storyImages = [
-    'https://placekitten.com/100/100',
+    'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
     'https://placekitten.com/101/100',
     'https://placekitten.com/102/100',
     'https://placekitten.com/103/100',
