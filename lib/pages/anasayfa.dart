@@ -75,10 +75,10 @@ class AnaSayfa extends StatelessWidget {
                 onFunction4Pressed: () {
                   print("Test1");
                 },
-                function1Description: '',
-                function2Description: '',
-                function3Description: '',
-                function4Description: '',
+              function1Description: 'Su',
+              function2Description: 'Kilo',
+              function3Description: 'İlaç/Vitamin',
+              function4Description: 'Aktivite',
               ),
             ],
           ),
