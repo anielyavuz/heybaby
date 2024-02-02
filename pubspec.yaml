@@ -44,6 +44,7 @@ dependencies:
   font_awesome_flutter: ^10.6.0
   http: ^1.2.0
   firebase_messaging: ^14.7.10
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -55,7 +56,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-
+  
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/HeyBabyLogo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

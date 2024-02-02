@@ -84,7 +84,20 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           _showChatModalBottomSheet(context);
         },
-        child: FaIcon(FontAwesomeIcons.question),
+        child: Container(
+          width: 56.0, // Genişlik ayarı
+          height: 56.0, // Yükseklik ayarı
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: NetworkImage(
+                'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/aiChatBotIcon2.jpg?alt=media&token=9b56d1e4-bb29-431d-bdc3-d9a4b880562c',
+              ),
+              fit: BoxFit
+                  .fill, // Resmi butona tam olarak dolduracak şekilde ayarla
+            ),
+          ),
+        ),
       ),
     );
   }
