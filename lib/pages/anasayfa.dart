@@ -32,8 +32,10 @@ class AnaSayfa extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                StoryScreen(storyImages: storyImages),
+                            builder: (context) => StoryScreen(
+                              storyImages: storyImages,
+                              startingPage: index,
+                            ),
                           ),
                         );
                       },
