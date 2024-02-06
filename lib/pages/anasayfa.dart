@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
+import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
 
 class AnaSayfa extends StatelessWidget {
   final List<String> storyImages;
@@ -52,18 +53,7 @@ class AnaSayfa extends StatelessWidget {
               ),
               SizedBox(height: 10),
               // Resim
-              Container(
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: MediaQuery.of(context).size.height * 0.25,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Image.network(
-                  'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/Leonardo_Diffusion_XL_A_baby_cartoon_in_the_womb_make_its_age_2.jpg?alt=media&token=f1a7f0dc-b9b5-46e7-891f-ca4a76c78712',
-                  fit: BoxFit.cover,
-                ),
-              ),
+              TrimesterProgressWidget(),
               SizedBox(height: 10),
               FunctionsWidget(
                 onFunction1Pressed: () {
