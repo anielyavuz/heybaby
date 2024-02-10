@@ -27,7 +27,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentDate = DateTime(2024, 1, 12);
+    DateTime currentDate = DateTime(2024, 4, 9);
     DateTime startDate = DateTime(2024, 1, 1); // Başlangıç tarihi
     DateTime endDate = DateTime(2024, 10, 11); // Bitiş tarihi
 
@@ -46,18 +46,21 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     String _tahminiKilo = "";
     String _tahminiBoy = "";
     String _imageLink = "";
+    String _gifLink = "";
     String _benzerlik = "";
     if (jsonList.isNotEmpty) {
       if (weeks >= 4) {
-        _tahminiKilo = jsonList[weeks - 4]['Kilo'];
-        _tahminiBoy = jsonList[weeks - 4]['Boy'];
-        _imageLink = jsonList[weeks - 4]['Foto_Link'];
-        _benzerlik = jsonList[weeks - 4]['Benzerlik'];
+        _tahminiKilo = jsonList[weeks - 4]['kilo'];
+        _tahminiBoy = jsonList[weeks - 4]['boy'];
+        _imageLink = jsonList[weeks - 4]['foto_link'];
+        _benzerlik = jsonList[weeks - 4]['benzerlik'];
+        _gifLink = jsonList[weeks - 4]['gif_link'];
       } else {
-        _tahminiKilo = jsonList[0]['Kilo'];
-        _tahminiBoy = jsonList[0]['Boy'];
-        _imageLink = jsonList[0]['Foto_Link'];
-        _benzerlik = jsonList[0]['Benzerlik'];
+        _tahminiKilo = jsonList[0]['kilo'];
+        _tahminiBoy = jsonList[0]['boy'];
+        _imageLink = jsonList[0]['foto_link'];
+        _benzerlik = jsonList[0]['benzerlik'];
+        _gifLink = jsonList[0]['gif_link'];
       }
     }
 
@@ -192,7 +195,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
           ),
           child: _imageLink != ""
               ? Image.network(
-                  _imageLink,
+                  _gifLink,
                   fit: BoxFit.cover,
                   loadingBuilder: (BuildContext context, Widget child,
                       ImageChunkEvent? loadingProgress) {
@@ -200,7 +203,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
                       return child; // Yükleme tamamlandıysa görüntüyü göster
                     } else {
                       return Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fhashas_tohumu_image_week4_low.jpg?alt=media&token=064a490f-3dcf-45d0-a04e-1f833531a8a4', // Yükleme sürecinde gösterilecek ikinci bir GIF
+                        _imageLink, // Yükleme sürecinde gösterilecek ikinci bir GIF
                         fit: BoxFit.cover,
                       );
                     }

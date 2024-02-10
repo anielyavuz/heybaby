@@ -1,261 +1,299 @@
 [
     {
-        "Hafta": 4,
-        "Benzerlik": "Haşhaş Tohumu",
-        "Boy": "2-3 mm",
-        "Kilo": "1 g",
-        "Foto_Link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fhashas_tohumu_gif_week4_low.jpg.gif?alt=media&token=91a9fb33-be2d-4e4f-9cd6-759f814ea401"
+      "hafta": "4",
+      "benzerlik": "haşhaş tohumu",
+      "boy": "2-3 mm",
+      "kilo": "1 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fhashas_tohumu_image_week4_low.jpg?alt=media&token=064a490f-3dcf-45d0-a04e-1f833531a8a4",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fhashas_tohumu_gif_week4_low.jpg.gif?alt=media&token=91a9fb33-be2d-4e4f-9cd6-759f814ea401"
     },
     {
-        "Hafta": 5,
-        "Benzerlik": "Susam",
-        "Boy": "3 mm",
-        "Kilo": "1 g",
-        "Foto_Link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fsusam_image_week5_low.jpg?alt=media&token=7e4d6a8f-55e4-4f26-aeb7-4fdbd4ae4b01"
+      "hafta": "5",
+      "benzerlik": "susam",
+      "boy": "3 mm",
+      "kilo": "1 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fsusam_image_week5_low.jpg?alt=media&token=7e4d6a8f-55e4-4f26-aeb7-4fdbd4ae4b01",
+      "gif_link": ""
     },
     {
-        "Hafta": 6,
-        "Benzerlik": "Bezelye",
-        "Boy": "4-6 mm",
-        "Kilo": "1 g",
-        "Foto_Link": ""
+      "hafta": "6",
+      "benzerlik": "bezelye",
+      "boy": "4-6 mm",
+      "kilo": "1 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fbezelye_image_week6_low.jpg?alt=media&token=9a729c15-6f59-498d-840e-ffc25229469c",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fbezelye.gif?alt=media&token=88d97007-642b-41e6-82d0-0ad1170d318e"
     },
     {
-        "Hafta": 7,
-        "Benzerlik": "Yaban Mersini",
-        "Boy": "7-8 mm",
-        "Kilo": "1 g",
-        "Foto_Link": ""
+      "hafta": "7",
+      "benzerlik": "yaban mersini",
+      "boy": "7-8 mm",
+      "kilo": "1 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fyaban_mersini_image_week7_low.jpg?alt=media&token=46b1f572-53be-4a44-a7bf-fde2aa950d0d",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fyabanmersini.gif?alt=media&token=1fdbea07-2324-40b9-a9f1-dc43f40a5789"
     },
     {
-        "Hafta": 8,
-        "Benzerlik": "Barbunya",
-        "Boy": "15 mm",
-        "Kilo": "1 g",
-        "Foto_Link": ""
+      "hafta": "8",
+      "benzerlik": "barbunya",
+      "boy": "15 mm",
+      "kilo": "1 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fbarbunya_image_week8.jpg?alt=media&token=1baedc45-39f2-455c-8c84-30d21f238558",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fbarbunya.gif?alt=media&token=47551236-1eec-4a60-aa09-0d7f97ce4219"
     },
     {
-        "Hafta": 9,
-        "Benzerlik": "Üzüm Tanesi",
-        "Boy": "2 cm",
-        "Kilo": "2 g",
-        "Foto_Link": ""
+      "hafta": "9",
+      "benzerlik": "üzüm tanesi",
+      "boy": "2 cm",
+      "kilo": "2 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fuzum_tanesi_image_week9_low.jpg?alt=media&token=a701ffae-a00c-46d3-adb4-8919321be321",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fuzum.gif?alt=media&token=f3c5f579-1206-45b8-a698-98429194acfa"
     },
     {
-        "Hafta": 10,
-        "Benzerlik": "Çilek",
-        "Boy": "3 cm",
-        "Kilo": "4 g",
-        "Foto_Link": ""
+      "hafta": "10",
+      "benzerlik": "çilek",
+      "boy": "3 cm",
+      "kilo": "4 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek10_cilek_image_low.jpg?alt=media&token=c36e871e-5a27-4846-90db-dee1d26c0ac8",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fcilek.gif?alt=media&token=b7adf83e-a792-44d6-aa62-28ee259a35b9"
     },
     {
-        "Hafta": 11,
-        "Benzerlik": "İncir",
-        "Boy": "6 cm",
-        "Kilo": "7 g",
-        "Foto_Link": ""
+      "hafta": "11",
+      "benzerlik": "incir",
+      "boy": "6 cm",
+      "kilo": "7 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek11_incir_image_low.jpg?alt=media&token=30072d66-2ffd-4356-a149-6896078fac5b",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fincir.gif?alt=media&token=1b06a1ef-47d1-4b6e-805a-170a57327fca"
     },
     {
-        "Hafta": 12,
-        "Benzerlik": "Misket Limonu",
-        "Boy": "8 cm",
-        "Kilo": "14 g",
-        "Foto_Link": ""
+      "hafta": "12",
+      "benzerlik": "misket limonu",
+      "boy": "8 cm",
+      "kilo": "14 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek12_misket_limonu_image_low.jpg?alt=media&token=11596e9b-568b-4b2b-a806-56ad2da8ed65",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2FmisketLimon.gif?alt=media&token=341d2f70-3483-4f59-8b1e-8bba50497e18"
     },
     {
-        "Hafta": 13,
-        "Benzerlik": "Limon",
-        "Boy": "10 cm",
-        "Kilo": "23 g",
-        "Foto_Link": ""
+      "hafta": "13",
+      "benzerlik": "limon",
+      "boy": "10 cm",
+      "kilo": "23 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek13_limon_image_low.jpg?alt=media&token=33e0229d-a318-4611-bed2-2917c0171bb5",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Flimon.gif?alt=media&token=c6045725-9152-4409-8f24-225e95f1c76c"
     },
     {
-        "Hafta": 14,
-        "Benzerlik": "Şeftali",
-        "Boy": "10-11 cm",
-        "Kilo": "43 g",
-        "Foto_Link": ""
+      "hafta": "14",
+      "benzerlik": "şeftali",
+      "boy": "10-11 cm",
+      "kilo": "43 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek14_seftali_image_low.jpg?alt=media&token=d490cbca-795a-4836-8bb9-5445f794af1d",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fseftali.gif?alt=media&token=b78cd8e4-c304-40c8-970a-100ecc27fdd4"
     },
     {
-        "Hafta": 15,
-        "Benzerlik": "Elma",
-        "Boy": "12 cm",
-        "Kilo": "70 g",
-        "Foto_Link": ""
+      "hafta": "15",
+      "benzerlik": "elma",
+      "boy": "12 cm",
+      "kilo": "70 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek15_elma_image_low.jpg?alt=media&token=7ed2c918-8cf4-4fe0-9557-8d5fce1d843c",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Felma.gif?alt=media&token=2785a0e1-0bcd-4730-9db1-72812c37b3b4"
     },
     {
-        "Hafta": 16,
-        "Benzerlik": "Avokado",
-        "Boy": "13 cm",
-        "Kilo": "100 g",
-        "Foto_Link": ""
+      "hafta": "16",
+      "benzerlik": "avokado",
+      "boy": "13 cm",
+      "kilo": "100 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek16_avokado_image_low.jpg?alt=media&token=13c916c9-1eb1-4ecc-9e3a-d130e5dcf693",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Favokado.gif?alt=media&token=14ec3c22-2f2e-44b7-8067-2806534acf33"
     },
     {
-        "Hafta": 17,
-        "Benzerlik": "Nar",
-        "Boy": "18 cm",
-        "Kilo": "140 g",
-        "Foto_Link": ""
+      "hafta": "17",
+      "benzerlik": "nar",
+      "boy": "18 cm",
+      "kilo": "140 g",
+      "foto_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/childImages%2Fweek17_nar_image_low.jpg?alt=media&token=9713a63e-72bd-406d-8168-66530f874488",
+      "gif_link": "https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/gifs%2Fnar.gif?alt=media&token=b9cd3f1d-4503-488c-9e5a-2762600acab7"
     },
     {
-        "Hafta": 18,
-        "Benzerlik": "Enginar",
-        "Boy": "20 cm",
-        "Kilo": "190 g",
-        "Foto_Link": ""
+      "hafta": "18",
+      "benzerlik": "enginar",
+      "boy": "20 cm",
+      "kilo": "190 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 19,
-        "Benzerlik": "Mango",
-        "Boy": "22 cm",
-        "Kilo": "240 g",
-        "Foto_Link": ""
+      "hafta": "19",
+      "benzerlik": "mango",
+      "boy": "22 cm",
+      "kilo": "240 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 20,
-        "Benzerlik": "Muz",
-        "Boy": "25-26 cm",
-        "Kilo": "300 g",
-        "Foto_Link": ""
+      "hafta": "20",
+      "benzerlik": "muz",
+      "boy": "25-26 cm",
+      "kilo": "300 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 21,
-        "Benzerlik": "Havuç",
-        "Boy": "27 cm",
-        "Kilo": "360 g",
-        "Foto_Link": ""
+      "hafta": "21",
+      "benzerlik": "havuç",
+      "boy": "27 cm",
+      "kilo": "360 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 22,
-        "Benzerlik": "Hindistan Cevizi",
-        "Boy": "30 cm",
-        "Kilo": "430 g",
-        "Foto_Link": ""
+      "hafta": "22",
+      "benzerlik": "hindistan cevizi",
+      "boy": "30 cm",
+      "kilo": "430 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 23,
-        "Benzerlik": "Greyfurt",
-        "Boy": "32 cm",
-        "Kilo": "500 g",
-        "Foto_Link": ""
+      "hafta": "23",
+      "benzerlik": "greyfurt",
+      "boy": "32 cm",
+      "kilo": "500 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 24,
-        "Benzerlik": "Kavun",
-        "Boy": "35 cm",
-        "Kilo": "600 g",
-        "Foto_Link": ""
+      "hafta": "24",
+      "benzerlik": "kavun",
+      "boy": "35 cm",
+      "kilo": "600 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 25,
-        "Benzerlik": "Karnabahar",
-        "Boy": "36 cm",
-        "Kilo": "660 g",
-        "Foto_Link": ""
+      "hafta": "25",
+      "benzerlik": "karnabahar",
+      "boy": "36 cm",
+      "kilo": "660 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 26,
-        "Benzerlik": "Kabak",
-        "Boy": "36 cm",
-        "Kilo": "760 g",
-        "Foto_Link": ""
+      "hafta": "26",
+      "benzerlik": "kabak",
+      "boy": "36 cm",
+      "kilo": "760 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 27,
-        "Benzerlik": "Kıvırcık",
-        "Boy": "37 cm",
-        "Kilo": "875 g",
-        "Foto_Link": ""
+      "hafta": "27",
+      "benzerlik": "kıvırcık",
+      "boy": "37 cm",
+      "kilo": "875 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 28,
-        "Benzerlik": "Patlıcan",
-        "Boy": "38 cm",
-        "Kilo": "1005 g",
-        "Foto_Link": ""
+      "hafta": "28",
+      "benzerlik": "patlıcan",
+      "boy": "38 cm",
+      "kilo": "1005 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 29,
-        "Benzerlik": "Tatume Kabağı",
-        "Boy": "39 cm",
-        "Kilo": "1150 g",
-        "Foto_Link": ""
+      "hafta": "29",
+      "benzerlik": "tatume kabağı",
+      "boy": "39 cm",
+      "kilo": "1150 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 30,
-        "Benzerlik": "Lahana",
-        "Boy": "40 cm",
-        "Kilo": "1320 g",
-        "Foto_Link": ""
+      "hafta": "30",
+      "benzerlik": "lahana",
+      "boy": "40 cm",
+      "kilo": "1320 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 31,
-        "Benzerlik": "Kuşkonmaz Demeti",
-        "Boy": "43 cm",
-        "Kilo": "1500 g",
-        "Foto_Link": ""
+      "hafta": "31",
+      "benzerlik": "kuşkonmaz demeti",
+      "boy": "43 cm",
+      "kilo": "1500 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 32,
-        "Benzerlik": "Su Kabağı",
-        "Boy": "45 cm",
-        "Kilo": "1700 g",
-        "Foto_Link": ""
+      "hafta": "32",
+      "benzerlik": "su kabağı",
+      "boy": "45 cm",
+      "kilo": "1700 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 33,
-        "Benzerlik": "Kereviz",
-        "Boy": "46 cm",
-        "Kilo": "1920 g",
-        "Foto_Link": ""
+      "hafta": "33",
+      "benzerlik": "kereviz",
+      "boy": "46 cm",
+      "kilo": "1920 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 34,
-        "Benzerlik": "Kavun",
-        "Boy": "47 cm",
-        "Kilo": "2150 g",
-        "Foto_Link": ""
+      "hafta": "34",
+      "benzerlik": "kavun",
+      "boy": "47 cm",
+      "kilo": "2150 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 35,
-        "Benzerlik": "Ananas",
-        "Boy": "47 cm",
-        "Kilo": "2385 g",
-        "Foto_Link": ""
+      "hafta": "35",
+      "benzerlik": "ananas",
+      "boy": "47 cm",
+      "kilo": "2385 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 36,
-        "Benzerlik": "Papaya",
-        "Boy": "47-51 cm",
-        "Kilo": "2620 g",
-        "Foto_Link": ""
+      "hafta": "36",
+      "benzerlik": "papaya",
+      "boy": "47-51 cm",
+      "kilo": "2620 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 37,
-        "Benzerlik": "Marul",
-        "Boy": "48-51 cm",
-        "Kilo": "2860 g",
-        "Foto_Link": ""
+      "hafta": "37",
+      "benzerlik": "marul",
+      "boy": "48-51 cm",
+      "kilo": "2860 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 38,
-        "Benzerlik": "Kış Kabağı",
-        "Boy": "49-51 cm",
-        "Kilo": "3080 g",
-        "Foto_Link": ""
+      "hafta": "38",
+      "benzerlik": "kış kabağı",
+      "boy": "49-51 cm",
+      "kilo": "3080 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 39,
-        "Benzerlik": "Bal Kabağı",
-        "Boy": "50-51 cm",
-        "Kilo": "3290 g",
-        "Foto_Link": ""
+      "hafta": "39",
+      "benzerlik": "bal kabağı",
+      "boy": "50-51 cm",
+      "kilo": "3290 g",
+      "foto_link": "",
+      "gif_link": ""
     },
     {
-        "Hafta": 40,
-        "Benzerlik": "Karpuz",
-        "Boy": "51-52 cm",
-        "Kilo": "3460 g",
-        "Foto_Link": ""
+      "hafta": "40",
+      "benzerlik": "karpuz",
+      "boy": "51-52 cm",
+      "kilo": "3460 g",
+      "foto_link": "",
+      "gif_link": ""
     }
-]
+  ]
+  
