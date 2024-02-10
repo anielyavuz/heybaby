@@ -1,15 +1,35 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:heybaby/functions/jsonFiles.dart';
 
-class TrimesterProgressWidget extends StatelessWidget {
+class TrimesterProgressWidget extends StatefulWidget {
+  @override
+  State<TrimesterProgressWidget> createState() =>
+      _TrimesterProgressWidgetState();
+}
+
+class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
+  late List<dynamic> jsonList = []; // Global değişken tanımı
+
+  imageandInfoJsonFileLoad() async {
+    jsonList = await JsonReader.readJson();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 50), () {
+      imageandInfoJsonFileLoad();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    DateTime currentDate = DateTime(2024, 1, 20);
+    DateTime currentDate = DateTime(2024, 2, 8);
     DateTime startDate = DateTime(2024, 1, 1); // Başlangıç tarihi
     DateTime endDate = DateTime(2024, 10, 11); // Bitiş tarihi
-    String _tahminiKilo = "1 g";
-    String _tahminiBoy = "2-3 mm";
 
     double totalDays = endDate.difference(startDate).inDays.toDouble();
     double passedDays = currentDate.difference(startDate).inDays.toDouble();
@@ -23,6 +43,23 @@ class TrimesterProgressWidget extends StatelessWidget {
     int differenceDays = difference.inDays;
     int weeks = differenceDays ~/ 7;
     int remainingDays = differenceDays % 7;
+    String _tahminiKilo = "";
+    String _tahminiBoy = "";
+    String _imageLink = "";
+    String _benzerlik = "";
+    if (jsonList.isNotEmpty) {
+      if (weeks >= 4) {
+        _tahminiKilo = jsonList[weeks - 4]['Kilo'];
+        _tahminiBoy = jsonList[weeks - 4]['Boy'];
+        _imageLink = jsonList[weeks - 4]['Foto_Link'];
+        _benzerlik = jsonList[weeks - 4]['Benzerlik'];
+      } else {
+        _tahminiKilo = jsonList[0]['Kilo'];
+        _tahminiBoy = jsonList[0]['Boy'];
+        _imageLink = jsonList[0]['Foto_Link'];
+        _benzerlik = jsonList[0]['Benzerlik'];
+      }
+    }
 
     String _mevcutTarih;
     if (weeks > 0) {
@@ -153,14 +190,23 @@ class TrimesterProgressWidget extends StatelessWidget {
             border: Border.all(color: Colors.black),
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: Image.network(
-            'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/4week.jpg?alt=media&token=005936a7-5705-444e-808e-b3fa71b07389',
-            fit: BoxFit.cover,
-          ),
+          child: _imageLink != ""
+              ? Image.network(
+                  _imageLink,
+                  fit: BoxFit.cover,
+                )
+              : CircularProgressIndicator(),
         ),
-        Text(
-          '$_mevcutTarih',
-          style: TextStyle(fontSize: 15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              '$_mevcutTarih',
+              style: TextStyle(fontSize: 15),
+            ),
+            Text("Bebeğiniz şuan bir $_benzerlik boyutunda",
+                style: TextStyle(fontSize: 14)),
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -174,7 +220,7 @@ class TrimesterProgressWidget extends StatelessWidget {
               style: TextStyle(fontSize: 15),
             ),
           ],
-        )
+        ),
       ],
     );
   }
