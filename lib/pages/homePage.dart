@@ -1,8 +1,11 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/chatgptService.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:heybaby/functions/notificationController.dart';
+import 'package:heybaby/functions/notificationSender.dart';
 import 'package:heybaby/pages/anasayfa.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:heybaby/pages/hesapSayfasi.dart';
@@ -19,6 +22,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod);
+    // TODO: implement initState
+    super.initState();
+  }
+
   AuthService _authService = AuthService();
   int _selectedIndex = 0;
   Map<String, dynamic>? userData;
@@ -79,6 +96,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          NotificationSetup.scheduleWeeklyNotification(1);
+          // AwesomeNotifications().createNotification(
+          //   content: NotificationContent(
+          //       id: 1,
+          //       channelKey: "basic_channel",
+          //       title: "Title",
+          //       body: "This is a body"),
+          // );
           _showChatModalBottomSheet(context);
         },
         child: Container(

@@ -1,13 +1,31 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:heybaby/firebase_options.dart';
 import 'package:heybaby/pages/authentication.dart';
 
 void main() async {
+  await AwesomeNotifications().initialize(null, [
+    NotificationChannel(
+        channelGroupKey: "basic_channel_group",
+        channelKey: "basic_channel",
+        channelName: "Basic Notification",
+        channelDescription: "Basic  notification channel")
+  ], channelGroups: [
+    NotificationChannelGroup(
+        channelGroupKey: "basic_channel_group", channelGroupName: "Basic Group")
+  ]);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  bool isAllowedToSendNotification =
+      await AwesomeNotifications().isNotificationAllowed();
+  if (!isAllowedToSendNotification) {
+    AwesomeNotifications().requestPermissionToSendNotifications();
+  } else {
+    print("Bildirim yetkisi var");
+  }
   runApp(const MyApp());
 }
 
