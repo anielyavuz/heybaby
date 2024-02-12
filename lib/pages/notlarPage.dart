@@ -17,7 +17,7 @@ class _NotlarPageState extends State<NotlarPage> {
 
   @override
   void initState() {
-    init();
+    // init();  //firebase messaging modülü ama çalışmıyor.
     super.initState();
   }
 
