@@ -11,9 +11,14 @@ class TrimesterProgressWidget extends StatefulWidget {
 
 class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
   late List<dynamic> jsonList = []; // Global değişken tanımı
-
+  late List<dynamic> jsonList0 = [];
   imageandInfoJsonFileLoad() async {
-    jsonList = await JsonReader.readJson();
+    print("Deneme");
+    jsonList0 = await JsonReader.readJson();
+    setState(() {
+      jsonList = jsonList0;
+    });
+    print(jsonList);
   }
 
   @override
