@@ -32,7 +32,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentDate = DateTime(2024, 2, 8);
+    DateTime currentDate = DateTime(2024, 5, 8);
     DateTime startDate = DateTime(2024, 1, 1); // Başlangıç tarihi
     DateTime endDate = DateTime(2024, 10, 11); // Bitiş tarihi
 
@@ -54,18 +54,26 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     String _gifLink = "";
     String _benzerlik = "";
     if (jsonList.isNotEmpty) {
-      if (weeks >= 4) {
-        _tahminiKilo = jsonList[weeks - 4]['kilo'];
-        _tahminiBoy = jsonList[weeks - 4]['boy'];
-        _imageLink = jsonList[weeks - 4]['foto_link'];
-        _benzerlik = jsonList[weeks - 4]['benzerlik'];
-        _gifLink = jsonList[weeks - 4]['gif_link'];
+      if (weeks < 41) {
+        if (weeks >= 4) {
+          _tahminiKilo = jsonList[weeks - 4]['kilo'];
+          _tahminiBoy = jsonList[weeks - 4]['boy'];
+          _imageLink = jsonList[weeks - 4]['foto_link'];
+          _benzerlik = jsonList[weeks - 4]['benzerlik'];
+          _gifLink = jsonList[weeks - 4]['gif_link'];
+        } else {
+          _tahminiKilo = jsonList[0]['kilo'];
+          _tahminiBoy = jsonList[0]['boy'];
+          _imageLink = jsonList[0]['foto_link'];
+          _benzerlik = jsonList[0]['benzerlik'];
+          _gifLink = jsonList[0]['gif_link'];
+        }
       } else {
-        _tahminiKilo = jsonList[0]['kilo'];
-        _tahminiBoy = jsonList[0]['boy'];
-        _imageLink = jsonList[0]['foto_link'];
-        _benzerlik = jsonList[0]['benzerlik'];
-        _gifLink = jsonList[0]['gif_link'];
+        _tahminiKilo = jsonList[36]['kilo'];
+        _tahminiBoy = jsonList[36]['boy'];
+        _imageLink = jsonList[36]['foto_link'];
+        _benzerlik = jsonList[36]['benzerlik'];
+        _gifLink = jsonList[36]['gif_link'];
       }
     }
 
@@ -186,10 +194,15 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
           ),
         ),
         SizedBox(height: 2),
-        Text(
-          'Doğuma $_dogumaKalanHafta hafta kaldı',
-          style: TextStyle(fontSize: 15),
-        ),
+        _dogumaKalanHafta > 0
+            ? Text(
+                'Doğuma yaklaşık $_dogumaKalanHafta hafta kaldı',
+                style: TextStyle(fontSize: 15),
+              )
+            : Text(
+                'Doğum çok yakında 😇',
+                style: TextStyle(fontSize: 15),
+              ),
         SizedBox(height: 5),
         Container(
           width: MediaQuery.of(context).size.width * 0.95,
