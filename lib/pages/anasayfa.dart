@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
+import 'package:heybaby/pages/subpages/radialMenu.dart';
+import 'package:heybaby/pages/subpages/spinningWheel.dart';
 
-class AnaSayfa extends StatelessWidget {
+class AnaSayfa extends StatefulWidget {
   final List<String> storyImages;
   final Map<String, dynamic>? userData;
 
   const AnaSayfa({Key? key, this.userData, required this.storyImages})
       : super(key: key);
 
+  @override
+  State<AnaSayfa> createState() => _AnaSayfaState();
+}
+
+class _AnaSayfaState extends State<AnaSayfa> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -26,7 +33,7 @@ class AnaSayfa extends StatelessWidget {
                 height: 100.0,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: storyImages.length,
+                  itemCount: widget.storyImages.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
@@ -34,7 +41,7 @@ class AnaSayfa extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => StoryScreen(
-                              storyImages: storyImages,
+                              storyImages: widget.storyImages,
                               startingPage: index,
                             ),
                           ),
@@ -44,7 +51,8 @@ class AnaSayfa extends StatelessWidget {
                         padding: EdgeInsets.all(8.0),
                         child: CircleAvatar(
                           radius: 30.0,
-                          backgroundImage: NetworkImage(storyImages[index]),
+                          backgroundImage:
+                              NetworkImage(widget.storyImages[index]),
                         ),
                       ),
                     );
@@ -57,10 +65,17 @@ class AnaSayfa extends StatelessWidget {
               SizedBox(height: 10),
               FunctionsWidget(
                 onFunction1Pressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RadialMenu()),
+                  );
                   print("Test1");
                 },
                 onFunction2Pressed: () {
                   print("Test1");
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return SpinningWheel();
+                  }));
                 },
                 onFunction3Pressed: () {
                   print("Test1");
@@ -69,7 +84,7 @@ class AnaSayfa extends StatelessWidget {
                   print("Test1");
                 },
                 function1Description: 'Su',
-                function2Description: 'Kilo',
+                function2Description: 'Kilo Takibi',
                 function3Description: 'İlaç/Vitamin',
                 function4Description: 'Aktivite',
               ),
