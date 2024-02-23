@@ -53,8 +53,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
             children: _items
                 .map(
                   (e) => Container(
-                    width: 100,
-                    height: 100,
+                    width: _items.indexOf(e) == _selectedItemIndex ? 150 : 100,
+                    height: _items.indexOf(e) == _selectedItemIndex ? 150 : 100,
                     child: Card(
                       color: _items.indexOf(e) == _selectedItemIndex
                           ? Colors.orange

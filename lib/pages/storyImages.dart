@@ -23,7 +23,7 @@ class _StoryScreenState extends State<StoryScreen>
 
   @override
   void initState() {
-    print("Baslangic story no: " + widget.startingPage.toString());
+    // print("Baslangic story no: " + widget.startingPage.toString());
     super.initState();
     _pageController = PageController(initialPage: widget.startingPage);
     setState(() {
@@ -51,7 +51,7 @@ class _StoryScreenState extends State<StoryScreen>
     // Timer'ı başlat
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (!_isTouching) {
-        print(_animationController.value);
+        // print(_animationController.value);
       }
     });
   }
