@@ -5,7 +5,7 @@ class SpinningWheel extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(),
+        // appBar: AppBar(),
         body: Center(
           child: RotatingHalfWheel(),
         ),
@@ -28,7 +28,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
     'Surahi': "1000",
   };
 
-  String _selectedItem = 'Küçük Bardak';
+  String _selectedItem = 'Bardak';
   String _selectedValue = "200";
   List<String> _history = [];
   int _historyValue = 0;
@@ -39,12 +39,14 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
     return Column(
       children: [
         Expanded(
-          child: Text(
-              "Su Hedefi " +
-                  _historyValue.toString() +
-                  "/" +
-                  _targetValue.toString(),
-              style: TextStyle(fontSize: 22, color: Colors.black)),
+          child: Center(
+            child: Text(
+                "Su Hedefi " +
+                    _historyValue.toString() +
+                    "/" +
+                    _targetValue.toString(),
+                style: TextStyle(fontSize: 22, color: Colors.black)),
+          ),
           flex: 1,
         ),
         Expanded(
@@ -53,8 +55,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
             children: [
               Center(
                 child: SizedBox(
-                  width: 400,
-                  height: 500,
+                  width: MediaQuery.of(context).size.width-100,
+                  height: MediaQuery.of(context).size.width-100,
                   child: CircularProgressIndicator(
                     strokeWidth: 30,
                     value: _historyValue / _targetValue,
@@ -66,7 +68,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
               ),
               Center(
                 child: Container(
-                  width: 400,
+                  width: 250,
                   height: 250,
                   child: ListWheelScrollView(
                     itemExtent: 100,
@@ -78,25 +80,20 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                     },
                     children: _items.keys
                         .map(
-                          (e) => Column(
-                            children: [
-                              Container(
-                                width: e == _selectedItem ? 150 : 100,
-                                height: e == _selectedItem ? 100 : 80,
-                                child: Card(
-                                  color: e == _selectedItem
-                                      ? Colors.orange
-                                      : Colors.indigo,
-                                  child: Center(
-                                    child: Image.asset(
-                                      'assets/$e.png', // Örneğin, bardak.png, şişe.png gibi
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                                  ),
-                                ),
+                          (e) => Container(
+                            decoration: BoxDecoration(
+                              color: e == _selectedItem ? Color.fromARGB(100, 50, 173, 54) : Color.fromARGB(112, 234, 34, 20),
+                              borderRadius: BorderRadius.all(Radius.circular(50))
+                            ),
+                            width: e == _selectedItem ? 100 : 60,
+                            height: e == _selectedItem ? 100 : 60,
+                            child: Center(
+                              child: Image.asset(
+                                'assets/$e.png', // Örneğin, bardak.png, şişe.png gibi
+                                width: 200,
+                                height: 200,
                               ),
-                            ],
+                            ),
                           ),
                         )
                         .toList(),
