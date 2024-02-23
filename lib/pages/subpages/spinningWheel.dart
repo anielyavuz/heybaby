@@ -39,13 +39,15 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
     return Column(
       children: [
         Expanded(
-          child: Center(
-            child: Text(
-                "Su Hedefi " +
-                    _historyValue.toString() +
-                    "/" +
-                    _targetValue.toString(),
-                style: TextStyle(fontSize: 22, color: Colors.black)),
+          child: SafeArea(
+            child: Center(
+              child: Text(
+                  "Su Hedefi " +
+                      _historyValue.toString() +
+                      "/" +
+                      _targetValue.toString(),
+                  style: TextStyle(fontSize: 22, color: Colors.black)),
+            ),
           ),
           flex: 1,
         ),

@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
-      body: _buildBody(),
+      body: SafeArea(child: _buildBody()),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         selectedItemColor: Colors.deepPurple,
