@@ -25,71 +25,68 @@ class _AnaSayfaState extends State<AnaSayfa> {
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Story Circles
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Column(
-            children: [
-              Container(
-                height: 100.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.storyImages.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => StoryScreen(
-                              storyImages: widget.storyImages,
-                              startingPage: index,
-                            ),
+        Column(
+          children: [
+            Container(
+              height: 100.0,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.storyImages.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StoryScreen(
+                            storyImages: widget.storyImages,
+                            startingPage: index,
                           ),
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircleAvatar(
-                          radius: 30.0,
-                          backgroundImage:
-                              NetworkImage(widget.storyImages[index]),
                         ),
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage:
+                            NetworkImage(widget.storyImages[index]),
                       ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 10),
-              // Resim
-              TrimesterProgressWidget(),
-              SizedBox(height: 10),
-              FunctionsWidget(
-                onFunction1Pressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RadialMenu()),
+                    ),
                   );
-                  print("Test1");
                 },
-                onFunction2Pressed: () {
-                  print("Test1");
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return SpinningWheel();
-                  }));
-                },
-                onFunction3Pressed: () {
-                  print("Test1");
-                },
-                onFunction4Pressed: () {
-                  print("Test1");
-                },
-                function1Description: 'Su',
-                function2Description: 'Kilo Takibi',
-                function3Description: 'İlaç/Vitamin',
-                function4Description: 'Aktivite',
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+            // Resim
+            TrimesterProgressWidget(),
+            SizedBox(height: 10),
+            FunctionsWidget(
+              onFunction1Pressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RadialMenu()),
+                );
+                print("Test1");
+              },
+              onFunction2Pressed: () {
+                print("Test1");
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return SpinningWheel();
+                }));
+              },
+              onFunction3Pressed: () {
+                print("Test1");
+              },
+              onFunction4Pressed: () {
+                print("Test1");
+              },
+              function1Description: 'Su',
+              function2Description: 'Kilo Takibi',
+              function3Description: 'İlaç/Vitamin',
+              function4Description: 'Aktivite',
+            ),
+          ],
         ),
 
         // SizedBox(height: 10),
