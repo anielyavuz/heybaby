@@ -39,7 +39,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
     return SafeArea(
       child: Column(
         children: [
-          Expanded(
+          Container(
+            height: MediaQuery.of(context).size.height/10,
             child: Center(
               child: Text(
                   "Su Hedefi " +
@@ -48,10 +49,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                       _targetValue.toString(),
                   style: TextStyle(fontSize: 22, color: Colors.black)),
             ),
-            flex: 1,
           ),
-          Expanded(
-            flex: 4,
+          Container(
+            height: MediaQuery.of(context).size.height/10*4,
             child: Stack(
               children: [
                 Center(
@@ -105,7 +105,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
             ),
           ),
           Expanded(
-            flex: 5,
+            // flex: 5,
             child: Column(
               children: [
                 Text(
