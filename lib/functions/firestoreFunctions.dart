@@ -32,4 +32,43 @@ class FirestoreFunctions {
       return null;
     }
   }
+
+  static Future<void> updateDataRecord(
+      Map<String, dynamic> newData, String _type) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    List _tempList = [];
+    _tempList.add(newData);
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({
+          "dataRecord.$_type": FieldValue.arrayUnion(_tempList)
+
+          //       {
+
+          //   "dataRecord": {
+          //     "waterDrinkData": {
+          //       "type": "Bardak",
+          //       "amount": 200,
+          //       "count": 1,
+          //       "date": DateTime.now()
+          //     }
+          //   }
+          // }
+        });
+
+        print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
 }

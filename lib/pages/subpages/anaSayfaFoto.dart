@@ -31,7 +31,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentDate = DateTime(2024, 5, 8);
+    DateTime currentDate = DateTime(2024, 10, 22);
     DateTime startDate = DateTime(2024, 1, 1); // Başlangıç tarihi
     DateTime endDate = DateTime(2024, 10, 11); // Bitiş tarihi
 

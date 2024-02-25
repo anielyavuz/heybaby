@@ -63,17 +63,22 @@ class _AnaSayfaState extends State<AnaSayfa> {
             SizedBox(height: 10),
             FunctionsWidget(
               onFunction1Pressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RadialMenu()),
-                );
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (_) {
+                  return SpinningWheel(
+                    initialItems: widget.userData,
+                    pageType: 'waterDrinkData',
+                  );
+                }));
+
                 print("Test1");
               },
               onFunction2Pressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => RadialMenu()),
+                // );
                 print("Test1");
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return SpinningWheel();
-                }));
               },
               onFunction3Pressed: () {
                 print("Test1");
