@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
+import 'package:heybaby/pages/subpages/kiloTakip.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
 import 'package:heybaby/pages/subpages/spinningWheel.dart';
 
@@ -68,16 +69,25 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   return SpinningWheel(
                     initialItems: widget.userData,
                     pageType: 'waterDrinkData',
+                    pageItems: {
+                      'Bardak': "200",
+                      'Buyuk Bardak': "300",
+                      'Matara': "500",
+                      'Sise': "750",
+                      'Surahi': "1000",
+                    },
+                    selectedItem: 'Bardak',
+                    selectedValue: '200',
                   );
                 }));
 
                 print("Test1");
               },
               onFunction2Pressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => RadialMenu()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => KiloTakipApp()),
+                );
                 print("Test1");
               },
               onFunction3Pressed: () {
