@@ -219,7 +219,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ElevatedButton(
+                        GestureDetector(
+                          child: IconButton(
+                            icon: Icon(Icons.remove),
                             onPressed: () {
                               if (_count > 1) {
                                 setState(() {
@@ -227,7 +229,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                 });
                               }
                             },
-                            child: Icon(Icons.remove)),
+                          ),
+                        ),
                         ElevatedButton(
                           onPressed: () async {
                             var newData = {
@@ -256,13 +259,16 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                           },
                           child: Text('Kaydet'),
                         ),
-                        ElevatedButton(
+                        GestureDetector(
+                          child: IconButton(
+                            icon: Icon(Icons.add),
                             onPressed: () {
                               setState(() {
                                 _count += 1;
                               });
                             },
-                            child: Icon(Icons.add)),
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 10),

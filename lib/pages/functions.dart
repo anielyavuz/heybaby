@@ -30,22 +30,22 @@ class FunctionsWidget extends StatelessWidget {
       children: [
         _buildFunctionButton(
           onPressed: onFunction1Pressed,
-          icon: Icons.info,
+          icon: Icons.water_drop,
           description: function1Description,
         ),
         _buildFunctionButton(
           onPressed: onFunction2Pressed,
-          icon: Icons.generating_tokens,
+          icon: Icons.scale,
           description: function2Description,
         ),
         _buildFunctionButton(
           onPressed: onFunction3Pressed,
-          icon: Icons.info,
+          icon: Icons.monitor_heart,
           description: function3Description,
         ),
         _buildFunctionButton(
           onPressed: onFunction4Pressed,
-          icon: Icons.generating_tokens,
+          icon: Icons.fitness_center,
           description: function4Description,
         ),
       ],
