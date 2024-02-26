@@ -6,7 +6,17 @@ import 'package:heybaby/pages/authentication.dart';
 class SpinningWheel extends StatelessWidget {
   final Map<String, dynamic>? initialItems;
   String pageType;
-  SpinningWheel({required this.initialItems, required this.pageType});
+  Map<String, String> pageItems;
+  String selectedItem;
+  String selectedValue;
+
+  SpinningWheel({
+    required this.initialItems,
+    required this.pageType,
+    required this.pageItems,
+    required this.selectedItem,
+    required this.selectedValue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +27,9 @@ class SpinningWheel extends StatelessWidget {
           child: RotatingHalfWheel(
             initialItems: initialItems,
             pageType: pageType,
+            pageItems: pageItems,
+            selectedItem: selectedItem,
+            selectedValue: selectedValue,
           ),
         ),
       ),
@@ -28,24 +41,32 @@ class SpinningWheel extends StatelessWidget {
 class RotatingHalfWheel extends StatefulWidget {
   Map<String, dynamic>? initialItems;
   String pageType;
-
-  RotatingHalfWheel({required this.initialItems, required this.pageType});
+  Map<String, String> pageItems;
+  String selectedItem;
+  String selectedValue;
+  RotatingHalfWheel({
+    required this.initialItems,
+    required this.pageType,
+    required this.pageItems,
+    required this.selectedItem,
+    required this.selectedValue,
+  });
 
   @override
   _RotatingHalfWheelState createState() => _RotatingHalfWheelState();
 }
 
 class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
-  final Map<String, String> _items = {
-    'Bardak': "200",
-    'Buyuk_Bardak': "300",
-    'Matara': "500",
-    'Sise': "750",
-    'Surahi': "1000",
-  };
+  // final Map<String, String> _items = {
+  //   'Bardak': "200",
+  //   'Buyuk_Bardak': "300",
+  //   'Matara': "500",
+  //   'Sise': "750",
+  //   'Surahi': "1000",
+  // };
 
-  String _selectedItem = 'Bardak';
-  String _selectedValue = "200";
+  // String _selectedItem = 'Bardak';
+  // String _selectedValue = "200";
   List<Map> _history = [];
   int _historyValue = 0;
   int _targetValue = 2000;
@@ -138,22 +159,23 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                           itemExtent: 100,
                           onSelectedItemChanged: (int index) {
                             setState(() {
-                              _selectedItem = _items.keys.elementAt(index);
-                              _selectedValue =
-                                  _items[_items.keys.elementAt(index)]!;
+                              widget.selectedItem =
+                                  widget.pageItems.keys.elementAt(index);
+                              widget.selectedValue = widget.pageItems[
+                                  widget.pageItems.keys.elementAt(index)]!;
                             });
                           },
-                          children: _items.keys
+                          children: widget.pageItems.keys
                               .map(
                                 (e) => Container(
                                   decoration: BoxDecoration(
-                                      color: e == _selectedItem
+                                      color: e == widget.selectedItem
                                           ? Color.fromARGB(100, 50, 173, 54)
                                           : Color.fromARGB(112, 234, 34, 20),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(50))),
-                                  width: e == _selectedItem ? 100 : 60,
-                                  height: e == _selectedItem ? 100 : 60,
+                                  width: e == widget.selectedItem ? 100 : 60,
+                                  height: e == widget.selectedItem ? 100 : 60,
                                   child: Center(
                                     child: Image.asset(
                                       'assets/$e.png', // Örneğin, bardak.png, şişe.png gibi
@@ -185,7 +207,10 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                               )
                             : SizedBox(),
                         Text(
-                          _selectedItem + " (" + _selectedValue + "ml)",
+                          widget.selectedItem +
+                              " (" +
+                              widget.selectedValue +
+                              "ml)",
                           style: TextStyle(fontSize: 22, color: Colors.black),
                         ),
                       ],
@@ -206,19 +231,20 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                         ElevatedButton(
                           onPressed: () async {
                             var newData = {
-                              "type": _selectedItem,
+                              "type": widget.selectedItem,
                               "unit": "ml",
-                              "amount": int.parse(_selectedValue),
+                              "amount": int.parse(widget.selectedValue),
                               "count": _count,
                               "date": DateTime.now()
                             };
                             setState(() {
                               _history.insert(0, newData);
                               if (_historyValue +
-                                      int.parse(_selectedValue) * _count <=
+                                      int.parse(widget.selectedValue) *
+                                          _count <=
                                   _targetValue) {
                                 _historyValue +=
-                                    int.parse(_selectedValue) * _count;
+                                    int.parse(widget.selectedValue) * _count;
                               } else {
                                 _historyValue = _targetValue;
                               }
