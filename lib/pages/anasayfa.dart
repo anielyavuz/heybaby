@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
+import 'package:heybaby/pages/subpages/ilacTakip.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
 import 'package:heybaby/pages/subpages/spinningWheel.dart';
@@ -92,6 +93,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
               },
               onFunction3Pressed: () {
                 print("Test1");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => IlacTakip()),
+                );
               },
               onFunction4Pressed: () {
                 print("Test1");
