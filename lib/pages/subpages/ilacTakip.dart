@@ -22,6 +22,14 @@ class _IlacTakipState extends State<IlacTakip> {
       'gunler': [1, 3, 5], // Pazartesi, Çarşamba, Cuma
     },
     {
+      'saatler': ['09:00', '12:00', '18:00'],
+      'isim': 'Vitamin E',
+      'tok': true,
+      'baslangic_tarihi': '2024-02-26',
+      'kac_gun_kullanim': '30',
+      'gunler': [1, 2, 3, 4, 5], // Pazartesi, Çarşamba, Cuma
+    },
+    {
       'saatler': ['09:00', '18:00'],
       'isim': 'Vitamin C',
       'tok': true,
@@ -63,7 +71,7 @@ class _IlacTakipState extends State<IlacTakip> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medicine Tracker'),
+        title: Text('İlaç Takip'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

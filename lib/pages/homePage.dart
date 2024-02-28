@@ -81,12 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Takvim',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.format_list_bulleted),
-            label: 'Listeler',
+            icon: Icon(Icons.favorite),
+            label: 'Beğenilenler',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.note),
-            label: 'Notlar',
+            label: 'Günlük',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return TakvimPage(userData: userData);
 
       case 2:
-        return ListelerPage(userData: userData);
+        return BegenilenlerPage();
 
       case 3:
         return NotlarPage(userData: userData);
