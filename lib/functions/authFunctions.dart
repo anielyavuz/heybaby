@@ -28,6 +28,7 @@ class AuthService {
           "dogumOnceSonra": "Once",
           "isPregnant": true,
           "sonAdetTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "bebekDogumTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
           "id": user.user!.uid,
           "userAuth": "Prod",
           "userSubscription": "Free",
@@ -43,6 +44,7 @@ class AuthService {
           "registerType": "Anonym",
           "dogumOnceSonra": "Sonra",
           "isPregnant": false,
+          "sonAdetTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
           "bebekDogumTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
           "id": user.user!.uid,
           "userAuth": "Prod",
@@ -83,23 +85,52 @@ class AuthService {
   }
 
   Future<Map> createPerson(
-    String name,
     String email,
     String password,
+    bool _isPregnant,
+    DateTime _tarih,
+    String userName,
   ) async {
     Map returnCode = {};
     try {
       var user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      await _firestore.collection("Users").doc(user.user?.uid).set({
-        'id': user.user?.uid,
-        'name': name,
-        'email': email,
-        'area1': 0,
-        'area2': false,
-      }).whenComplete(() async {});
-
+      if (_isPregnant) {
+        await _firestore.collection("Users").doc(user.user?.uid).set({
+          'id': user.user?.uid,
+          'email': email,
+          "userName": userName,
+          "photoUrl": "",
+          "registerType": "Authenticated",
+          "dogumOnceSonra": "Once",
+          "isPregnant": true,
+          "sonAdetTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "bebekDogumTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "userAuth": "Prod",
+          "userSubscription": "Free",
+          "createTime": DateFormat('yyyy-MM-dd HH:mm:ss')
+              .format(DateTime.now())
+              .toString(),
+        }).whenComplete(() async {});
+      } else {
+        await _firestore.collection("Users").doc(user.user?.uid).set({
+          'id': user.user?.uid,
+          'email': email,
+          "userName": userName,
+          "photoUrl": "",
+          "registerType": "Authenticated",
+          "dogumOnceSonra": "Sonra",
+          "isPregnant": false,
+          "sonAdetTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "bebekDogumTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "userAuth": "Prod",
+          "userSubscription": "Free",
+          "createTime": DateFormat('yyyy-MM-dd HH:mm:ss')
+              .format(DateTime.now())
+              .toString(),
+        }).whenComplete(() async {});
+      }
       returnCode['status'] = true;
       returnCode['value'] = user.user;
 

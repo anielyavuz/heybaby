@@ -189,6 +189,8 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                 onPressed: () async {
                   var a = await _authService.anonymSignIn(
                       isPregnant, lastPeriodDate);
+
+                  Navigator.of(context).pop();
                 },
                 child: Text('Giriş Yap'))
           ],
@@ -249,6 +251,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController registerUsernameController =
       TextEditingController();
 
+  bool isPregnant = true;
+  String _dogumOnceSonra = "Once";
+  DateTime lastPeriodDate = DateTime.now();
   AuthService _authService = AuthService();
 
   @override
@@ -268,17 +273,78 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             SizedBox(height: 16.0),
             TextField(
+              controller: registerUsernameController,
+              decoration: InputDecoration(labelText: 'Name'),
+            ),
+            SizedBox(height: 16.0),
+            TextField(
               controller: registerPasswordController,
               decoration: InputDecoration(labelText: 'Şifre'),
               obscureText: true,
             ),
             SizedBox(height: 24.0),
+            SizedBox(height: 24.0),
+            SwitchListTile(
+              title: isPregnant ? Text('Hamileyim') : Text("Bebeğim var"),
+              value: isPregnant,
+              onChanged: (bool value) async {
+                setState(() {
+                  _dogumOnceSonra = "Once";
+                  isPregnant = value;
+                });
+
+                if (!value) {
+                  await Future.delayed(Duration(milliseconds: 100));
+                  setState(() {
+                    isPregnant = true;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text('Yeni doğum modu henüz desteklenmemektedir.')),
+                  );
+                }
+              },
+            ),
+            Column(
+              children: [
+                isPregnant
+                    ? Text('Son adet tarihi giriniz:')
+                    : Text('Bebek doğum tarihini giriniz:'),
+                SizedBox(height: 8),
+                InkWell(
+                  onTap: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: lastPeriodDate,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (picked != null && picked != lastPeriodDate) {
+                      setState(() {
+                        lastPeriodDate = picked;
+                      });
+                    }
+                  },
+                  child: Text(
+                    '${lastPeriodDate.day}/${lastPeriodDate.month}/${lastPeriodDate.year}',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
                 var a = await _authService.createPerson(
-                    registerUsernameController.text,
                     registerEmailController.text,
-                    registerPasswordController.text);
+                    registerPasswordController.text,
+                    isPregnant,
+                    lastPeriodDate,
+                    registerUsernameController.text);
                 // Burada kayıt işlemlerini gerçekleştirebilirsiniz.
                 // Örneğin, registerEmailController.text ve registerPasswordController.text'i kullanarak yeni bir kullanıcı kaydedebilirsiniz.
               },
