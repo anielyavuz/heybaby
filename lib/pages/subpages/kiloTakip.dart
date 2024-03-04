@@ -90,20 +90,25 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
         }));
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Kilo Takip'),
-        ),
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0.0),
-              child: Column(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
+                  Container(
+                    height: 80,
+                    child: Center(
+                        child: Text(
+                      "Kilo Takip",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    )),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text('Bebek Kilo'),
                         Switch(
@@ -120,6 +125,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                     ),
                   ),
                   Expanded(
+                    flex: 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -141,48 +147,65 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTapDown: (_) {
-                          _updateWeight(false); // Changed here
-                          _longPressSubtract = true;
-                          _startTimer(false);
-                        },
-                        onTapUp: (_) {
-                          _longPressSubtract = false;
-                          _stopTimer();
-                        },
-                        child: IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: null,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTapDown: (_) {
+                            _updateWeight(false); // Changed here
+                            _longPressSubtract = true;
+                            _startTimer(false);
+                          },
+                          onTapUp: (_) {
+                            _longPressSubtract = false;
+                            _stopTimer();
+                          },
+                          child: IconButton(
+                            icon: Icon(Icons.remove),
+                            onPressed: null,
+                          ),
                         ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          _saveWeight();
-                        },
-                        child: Text('Kaydet'),
-                      ),
-                      GestureDetector(
-                        onTapDown: (_) {
-                          _updateWeight(true); // Changed here
-                          _longPressAdd = true;
-                          _startTimer(true);
-                        },
-                        onTapUp: (_) {
-                          _longPressAdd = false;
-                          _stopTimer();
-                        },
-                        child: IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: null,
+                        ElevatedButton(
+                          onPressed: () async {
+                            _saveWeight();
+                          },
+                          child: Text('Kaydet'),
                         ),
-                      ),
-                    ],
+                        GestureDetector(
+                          onTapDown: (_) {
+                            _updateWeight(true); // Changed here
+                            _longPressAdd = true;
+                            _startTimer(true);
+                          },
+                          onTapUp: (_) {
+                            _longPressAdd = false;
+                            _stopTimer();
+                          },
+                          child: IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    thickness: 4,
+                    color: Colors.red,
+                  ),
+                  Container(
+                    height: 50,
+                    child: Center(
+                        child: Text(
+                      "Geçmiş",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    )),
                   ),
                   Expanded(
+                    flex: 3,
                     child: ListView.builder(
                       itemCount: _weightHistory.length,
                       itemBuilder: (context, index) {
@@ -200,6 +223,20 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                               'Kayıt Tarihi: ${_weightHistory[index].dateTime}',
                               style: TextStyle(fontSize: 12.0),
                             ),
+                            trailing: Container(
+                              width: 60,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.edit_note_sharp,
+                                    size: 30,
+                                    // color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                  Text("Not Ekle"),
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -207,33 +244,34 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                   ),
                 ],
               ),
-            ),
-            Positioned(
-              left: 5,
-              top: 0,
-              child: Container(
-                height: 40,
-                child: IconButton(
-                    onPressed: () {
-                      if (!Navigator.of(context).canPop()) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => CheckAuth()),
-                        );
-                      }
-                      // Navigator.pop(context);
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return CheckAuth();
-                      // }));
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios_new_outlined,
-                      size: 35,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    )),
-              ),
-            )
-          ],
+              Positioned(
+                left: 5,
+                top: 0,
+                child: Container(
+                  height: 40,
+                  child: IconButton(
+                      onPressed: () {
+                        if (!Navigator.of(context).canPop()) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                                builder: (context) => CheckAuth()),
+                          );
+                        }
+                        // Navigator.pop(context);
+                        // Navigator.pushReplacement(context,
+                        //     MaterialPageRoute(builder: (_) {
+                        //   return CheckAuth();
+                        // }));
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios_new_outlined,
+                        size: 35,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      )),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
