@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:heybaby/functions/jsonFiles.dart';
 
 class TrimesterProgressWidget extends StatefulWidget {
+  final Map<String, dynamic>? userData;
+  const TrimesterProgressWidget({Key? key, this.userData}) : super(key: key);
+
   @override
   State<TrimesterProgressWidget> createState() =>
       _TrimesterProgressWidgetState();
@@ -31,7 +34,10 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentDate = DateTime(2024, 10, 22);
+    DateTime currentDate = widget.userData!['sonAdetTarihi'] == null
+        ? DateTime.now().add(Duration(days: -200))
+        : DateTime.parse(widget.userData!['sonAdetTarihi']);
+
     DateTime startDate = DateTime(2024, 1, 1); // Başlangıç tarihi
     DateTime endDate = DateTime(2024, 10, 11); // Bitiş tarihi
 

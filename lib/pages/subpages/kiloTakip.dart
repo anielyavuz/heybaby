@@ -37,6 +37,11 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
 
   void _saveWeight() {
     print(widget.userData);
+    if (widget.userData != null) {
+      print(widget.userData!['isPregnant']);
+    } else {
+      print("user data null");
+    }
     setState(() {
       DateTime now = DateTime.now();
       String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);

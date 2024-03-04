@@ -61,7 +61,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
             ),
             SizedBox(height: 10),
             // Resim
-            TrimesterProgressWidget(),
+            TrimesterProgressWidget(
+              userData: widget.userData,
+            ),
             SizedBox(height: 10),
             FunctionsWidget(
               onFunction1Pressed: () {
