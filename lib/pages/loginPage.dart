@@ -68,7 +68,8 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 12.0),
             ElevatedButton(
               onPressed: () async {
-                var a = await _authService.anonymSignIn();
+                _showGuestLoginPopup(context);
+                // var a = await _authService.anonymSignIn();
                 // Burada giriş işlemlerini gerçekleştirebilirsiniz.
                 // Örneğin, emailController.text ve passwordController.text'i kullanarak kontrol yapabilirsiniz.
                 // Eğer giriş başarılıysa başka bir ekran açabilir veya işlemleri gerçekleştirebilirsiniz.
@@ -86,6 +87,113 @@ class LoginScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+void _showGuestLoginPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              20), // Burada pop-up'ın köşelerini yuvarlak yapabiliriz.
+        ),
+        title: Text('Misafir Olarak Giriş Yap'),
+        content: SizedBox(
+            width: MediaQuery.of(context).size.width *
+                0.8, // Burada pop-up'ın genişliğini ekranın %80'i olarak ayarladık.
+            height: MediaQuery.of(context).size.height *
+                0.2, // Burada pop-up'ın yüksekliğini ekranın %50'si olarak ayarladık.
+
+            child: GuestLoginContent()),
+      );
+    },
+  );
+}
+
+class GuestLoginContent extends StatefulWidget {
+  @override
+  _GuestLoginContentState createState() => _GuestLoginContentState();
+}
+
+class _GuestLoginContentState extends State<GuestLoginContent> {
+  String _dogumOnceSonra = "Once";
+  bool isPregnant = true;
+  DateTime lastPeriodDate = DateTime.now();
+  AuthService _authService = AuthService();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Builder(builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SwitchListTile(
+              title: isPregnant ? Text('Hamileyim') : Text("Bebeğim var"),
+              value: isPregnant,
+              onChanged: (bool value) async {
+                setState(() {
+                  _dogumOnceSonra = "Once";
+                  isPregnant = value;
+                });
+
+                if (!value) {
+                  await Future.delayed(Duration(milliseconds: 100));
+                  setState(() {
+                    isPregnant = true;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text('Yeni doğum modu henüz desteklenmemektedir.')),
+                  );
+                }
+              },
+            ),
+            Column(
+              children: [
+                isPregnant
+                    ? Text('Son adet tarihi giriniz:')
+                    : Text('Bebek doğum tarihini giriniz:'),
+                SizedBox(height: 8),
+                InkWell(
+                  onTap: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: lastPeriodDate,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (picked != null && picked != lastPeriodDate) {
+                      setState(() {
+                        lastPeriodDate = picked;
+                      });
+                    }
+                  },
+                  child: Text(
+                    '${lastPeriodDate.day}/${lastPeriodDate.month}/${lastPeriodDate.year}',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+                onPressed: () async {
+                  var a = await _authService.anonymSignIn(
+                      isPregnant, lastPeriodDate);
+                },
+                child: Text('Giriş Yap'))
+          ],
+        );
+      }),
     );
   }
 }

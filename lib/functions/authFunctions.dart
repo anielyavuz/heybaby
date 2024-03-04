@@ -14,22 +14,46 @@ class AuthService {
   // GoogleSignInAccount? _user;
   // GoogleSignInAccount get user => _user!;
 
-  Future<Map> anonymSignIn() async {
+  Future<Map> anonymSignIn(bool _isPregnant, DateTime _tarih) async {
     Map returnCode = {};
     try {
       var user = await _auth.signInAnonymously();
+      var _finalData;
+      if (_isPregnant) {
+        _finalData = {
+          "userName": "Guest",
+          "email": "",
+          "photoUrl": "",
+          "registerType": "Anonym",
+          "dogumOnceSonra": "Once",
+          "isPregnant": true,
+          "sonAdetTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "id": user.user!.uid,
+          "userAuth": "Prod",
+          "userSubscription": "Free",
+          "createTime": DateFormat('yyyy-MM-dd HH:mm:ss')
+              .format(DateTime.now())
+              .toString(),
+        };
+      } else {
+        _finalData = {
+          "userName": "Guest",
+          "email": "",
+          "photoUrl": "",
+          "registerType": "Anonym",
+          "dogumOnceSonra": "Sonra",
+          "isPregnant": false,
+          "bebekDogumTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "id": user.user!.uid,
+          "userAuth": "Prod",
+          "userSubscription": "Free",
+          "createTime": DateFormat('yyyy-MM-dd HH:mm:ss')
+              .format(DateTime.now())
+              .toString(),
+        };
+      }
 
-      await _firestore.collection("Users").doc(user.user!.uid).set({
-        "userName": "Guest",
-        "email": "",
-        "photoUrl": "",
-        "registerType": "Anonym",
-        "id": user.user!.uid,
-        "userAuth": "Prod",
-        "userSubscription": "Free",
-        "createTime":
-            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()).toString(),
-      });
+      await _firestore.collection("Users").doc(user.user!.uid).set(_finalData);
     } on FirebaseAuthException catch (e) {
       returnCode['status'] = false;
       returnCode['value'] = e.code;

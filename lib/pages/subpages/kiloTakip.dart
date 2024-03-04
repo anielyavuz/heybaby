@@ -4,24 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:intl/intl.dart';
 
-void main() {
-  runApp(KiloTakipApp());
-}
-
-class KiloTakipApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Kilo Takip',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: KiloTakipPage(),
-    );
-  }
-}
-
 class KiloTakipPage extends StatefulWidget {
+  final Map<String, dynamic>? userData;
+  final String dogumOnceSonra;
+  const KiloTakipPage({Key? key, this.userData, required this.dogumOnceSonra})
+      : super(key: key);
+
   @override
   _KiloTakipPageState createState() => _KiloTakipPageState();
 }
@@ -48,6 +36,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
   }
 
   void _saveWeight() {
+    print(widget.userData);
     setState(() {
       DateTime now = DateTime.now();
       String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
@@ -57,6 +46,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
           weight: _currentWeight,
           dateTime: formattedDate,
           isMotherWeight: _isMotherWeight,
+          dogumOnceSonra: widget.dogumOnceSonra,
         ), // Insert at the beginning
       );
     });
@@ -220,11 +210,16 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                 height: 40,
                 child: IconButton(
                     onPressed: () {
+                      if (!Navigator.of(context).canPop()) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => CheckAuth()),
+                        );
+                      }
                       // Navigator.pop(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) {
-                        return CheckAuth();
-                      }));
+                      // Navigator.pushReplacement(context,
+                      //     MaterialPageRoute(builder: (_) {
+                      //   return CheckAuth();
+                      // }));
                     },
                     icon: Icon(
                       Icons.arrow_back_ios_new_outlined,
@@ -244,10 +239,12 @@ class WeightEntry {
   final double weight;
   final String dateTime;
   final bool isMotherWeight;
+  final String dogumOnceSonra;
 
   WeightEntry({
     required this.weight,
     required this.dateTime,
     required this.isMotherWeight,
+    required this.dogumOnceSonra,
   });
 }

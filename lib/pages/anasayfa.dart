@@ -87,7 +87,11 @@ class _AnaSayfaState extends State<AnaSayfa> {
               onFunction2Pressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => KiloTakipApp()),
+                  MaterialPageRoute(
+                      builder: (context) => KiloTakipPage(
+                            userData: widget.userData,
+                            dogumOnceSonra: "Once",
+                          )),
                 );
                 print("Test1");
               },
