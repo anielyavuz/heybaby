@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:intl/intl.dart';
 
 class KiloTakipPage extends StatefulWidget {
   final Map<String, dynamic>? userData;
-  final String dogumOnceSonra;
-  const KiloTakipPage({Key? key, this.userData, required this.dogumOnceSonra})
-      : super(key: key);
+
+  const KiloTakipPage({Key? key, this.userData}) : super(key: key);
 
   @override
   _KiloTakipPageState createState() => _KiloTakipPageState();
@@ -18,6 +18,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
   double _currentWeight = 1.0; // Default weight for baby
   List<WeightEntry> _weightHistory = []; // Weight history list
   bool _isMotherWeight = false; // Default switch value
+  TextEditingController _weightController = TextEditingController();
 
   Timer? _timer;
   bool _longPressAdd = false;
@@ -51,7 +52,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
           weight: _currentWeight,
           dateTime: formattedDate,
           isMotherWeight: _isMotherWeight,
-          dogumOnceSonra: widget.dogumOnceSonra,
+          dogumOnceSonra: widget.userData!['dogumOnceSonra'],
         ), // Insert at the beginning
       );
     });
@@ -77,6 +78,43 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
 
   void _stopTimer() {
     _timer?.cancel();
+  }
+
+  void _showWeightInputDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Kilo Girin"),
+          content: TextField(
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            controller:
+                _weightController, // TextEditingController tanımlanmalıdır.
+            decoration: InputDecoration(labelText: "Kilo"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text("İptal"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _weightController.clear();
+              },
+            ),
+            TextButton(
+              child: Text("Kaydet"),
+              onPressed: () {
+                // Kullanıcının girdiği kiloyu al ve _currentWeight'i güncelle
+                setState(() {
+                  _currentWeight = double.parse(_weightController.text);
+                });
+                Navigator.of(context).pop();
+                _weightController.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -135,6 +173,9 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                         ),
                         SizedBox(height: 10.0),
                         GestureDetector(
+                          onTap: () {
+                            _showWeightInputDialog(); // Kullanıcı tıkladığında ağırlık giriş iletişim kutusunu göster
+                          },
                           onVerticalDragUpdate: (details) {
                             _updateWeight(
                                 details.primaryDelta! < 0); // Changed here
@@ -214,27 +255,91 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                             : Colors.pink[100]!;
                         return Container(
                           color: bgColor,
-                          child: ListTile(
-                            title: Text(
-                              'Kilo: ${_weightHistory[index].weight.toStringAsFixed(1)} kg', // Changed here
-                              style: TextStyle(fontSize: 16.0),
+                          child: Slidable(
+                            endActionPane: const ActionPane(
+                              motion: ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  // An action can be bigger than the others.
+                                  flex: 2,
+                                  onPressed: null,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 133, 221, 106),
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.archive,
+                                  label: 'Düzenle',
+                                ),
+                                SlidableAction(
+                                  onPressed: null,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 207, 3, 3),
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.save,
+                                  label: 'Sil',
+                                ),
+                              ],
                             ),
-                            subtitle: Text(
-                              'Kayıt Tarihi: ${_weightHistory[index].dateTime}',
-                              style: TextStyle(fontSize: 12.0),
-                            ),
-                            trailing: Container(
-                              width: 60,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.edit_note_sharp,
-                                    size: 30,
-                                    // color: Color.fromARGB(255, 0, 0, 0),
-                                  ),
-                                  Text("Not Ekle"),
-                                ],
+                            child: ListTile(
+                              title: widget.userData!['isPregnant']
+                                  ? Row(
+                                      children: <Widget>[
+                                        CircleAvatar(
+                                          radius: 15.0,
+                                          backgroundColor: const Color.fromARGB(
+                                              255,
+                                              138,
+                                              33,
+                                              243), // Yuvarlağın arka plan rengini ayarlayabilirsiniz.
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                (((DateTime.now().difference(
+                                                                DateTime.parse(widget
+                                                                        .userData![
+                                                                    'sonAdetTarihi'])))
+                                                            .inDays) ~/
+                                                        7)
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .white, // Metnin rengini ayarlayabilirsiniz.
+                                                  fontSize: 16.0,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                10.0), // CircleAvatar ve metin arasında biraz boşluk bırakır.
+                                        Text(
+                                          'Kilo: ${_weightHistory[index].weight.toStringAsFixed(1)} kg',
+                                          style: TextStyle(fontSize: 16.0),
+                                        ),
+                                      ],
+                                    )
+                                  : Text(
+                                      '${_weightHistory[index].weight.toStringAsFixed(1)} kg',
+                                      // Changed here
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                              subtitle: Text(
+                                'Kayıt Tarihi: ${_weightHistory[index].dateTime}',
+                                style: TextStyle(fontSize: 12.0),
+                              ),
+                              trailing: Container(
+                                width: 60,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.edit_note_sharp,
+                                      size: 30,
+                                      // color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                    Text("Not Ekle"),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

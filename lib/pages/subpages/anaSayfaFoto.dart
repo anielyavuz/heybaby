@@ -34,12 +34,17 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentDate = widget.userData!['sonAdetTarihi'] == null
-        ? DateTime.now().add(Duration(days: -200))
+    DateTime currentDate = DateTime.now();
+
+    DateTime startDate = widget.userData!['sonAdetTarihi'] == null
+        ? DateTime.now().add(Duration(days: -1))
         : DateTime.parse(widget.userData!['sonAdetTarihi']);
 
-    DateTime startDate = DateTime(2024, 1, 1); // Başlangıç tarihi
-    DateTime endDate = DateTime(2024, 10, 11); // Bitiş tarihi
+    // DateTime(2024, 1, 1); // Başlangıç tarihi
+    DateTime endDate = widget.userData!['sonAdetTarihi'] == null
+        ? DateTime.now().add(Duration(days: 279))
+        : DateTime.parse(widget.userData!['sonAdetTarihi'])
+            .add(Duration(days: 280)); // Bitiş tarihi
 
     double totalDays = endDate.difference(startDate).inDays.toDouble();
     double passedDays = currentDate.difference(startDate).inDays.toDouble();
@@ -47,6 +52,9 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     int differenceInDays = endDate.difference(currentDate).inDays;
     int _dogumaKalanHafta = differenceInDays ~/ 7;
 ////
+    ///
+    ///
+    ///
     ///
     Duration difference = currentDate.difference(startDate);
 
