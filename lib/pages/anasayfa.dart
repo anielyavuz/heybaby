@@ -100,7 +100,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 print("Test1");
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => IlacTakip()),
+                  MaterialPageRoute(
+                      builder: (context) => IlacTakip(
+                            userData: widget.userData,
+                          )),
                 );
               },
               onFunction4Pressed: () {

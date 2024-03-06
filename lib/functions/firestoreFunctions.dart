@@ -71,4 +71,30 @@ class FirestoreFunctions {
       print('Kullanıcı giriş yapmamış.');
     }
   }
+
+  static Future<void> addIlacDataRecord(
+    Map<String, dynamic> newData,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    List _tempList = [];
+    _tempList.add(newData);
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"ilacListesi": FieldValue.arrayUnion(_tempList)});
+
+        print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
 }

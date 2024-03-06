@@ -1,10 +1,13 @@
-var a = await _authService.createPerson(
-                      "ANIL", "anilya@garantibbva.com.tr", "Test123456");
-                  // var a = await _authService.anonymSignIn();
-
-
-                    var a = await _authService.signIn(
-                      "anilya@garantibbva.com.tr", "Test123456");,
-
-
-  AuthService _authService = AuthService();
+[
+    
+    {saatler: [09:00, 12:00, 18:00], isim: Vitamin D, tok: true, baslangic_tarihi: 2024-02-26, kac_gun_kullanim: 30, gunler: [1, 3, 5]}, 
+    
+    {saatler: [09:00, 12:00, 18:00], isim: Vitamin E, tok: true, baslangic_tarihi: 2024-02-26, kac_gun_kullanim: 30, gunler: [1, 2, 3, 4, 5]}, 
+    
+    {saatler: [09:00, 18:00], isim: Vitamin C, tok: true, baslangic_tarihi: 2024-02-26, kac_gun_kullanim: 20, gunler: [2, 4]}, 
+    
+    {saatler: [09:00, 12:00, 18:00], isim: Omega-3, tok: false, baslangic_tarihi: 2024-02-27, kac_gun_kullanim: 10, gunler: [1, 2, 3, 4, 5]}, 
+    
+    {isim: test, saatler: [14:28, 19:28], baslangic_tarihi: 2024-03-06, kac_gun_kullanim: 4, tok: false, gunler: [0, 1, 2, 3, 4, 5, 6]}
+    
+    ]
