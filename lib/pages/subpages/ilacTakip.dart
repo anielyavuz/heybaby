@@ -87,6 +87,7 @@ class _IlacTakipState extends State<IlacTakip> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('İlaç Takip'),
       ),
       body: Column(
