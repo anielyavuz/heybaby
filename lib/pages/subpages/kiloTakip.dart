@@ -346,12 +346,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                 height: 40,
                 child: IconButton(
                     onPressed: () {
-                      if (!Navigator.of(context).canPop()) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => CheckAuth()),
-                        );
-                      }
-                      // Navigator.pop(context);
+                      Navigator.pop(context);
                       // Navigator.pushReplacement(context,
                       //     MaterialPageRoute(builder: (_) {
                       //   return CheckAuth();
