@@ -248,129 +248,135 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('İlaç Ekle'),
-      ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0.0),
-          width: MediaQuery.of(context).size.width * 0.97,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: _ilacAdiController,
-                  decoration: InputDecoration(labelText: 'İlaç Adı'),
-                ),
-                SizedBox(height: 2),
-                Divider(),
-                SizedBox(height: 2),
-                Text('İlaç Saatleri'),
-                Column(
-                  children: ilacSaatleri
-                      .map((time) => Row(
-                            children: [
-                              Text(
-                                '${time.hour}:${time.minute}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.remove_circle),
-                                onPressed: () {
-                                  setState(() {
-                                    ilacSaatleri.remove(time);
-                                  });
-                                },
-                              ),
-                            ],
-                          ))
-                      .toList(),
-                ),
-                ElevatedButton(
-                  onPressed: _ilacSaatiEkle,
-                  child: Text('İlaç Saati Ekle'),
-                ),
-                SizedBox(height: 2),
-                Divider(),
-                SizedBox(height: 2),
-                TextButton(
-                  onPressed: _selectDate,
-                  child: Text(
-                      'Başlangıç Tarihi: ${baslangicTarihi.toString().split(" ")[0]}'),
-                )
-                // TextButton(
-                //   onPressed: _selectDate,
-                //   child: Text('Tarihi Seç'),
-                // ),
-                ,
-                SizedBox(height: 2),
-                Divider(),
-                Text('Hangi Günler?'),
-                // Günlerin listesi ve check kutuları
-                Wrap(
-                  spacing: 10,
-                  children: List.generate(
-                    7,
-                    (index) => FilterChip(
-                      selectedColor: Colors.green,
-                      disabledColor: Colors.grey,
-                      label: Text(_getDayName(index)),
-                      selected: selectedDays[index],
-                      onSelected: (isSelected) {
-                        setState(() {
-                          selectedDays[index] = isSelected;
-                        });
-                      },
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text(
+                "İlaç Ekle",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 25),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15,5,15,5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: _ilacAdiController,
+                    decoration: InputDecoration(labelText: 'İlaç Adı'),
+                  ),
+                  SizedBox(height: 2),
+                  Divider(),
+                  SizedBox(height: 2),
+                  Text('İlaç Saatleri'),
+                  Column(
+                    children: ilacSaatleri
+                        .map((time) => Row(
+                              children: [
+                                Text(
+                                  '${time.hour}:${time.minute}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.remove_circle),
+                                  onPressed: () {
+                                    setState(() {
+                                      ilacSaatleri.remove(time);
+                                    });
+                                  },
+                                ),
+                              ],
+                            ))
+                        .toList(),
+                  ),
+                  ElevatedButton(
+                    onPressed: _ilacSaatiEkle,
+                    child: Text('İlaç Saati Ekle'),
+                  ),
+                  SizedBox(height: 2),
+                  Divider(),
+                  SizedBox(height: 2),
+                  TextButton(
+                    onPressed: _selectDate,
+                    child: Text(
+                        'Başlangıç Tarihi: ${baslangicTarihi.toString().split(" ")[0]}'),
+                  )
+                  // TextButton(
+                  //   onPressed: _selectDate,
+                  //   child: Text('Tarihi Seç'),
+                  // ),
+                  ,
+                  SizedBox(height: 2),
+                  Divider(),
+                  Text('Hangi Günler?'),
+                  // Günlerin listesi ve check kutuları
+                  Wrap(
+                    spacing: 10,
+                    children: List.generate(
+                      7,
+                      (index) => FilterChip(
+                        selectedColor: Colors.green,
+                        disabledColor: Colors.grey,
+                        label: Text(_getDayName(index)),
+                        selected: selectedDays[index],
+                        onSelected: (isSelected) {
+                          setState(() {
+                            selectedDays[index] = isSelected;
+                          });
+                        },
+                      ),
                     ),
                   ),
-                ),
-                Divider(),
-                SizedBox(height: 2),
-                Text('Kaç Gün Kullanılacak'),
-                NumberPicker(
-                  value: kacGunKullanilacak,
-                  minValue: 1,
-                  maxValue: 30,
-                  onChanged: (value) {
-                    setState(() {
-                      kacGunKullanilacak = value;
-                    });
-                  },
-                ),
-
-                Divider(),
-                SizedBox(height: 2),
-                Row(
-                  children: [
-                    Text('Tok mu?'),
-                    Switch(
-                      value: tokMu,
-                      onChanged: (newValue) {
-                        setState(() {
-                          tokMu = newValue;
-                        });
-                      },
-                    ),
-                    Text(tokMu ? 'Evet' : 'Hayır'),
-                  ],
-                ),
-                SizedBox(height: 5),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_ilacAdiController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('İlaç Adı boş olamaz.')),
-                      );
-                    } else {
-                      _ilacEkle();
-                    }
-                  },
-                  child: Text('Ekle'),
-                ),
-              ],
+                  Divider(),
+                  SizedBox(height: 2),
+                  Text('Kaç Gün Kullanılacak'),
+                  NumberPicker(
+                    value: kacGunKullanilacak,
+                    minValue: 1,
+                    maxValue: 30,
+                    onChanged: (value) {
+                      setState(() {
+                        kacGunKullanilacak = value;
+                      });
+                    },
+                  ),
+              
+                  Divider(),
+                  SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Text('Tok mu?'),
+                      Switch(
+                        value: tokMu,
+                        onChanged: (newValue) {
+                          setState(() {
+                            tokMu = newValue;
+                          });
+                        },
+                      ),
+                      Text(tokMu ? 'Evet' : 'Hayır'),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_ilacAdiController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('İlaç Adı boş olamaz.')),
+                        );
+                      } else {
+                        _ilacEkle();
+                      }
+                    },
+                    child: Text('Ekle'),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -120,263 +120,251 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
   @override
   Widget build(BuildContext context) {
     Color itemColor = _isMotherWeight ? Colors.purple[50]! : Colors.pink[50]!;
-    return PopScope(
-      onPopInvoked: (didPop) {
-        print("pop oldu");
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
-          return CheckAuth();
-        }));
-      },
-      child: Scaffold(
-        body: SafeArea(
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    height: 80,
-                    child: Center(
-                        child: Text(
-                      "Kilo Takip",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                    )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text('Bebek Kilo'),
-                        Switch(
-                          value: _isMotherWeight,
-                          onChanged: (value) {
-                            setState(() {
-                              _isMotherWeight = value;
-                              _currentWeight = value ? 50.0 : 1.0;
-                            });
-                          },
-                        ),
-                        Text('Anne Kilo'),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Mevcut Kilo',
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        SizedBox(height: 10.0),
-                        GestureDetector(
-                          onTap: () {
-                            _showWeightInputDialog(); // Kullanıcı tıkladığında ağırlık giriş iletişim kutusunu göster
-                          },
-                          onVerticalDragUpdate: (details) {
-                            _updateWeight(
-                                details.primaryDelta! < 0); // Changed here
-                          },
-                          child: Text(
-                            _currentWeight.toStringAsFixed(1), // Changed here
-                            style: TextStyle(fontSize: 40.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTapDown: (_) {
-                            _updateWeight(false); // Changed here
-                            _longPressSubtract = true;
-                            _startTimer(false);
-                          },
-                          onTapUp: (_) {
-                            _longPressSubtract = false;
-                            _stopTimer();
-                          },
-                          child: IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: null,
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            _saveWeight();
-                          },
-                          child: Text('Kaydet'),
-                        ),
-                        GestureDetector(
-                          onTapDown: (_) {
-                            _updateWeight(true); // Changed here
-                            _longPressAdd = true;
-                            _startTimer(true);
-                          },
-                          onTapUp: (_) {
-                            _longPressAdd = false;
-                            _stopTimer();
-                          },
-                          child: IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 4,
-                    color: Colors.red,
-                  ),
-                  Container(
-                    height: 50,
-                    child: Center(
-                        child: Text(
-                      "Geçmiş",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                    )),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: ListView.builder(
-                      itemCount: _weightHistory.length,
-                      itemBuilder: (context, index) {
-                        Color bgColor = _weightHistory[index].isMotherWeight
-                            ? Colors.purple[100]!
-                            : Colors.pink[100]!;
-                        return Container(
-                          color: bgColor,
-                          child: Slidable(
-                            endActionPane: const ActionPane(
-                              motion: ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  // An action can be bigger than the others.
-                                  flex: 2,
-                                  onPressed: null,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 133, 221, 106),
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.archive,
-                                  label: 'Düzenle',
-                                ),
-                                SlidableAction(
-                                  onPressed: null,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 207, 3, 3),
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.save,
-                                  label: 'Sil',
-                                ),
-                              ],
-                            ),
-                            child: ListTile(
-                              title: widget.userData!['isPregnant']
-                                  ? Row(
-                                      children: <Widget>[
-                                        CircleAvatar(
-                                          radius: 15.0,
-                                          backgroundColor: const Color.fromARGB(
-                                              255,
-                                              138,
-                                              33,
-                                              243), // Yuvarlağın arka plan rengini ayarlayabilirsiniz.
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                (((DateTime.now().difference(
-                                                                DateTime.parse(widget
-                                                                        .userData![
-                                                                    'sonAdetTarihi'])))
-                                                            .inDays) ~/
-                                                        7)
-                                                    .toString(),
-                                                style: TextStyle(
-                                                  color: Colors
-                                                      .white, // Metnin rengini ayarlayabilirsiniz.
-                                                  fontSize: 16.0,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                10.0), // CircleAvatar ve metin arasında biraz boşluk bırakır.
-                                        Text(
-                                          'Kilo: ${_weightHistory[index].weight.toStringAsFixed(1)} kg',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                      ],
-                                    )
-                                  : Text(
-                                      '${_weightHistory[index].weight.toStringAsFixed(1)} kg',
-                                      // Changed here
-                                      style: TextStyle(fontSize: 16.0),
-                                    ),
-                              subtitle: Text(
-                                'Kayıt Tarihi: ${_weightHistory[index].dateTime}',
-                                style: TextStyle(fontSize: 12.0),
-                              ),
-                              trailing: Container(
-                                width: 60,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.edit_note_sharp,
-                                      size: 30,
-                                      // color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                    Text("Not Ekle"),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Positioned(
-                left: 5,
-                top: 0,
-                child: Container(
-                  height: 40,
-                  child: IconButton(
-                      onPressed: () {
-                        if (!Navigator.of(context).canPop()) {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                                builder: (context) => CheckAuth()),
-                          );
-                        }
-                        // Navigator.pop(context);
-                        // Navigator.pushReplacement(context,
-                        //     MaterialPageRoute(builder: (_) {
-                        //   return CheckAuth();
-                        // }));
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_ios_new_outlined,
-                        size: 35,
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      )),
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Container(
+                  height: 80,
+                  child: Center(
+                      child: Text(
+                    "Kilo Takip",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  )),
                 ),
-              )
-            ],
-          ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text('Bebek Kilo'),
+                      Switch(
+                        value: _isMotherWeight,
+                        onChanged: (value) {
+                          setState(() {
+                            _isMotherWeight = value;
+                            _currentWeight = value ? 50.0 : 1.0;
+                          });
+                        },
+                      ),
+                      Text('Anne Kilo'),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Mevcut Kilo',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      SizedBox(height: 10.0),
+                      GestureDetector(
+                        onTap: () {
+                          _showWeightInputDialog(); // Kullanıcı tıkladığında ağırlık giriş iletişim kutusunu göster
+                        },
+                        onVerticalDragUpdate: (details) {
+                          _updateWeight(
+                              details.primaryDelta! < 0); // Changed here
+                        },
+                        child: Text(
+                          _currentWeight.toStringAsFixed(1), // Changed here
+                          style: TextStyle(fontSize: 40.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTapDown: (_) {
+                          _updateWeight(false); // Changed here
+                          _longPressSubtract = true;
+                          _startTimer(false);
+                        },
+                        onTapUp: (_) {
+                          _longPressSubtract = false;
+                          _stopTimer();
+                        },
+                        child: IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: null,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          _saveWeight();
+                        },
+                        child: Text('Kaydet'),
+                      ),
+                      GestureDetector(
+                        onTapDown: (_) {
+                          _updateWeight(true); // Changed here
+                          _longPressAdd = true;
+                          _startTimer(true);
+                        },
+                        onTapUp: (_) {
+                          _longPressAdd = false;
+                          _stopTimer();
+                        },
+                        child: IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  thickness: 4,
+                  color: Colors.red,
+                ),
+                Container(
+                  height: 50,
+                  child: Center(
+                      child: Text(
+                    "Geçmiş",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  )),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: ListView.builder(
+                    itemCount: _weightHistory.length,
+                    itemBuilder: (context, index) {
+                      Color bgColor = _weightHistory[index].isMotherWeight
+                          ? Colors.purple[100]!
+                          : Colors.pink[100]!;
+                      return Container(
+                        color: bgColor,
+                        child: Slidable(
+                          endActionPane: const ActionPane(
+                            motion: ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                // An action can be bigger than the others.
+                                flex: 2,
+                                onPressed: null,
+                                backgroundColor:
+                                    Color.fromARGB(255, 133, 221, 106),
+                                foregroundColor: Colors.white,
+                                icon: Icons.archive,
+                                label: 'Düzenle',
+                              ),
+                              SlidableAction(
+                                onPressed: null,
+                                backgroundColor: Color.fromARGB(255, 207, 3, 3),
+                                foregroundColor: Colors.white,
+                                icon: Icons.save,
+                                label: 'Sil',
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            title: widget.userData!['isPregnant']
+                                ? Row(
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        radius: 15.0,
+                                        backgroundColor: const Color.fromARGB(
+                                            255,
+                                            138,
+                                            33,
+                                            243), // Yuvarlağın arka plan rengini ayarlayabilirsiniz.
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              (((DateTime.now().difference(
+                                                              DateTime.parse(widget
+                                                                      .userData![
+                                                                  'sonAdetTarihi'])))
+                                                          .inDays) ~/
+                                                      7)
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: Colors
+                                                    .white, // Metnin rengini ayarlayabilirsiniz.
+                                                fontSize: 16.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              10.0), // CircleAvatar ve metin arasında biraz boşluk bırakır.
+                                      Text(
+                                        'Kilo: ${_weightHistory[index].weight.toStringAsFixed(1)} kg',
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ],
+                                  )
+                                : Text(
+                                    '${_weightHistory[index].weight.toStringAsFixed(1)} kg',
+                                    // Changed here
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                            subtitle: Text(
+                              'Kayıt Tarihi: ${_weightHistory[index].dateTime}',
+                              style: TextStyle(fontSize: 12.0),
+                            ),
+                            trailing: Container(
+                              width: 60,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.edit_note_sharp,
+                                    size: 30,
+                                    // color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                  Text("Not Ekle"),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              left: 5,
+              top: 0,
+              child: Container(
+                height: 40,
+                child: IconButton(
+                    onPressed: () {
+                      if (!Navigator.of(context).canPop()) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => CheckAuth()),
+                        );
+                      }
+                      // Navigator.pop(context);
+                      // Navigator.pushReplacement(context,
+                      //     MaterialPageRoute(builder: (_) {
+                      //   return CheckAuth();
+                      // }));
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_outlined,
+                      size: 35,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    )),
+              ),
+            )
+          ],
         ),
       ),
     );
