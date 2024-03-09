@@ -235,7 +235,8 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   @override
   void initState() {
     super.initState();
-    ilacSaatleri = [TimeOfDay.now()];
+
+    ilacSaatleri = [TimeOfDay(hour: 20, minute: 00)];
 
     baslangicTarihi = DateTime.now();
     kacGunKullanilacak = 1;
@@ -249,19 +250,14 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('İlaç Ekle'),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
             Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Text(
-                    "İlaç Ekle",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 25),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                   child: Column(
@@ -273,14 +269,36 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                       ),
                       SizedBox(height: 2),
                       Divider(),
+
+                      // Günlerin listesi ve check kutuları
+                      Wrap(
+                        spacing: 10,
+                        children: List.generate(
+                          7,
+                          (index) => FilterChip(
+                            selectedColor: Colors.green,
+                            disabledColor: Colors.grey,
+                            label: Text(_getDayName(index)),
+                            selected: selectedDays[index],
+                            onSelected: (isSelected) {
+                              setState(() {
+                                selectedDays[index] = isSelected;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 2),
+                      Divider(),
                       SizedBox(height: 2),
                       Text('İlaç Saatleri'),
-                      Column(
+                      Row(
                         children: ilacSaatleri
                             .map((time) => Row(
                                   children: [
                                     Text(
-                                      '${time.hour}:${time.minute}',
+                                      '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
                                       style: TextStyle(fontSize: 16),
                                     ),
                                     IconButton(
@@ -289,6 +307,8 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                                         setState(() {
                                           ilacSaatleri.remove(time);
                                         });
+                                        ilacSaatleri.sort(
+                                            (a, b) => a.hour.compareTo(b.hour));
                                       },
                                     ),
                                   ],
@@ -314,27 +334,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                       ,
                       SizedBox(height: 2),
                       Divider(),
-                      Text('Hangi Günler?'),
-                      // Günlerin listesi ve check kutuları
-                      Wrap(
-                        spacing: 10,
-                        children: List.generate(
-                          7,
-                          (index) => FilterChip(
-                            selectedColor: Colors.green,
-                            disabledColor: Colors.grey,
-                            label: Text(_getDayName(index)),
-                            selected: selectedDays[index],
-                            onSelected: (isSelected) {
-                              setState(() {
-                                selectedDays[index] = isSelected;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Divider(),
-                      SizedBox(height: 2),
+
                       Text('Kaç Gün Kullanılacak'),
                       NumberPicker(
                         value: kacGunKullanilacak,
@@ -381,26 +381,26 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                 ),
               ],
             ),
-            Positioned(
-              left: 5,
-              top: 0,
-              child: Container(
-                height: 40,
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // Navigator.pushReplacement(context,
-                      //     MaterialPageRoute(builder: (_) {
-                      //   return CheckAuth();
-                      // }));
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios_new_outlined,
-                      size: 35,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    )),
-              ),
-            )
+            // Positioned(
+            //   left: 5,
+            //   top: 0,
+            //   child: Container(
+            //     height: 40,
+            //     child: IconButton(
+            //         onPressed: () {
+            //           Navigator.pop(context);
+            //           // Navigator.pushReplacement(context,
+            //           //     MaterialPageRoute(builder: (_) {
+            //           //   return CheckAuth();
+            //           // }));
+            //         },
+            //         icon: Icon(
+            //           Icons.arrow_back_ios_new_outlined,
+            //           size: 35,
+            //           color: Color.fromARGB(255, 0, 0, 0),
+            //         )),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -416,6 +416,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
         setState(() {
           ilacSaatleri.add(pickedTime);
         });
+        ilacSaatleri.sort((a, b) => a.hour.compareTo(b.hour));
       }
     });
   }
