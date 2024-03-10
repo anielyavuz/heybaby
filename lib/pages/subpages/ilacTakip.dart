@@ -97,8 +97,8 @@ class _IlacTakipState extends State<IlacTakip> {
       for (var gun in ilac['gunler']) {
         DateTime ilacGunu = _selectedDay
             .subtract(Duration(days: (_selectedDay.weekday - gun) as int));
-        ilacCheckboxValues[ilac['isim']]![ilacGunu] =
-            List<bool>.filled(ilac['saatler'].length, false);
+        // ilacCheckboxValues[ilac['isim']]![ilacGunu] =
+        //     List<bool>.filled(ilac['saatler'].length, false);
       }
     }
   }
