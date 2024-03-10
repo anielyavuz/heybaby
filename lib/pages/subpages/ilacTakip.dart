@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -239,7 +241,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
     ilacSaatleri = [TimeOfDay(hour: 20, minute: 00)];
 
     baslangicTarihi = DateTime.now();
-    kacGunKullanilacak = 1;
+    kacGunKullanilacak = 7;
     // Pazartesi, Çarşamba ve Cuma günlerini seçili hale getir
     List<int> selectedIndices = [0, 1, 2, 3, 4, 5, 6];
     for (int index in selectedIndices) {
@@ -256,130 +258,218 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextField(
-                        controller: _ilacAdiController,
-                        decoration: InputDecoration(labelText: 'İlaç Adı'),
-                      ),
-                      SizedBox(height: 2),
-                      Divider(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.blue, // Arka plan rengi
+                      borderRadius:
+                          BorderRadius.circular(10), // Kenar yuvarlatma
+                      border: Border.all(color: Colors.black), // Kenar çizgisi
+                    ),
+                    child: TextField(
+                      controller: _ilacAdiController,
+                      decoration: InputDecoration(labelText: 'İlaç Adı'),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Divider(),
 
-                      // Günlerin listesi ve check kutuları
-                      Wrap(
-                        spacing: 10,
-                        children: List.generate(
-                          7,
-                          (index) => FilterChip(
-                            selectedColor: Colors.green,
-                            disabledColor: Colors.grey,
-                            label: Text(_getDayName(index)),
-                            selected: selectedDays[index],
-                            onSelected: (isSelected) {
-                              setState(() {
-                                selectedDays[index] = isSelected;
-                              });
-                            },
+                  // Günlerin listesi ve check kutuları
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.blue, // Arka plan rengi
+                      borderRadius:
+                          BorderRadius.circular(10), // Kenar yuvarlatma
+                      border: Border.all(color: Colors.black), // Kenar çizgisi
+                    ),
+                    child: Wrap(
+                      spacing: 2,
+                      children: List.generate(
+                        7,
+                        (index) => FilterChip(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
                           ),
+                          showCheckmark: false,
+                          selectedColor: Color.fromARGB(255, 164, 38, 243),
+                          disabledColor: Colors.grey,
+                          label: Text(_getDayName(index)),
+                          selected: selectedDays[index],
+                          onSelected: (isSelected) {
+                            setState(() {
+                              selectedDays[index] = isSelected;
+                            });
+                          },
                         ),
                       ),
-
-                      SizedBox(height: 2),
-                      Divider(),
-                      SizedBox(height: 2),
-                      Text('İlaç Saatleri'),
-                      Row(
-                        children: ilacSaatleri
-                            .map((time) => Row(
-                                  children: [
-                                    Text(
-                                      '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.remove_circle),
-                                      onPressed: () {
-                                        setState(() {
-                                          ilacSaatleri.remove(time);
-                                        });
-                                        ilacSaatleri.sort(
-                                            (a, b) => a.hour.compareTo(b.hour));
-                                      },
-                                    ),
-                                  ],
-                                ))
-                            .toList(),
-                      ),
-                      ElevatedButton(
-                        onPressed: _ilacSaatiEkle,
-                        child: Text('İlaç Saati Ekle'),
-                      ),
-                      SizedBox(height: 2),
-                      Divider(),
-                      SizedBox(height: 2),
-                      TextButton(
-                        onPressed: _selectDate,
-                        child: Text(
-                            'Başlangıç Tarihi: ${baslangicTarihi.toString().split(" ")[0]}'),
-                      )
-                      // TextButton(
-                      //   onPressed: _selectDate,
-                      //   child: Text('Tarihi Seç'),
-                      // ),
-                      ,
-                      SizedBox(height: 2),
-                      Divider(),
-
-                      Text('Kaç Gün Kullanılacak'),
-                      NumberPicker(
-                        value: kacGunKullanilacak,
-                        minValue: 1,
-                        maxValue: 30,
-                        onChanged: (value) {
-                          setState(() {
-                            kacGunKullanilacak = value;
-                          });
-                        },
-                      ),
-
-                      Divider(),
-                      SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Text('Tok mu?'),
-                          Switch(
-                            value: tokMu,
-                            onChanged: (newValue) {
-                              setState(() {
-                                tokMu = newValue;
-                              });
-                            },
-                          ),
-                          Text(tokMu ? 'Evet' : 'Hayır'),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_ilacAdiController.text.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('İlaç Adı boş olamaz.')),
-                            );
-                          } else {
-                            _ilacEkle();
-                          }
-                        },
-                        child: Text('Ekle'),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+
+                  SizedBox(height: 10),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.blue, // Arka plan rengi
+                      borderRadius:
+                          BorderRadius.circular(10), // Kenar yuvarlatma
+                      border: Border.all(color: Colors.black), // Kenar çizgisi
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Saat'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () {
+                                _ilacSaatiEkle();
+                              },
+                            ),
+                            Row(
+                              children: ilacSaatleri
+                                  .map(
+                                    (time) => Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color.fromARGB(255, 153, 51,
+                                              255), // Çerçeve rengi
+                                          width: 1.0, // Çerçeve kalınlığı
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                            8.0), // Opsiyonel: Köşelerin yuvarlaklığı
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.remove_circle),
+                                            onPressed: () {
+                                              setState(() {
+                                                ilacSaatleri.remove(time);
+                                              });
+                                              ilacSaatleri.sort((a, b) =>
+                                                  a.hour.compareTo(b.hour));
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+                  // Divider(),
+                  // SizedBox(height: 2),
+                  // TextButton(
+                  //   onPressed: _selectDate,
+                  //   child: Text(
+                  //       'Başlangıç Tarihi: ${baslangicTarihi.toString().split(" ")[0]}'),
+                  // )
+                  // TextButton(
+                  //   onPressed: _selectDate,
+                  //   child: Text('Tarihi Seç'),
+                  // ),
+                  // ,
+
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.blue, // Arka plan rengi
+                      borderRadius:
+                          BorderRadius.circular(10), // Kenar yuvarlatma
+                      border: Border.all(color: Colors.black), // Kenar çizgisi
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Tok'),
+                        Switch(
+                          value: tokMu,
+                          onChanged: (newValue) {
+                            setState(() {
+                              tokMu = newValue;
+                            });
+                          },
+                        ),
+                        // Text(tokMu ? 'Evet' : 'Hayır'),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.blue, // Arka plan rengi
+                      borderRadius:
+                          BorderRadius.circular(10), // Kenar yuvarlatma
+                      border: Border.all(color: Colors.black), // Kenar çizgisi
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Kaç Gün Kullanılacak'),
+                        NumberPicker(
+                          value: kacGunKullanilacak,
+                          minValue: 1,
+                          maxValue: 30,
+                          onChanged: (value) {
+                            setState(() {
+                              kacGunKullanilacak = value;
+                            });
+                          },
+                          decoration: BoxDecoration(
+                            // color: Colors.blue, // Arka plan rengi
+                            borderRadius:
+                                BorderRadius.circular(10), // Kenar yuvarlatma
+                            border: Border.all(
+                                color: Colors.black), // Kenar çizgisi
+                          ),
+                          textStyle: TextStyle(
+                            color: Colors.black, // Sayı rengi
+                          ),
+                          selectedTextStyle: TextStyle(
+                            color: Color.fromARGB(
+                                255, 101, 44, 243), // Seçili sayı rengi
+                            fontWeight: FontWeight.bold,
+                          ),
+                          itemWidth: 50,
+                          itemHeight: 30,
+                          zeroPad: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_ilacAdiController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('İlaç Adı boş olamaz.')),
+                          );
+                        } else {
+                          _ilacEkle();
+                        }
+                      },
+                      child: Text('Ekle'),
+                    ),
+                  ),
+                ],
+              ),
             ),
             // Positioned(
             //   left: 5,
@@ -459,19 +549,19 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   String _getDayName(int index) {
     switch (index) {
       case 0:
-        return 'Pzt';
+        return 'P';
       case 1:
-        return 'Sal';
+        return 'S';
       case 2:
-        return 'Çrş';
+        return 'Ç';
       case 3:
-        return 'Per';
+        return 'P';
       case 4:
-        return 'Cum';
+        return 'C';
       case 5:
-        return 'Cmt';
+        return 'C';
       case 6:
-        return 'Pzr';
+        return 'P';
       default:
         return '';
     }
