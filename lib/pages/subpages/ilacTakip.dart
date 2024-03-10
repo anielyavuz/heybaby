@@ -70,7 +70,7 @@ class _IlacTakipState extends State<IlacTakip> {
         currentUserData = data;
         _shouldFetchUserData = false;
         widget.userData = currentUserData;
-        ilacListesi = (widget.userData?['ilacListesi'] ?? [])
+        ilacListesi = (widget.userData?['dataRecord']['ilacListesiData'] ?? [])
             .map((item) => item as Map<String, dynamic>)
             .toList();
       });
@@ -84,7 +84,7 @@ class _IlacTakipState extends State<IlacTakip> {
     print("lkfdlkfdk");
     print(ilacListesi);
     setState(() {
-      ilacListesi = (widget.userData?['ilacListesi'] ?? [])
+      ilacListesi = (widget.userData?['dataRecord']['ilacListesiData'] ?? [])
           .map((item) => item as Map<String, dynamic>)
           .toList();
       print("ASDSDSADSAD");
@@ -569,7 +569,9 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
     };
     print(newMedication);
     // widget.ilacListesi.add(newMedication);
-    var _result = await FirestoreFunctions.addIlacDataRecord(newMedication);
+    // var _result = await FirestoreFunctions.addIlacDataRecord(newMedication);
+    var _result2 = await FirestoreFunctions.updateDataRecord(
+        newMedication, "ilacListesiData");
     Navigator.pop(context);
   }
 

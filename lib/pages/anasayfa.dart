@@ -116,7 +116,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       builder: (context) => IlacTakip(
                             userData: widget.userData,
                           )),
-                );
+                ).then((value) {
+                  _fetchUserData();
+                });
+                ;
               },
               onFunction4Pressed: () {
                 print("Test1");
