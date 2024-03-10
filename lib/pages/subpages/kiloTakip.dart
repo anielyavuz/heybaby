@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:intl/intl.dart';
 
@@ -55,7 +56,35 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
           dogumOnceSonra: widget.userData!['dogumOnceSonra'],
         ), // Insert at the beginning
       );
+      FirestoreFunctions.updateKiloDataRecord(
+          WeightEntry(
+            weight: _currentWeight,
+            dateTime: formattedDate,
+            isMotherWeight: _isMotherWeight,
+            dogumOnceSonra: widget.userData!['dogumOnceSonra'],
+          ),
+          "KiloSaveData");
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.userData != null) {
+      if (widget.userData!['dataRecord'] != null) {
+        if (widget.userData!['dataRecord']['KiloSaveData'] != null) {
+          List _tempList = widget.userData!['dataRecord']['KiloSaveData'];
+          _weightHistory = _tempList
+              .map((entry) => WeightEntry(
+                    weight: entry['weight'],
+                    dateTime: entry['dateTime'],
+                    isMotherWeight: entry['isMotherWeight'],
+                    dogumOnceSonra: entry['dogumOnceSonra'],
+                  ))
+              .toList();
+        }
+      }
+    }
   }
 
   @override

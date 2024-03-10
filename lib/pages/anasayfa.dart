@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
 import 'package:heybaby/pages/subpages/ilacTakip.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
-import 'package:heybaby/pages/subpages/spinningWheel.dart';
+import 'package:heybaby/pages/subpages/suTakip.dart';
 
 class AnaSayfa extends StatefulWidget {
   final List<String> storyImages;
-  final Map<String, dynamic>? userData;
+  Map<String, dynamic>? userData;
 
-  const AnaSayfa({Key? key, this.userData, required this.storyImages})
+  AnaSayfa({Key? key, this.userData, required this.storyImages})
       : super(key: key);
 
   @override
@@ -19,6 +20,15 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
+  Future<void> _fetchUserData() async {
+    Map<String, dynamic>? data = await FirestoreFunctions.getUserData();
+    if (data != null) {
+      setState(() {
+        widget.userData = data;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -70,7 +80,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (_) {
                   return SpinningWheel(
-                    initialItems: widget.userData,
+                    userData: widget.userData,
                     pageType: 'waterDrinkData',
                     pageItems: {
                       'Bardak': "200",
@@ -93,7 +103,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       builder: (context) => KiloTakipPage(
                             userData: widget.userData,
                           )),
-                );
+                ).then((value) {
+                  _fetchUserData();
+                });
                 print("Test1");
               },
               onFunction3Pressed: () {

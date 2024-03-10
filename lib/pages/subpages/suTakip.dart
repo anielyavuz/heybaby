@@ -4,14 +4,14 @@ import 'package:heybaby/pages/anasayfa.dart';
 import 'package:heybaby/pages/authentication.dart';
 
 class SpinningWheel extends StatelessWidget {
-  final Map<String, dynamic>? initialItems;
+  final Map<String, dynamic>? userData;
   String pageType;
   Map<String, String> pageItems;
   String selectedItem;
   String selectedValue;
 
   SpinningWheel({
-    required this.initialItems,
+    required this.userData,
     required this.pageType,
     required this.pageItems,
     required this.selectedItem,
@@ -25,7 +25,7 @@ class SpinningWheel extends StatelessWidget {
         // appBar: AppBar(),
         body: Center(
           child: RotatingHalfWheel(
-            initialItems: initialItems,
+            userData: userData,
             pageType: pageType,
             pageItems: pageItems,
             selectedItem: selectedItem,
@@ -39,13 +39,13 @@ class SpinningWheel extends StatelessWidget {
 
 // ignore: must_be_immutable
 class RotatingHalfWheel extends StatefulWidget {
-  Map<String, dynamic>? initialItems;
+  Map<String, dynamic>? userData;
   String pageType;
   Map<String, String> pageItems;
   String selectedItem;
   String selectedValue;
   RotatingHalfWheel({
-    required this.initialItems,
+    required this.userData,
     required this.pageType,
     required this.pageItems,
     required this.selectedItem,
@@ -76,11 +76,11 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
   void initState() {
     super.initState();
 
-    if (widget.initialItems != null &&
-        widget.initialItems!.containsKey('dataRecord') &&
-        widget.initialItems!['dataRecord'] != null &&
-        widget.initialItems!['dataRecord'].containsKey(widget.pageType)) {
-      var historyData = widget.initialItems!['dataRecord'][widget.pageType];
+    if (widget.userData != null &&
+        widget.userData!.containsKey('dataRecord') &&
+        widget.userData!['dataRecord'] != null &&
+        widget.userData!['dataRecord'].containsKey(widget.pageType)) {
+      var historyData = widget.userData!['dataRecord'][widget.pageType];
 
       if (historyData is List) {
         // Bugünün tarihini al
