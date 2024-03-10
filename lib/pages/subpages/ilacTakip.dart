@@ -6,9 +6,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class IlacTakip extends StatefulWidget {
-  final Map<String, dynamic>? userData;
+  Map<String, dynamic>? userData;
 
-  const IlacTakip({Key? key, this.userData}) : super(key: key);
+  IlacTakip({Key? key, this.userData}) : super(key: key);
   @override
   _IlacTakipState createState() => _IlacTakipState();
 }
@@ -20,6 +20,8 @@ class _IlacTakipState extends State<IlacTakip> {
   TextEditingController _ilacEkleTextFieldController = TextEditingController();
   // Sample medication data
   var ilacListesi = [];
+  Map<String, dynamic>? currentUserData;
+  bool _shouldFetchUserData = true;
 
   // [
   //   {
@@ -59,6 +61,22 @@ class _IlacTakipState extends State<IlacTakip> {
   // Store the selected checkbox values for each medication for each day
   Map<String, Map<DateTime, List<bool>>> ilacCheckboxValues = {};
 
+  Future<void> _fetchUserData() async {
+    Map<String, dynamic>? data = await FirestoreFunctions.getUserData();
+    if (data != null) {
+      setState(() {
+        print("Datayı güncelle");
+        // print(widget.userData);
+        currentUserData = data;
+        _shouldFetchUserData = false;
+        widget.userData = currentUserData;
+        ilacListesi = (widget.userData?['ilacListesi'] ?? [])
+            .map((item) => item as Map<String, dynamic>)
+            .toList();
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,7 +93,7 @@ class _IlacTakipState extends State<IlacTakip> {
 
     // Initialize the checkbox values for each medication for each day
     for (var ilac in ilacListesi) {
-      ilacCheckboxValues[ilac['isim']] = {};
+      // ilacCheckboxValues[ilac['isim']] = {};
       for (var gun in ilac['gunler']) {
         DateTime ilacGunu = _selectedDay
             .subtract(Duration(days: (_selectedDay.weekday - gun) as int));
@@ -96,6 +114,7 @@ class _IlacTakipState extends State<IlacTakip> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TableCalendar(
+            startingDayOfWeek: StartingDayOfWeek.monday,
             firstDay: DateTime.utc(2020, 10, 16),
             lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: _focusedDay,
@@ -109,19 +128,19 @@ class _IlacTakipState extends State<IlacTakip> {
                 _focusedDay = focusedDay;
 
                 // Update the checkbox values for each medication for the selected day
-                for (var ilac in ilacListesi) {
-                  if (!ilacCheckboxValues[ilac['isim']]!
-                      .containsKey(_selectedDay)) {
-                    ilacCheckboxValues[ilac['isim']]![_selectedDay] =
-                        List<bool>.filled(ilac['saatler'].length, false);
-                  }
-                }
+                // for (var ilac in ilacListesi) {
+                //   if (!ilacCheckboxValues[ilac['isim']]!
+                //       .containsKey(_selectedDay)) {
+                //     ilacCheckboxValues[ilac['isim']]![_selectedDay] =
+                //         List<bool>.filled(ilac['saatler'].length, false);
+                //   }
+                // }
 
                 // Print the checkbox values for each medication for the selected day
                 for (var ilac in ilacListesi) {
-                  print('Medicine: ${ilac['isim']}');
-                  print(
-                      'Checkbox values: ${ilacCheckboxValues[ilac['isim']]![_selectedDay]}');
+                  // print('Medicine: ${ilac['isim']}');
+                  // print(
+                  //     'Checkbox values: ${ilacCheckboxValues[ilac['isim']]![_selectedDay]}');
                 }
               });
             },
@@ -153,7 +172,7 @@ class _IlacTakipState extends State<IlacTakip> {
                     DateTime bitisTarihi = baslangicTarihi.add(
                         Duration(days: int.parse(ilac['kac_gun_kullanim'])));
 
-                    if (ilac['gunler'].contains(_selectedDay.weekday) &&
+                    if (ilac['gunler'].contains(_selectedDay.weekday - 1) &&
                         _selectedDay.isAfter(baslangicTarihi) &&
                         _selectedDay.isBefore(bitisTarihi)) {
                       return Column(
@@ -173,17 +192,17 @@ class _IlacTakipState extends State<IlacTakip> {
                               return Row(
                                 children: [
                                   Text(saat),
-                                  Checkbox(
-                                    value: ilacCheckboxValues[ilac['isim']]![
-                                            _selectedDay]![index] ??
-                                        false,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        ilacCheckboxValues[ilac['isim']]![
-                                            _selectedDay]![index] = value!;
-                                      });
-                                    },
-                                  ),
+                                  // Checkbox(
+                                  //   value: ilacCheckboxValues[ilac['isim']]![
+                                  //           _selectedDay]![index] ??
+                                  //       false,
+                                  //   onChanged: (value) {
+                                  //     setState(() {
+                                  //       ilacCheckboxValues[ilac['isim']]![
+                                  //           _selectedDay]![index] = value!;
+                                  //     });
+                                  //   },
+                                  // ),
                                 ],
                               );
                             }),
@@ -209,7 +228,7 @@ class _IlacTakipState extends State<IlacTakip> {
               builder: (context) => IlacEkleScreen(),
             ),
           ).then((value) {
-            setState(() {});
+            _fetchUserData();
           });
         },
         tooltip: 'İlaç Ekle',
@@ -304,6 +323,12 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                             setState(() {
                               selectedDays[index] = isSelected;
                             });
+                            print(selectedDays
+                                .asMap()
+                                .entries
+                                .where((entry) => entry.value)
+                                .map((entry) => entry.key)
+                                .toList());
                           },
                         ),
                       ),
@@ -527,8 +552,10 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   void _ilacEkle() async {
     Map<String, dynamic> newMedication = {
       'isim': _ilacAdiController.text,
-      'saatler':
-          ilacSaatleri.map((time) => "'${time.hour}:${time.minute}'").toList(),
+      'saatler': ilacSaatleri
+          .map((time) =>
+              "${time.hour}:${time.minute.toString().padLeft(2, '0')}")
+          .toList(),
       'baslangic_tarihi':
           "${baslangicTarihi.year}-${baslangicTarihi.month < 10 ? '0${baslangicTarihi.month}' : baslangicTarihi.month}-${baslangicTarihi.day < 10 ? '0${baslangicTarihi.day}' : baslangicTarihi.day}",
       'kac_gun_kullanim': kacGunKullanilacak.toString(),
