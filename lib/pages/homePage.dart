@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return AnaSayfa(storyImages: storyImages, userData: userData);
 
       case 1:
-        return TakvimPage(userData: userData);
+        return Calendar();
 
       case 2:
         return BegenilenlerPage();

@@ -1,158 +1,162 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 
-class TakvimPage extends StatefulWidget {
-  final Map<String, dynamic>? userData;
-  const TakvimPage({
-    Key? key,
-    this.userData,
-  }) : super(key: key);
+class Event {
+  final String title;
+  Event({required this.title});
 
-  @override
-  _TakvimPageState createState() => _TakvimPageState();
+  String toString() => this.title;
 }
 
-class _TakvimPageState extends State<TakvimPage> {
-  TextEditingController planController = TextEditingController();
-  DateTime? selectedDate;
-  TimeOfDay? selectedTime;
-  List<Map<String, dynamic>> planlar = [];
-  //test
+class Calendar extends StatefulWidget {
+  @override
+  _CalendarState createState() => _CalendarState();
+}
 
-  Future<void> _selectDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-    );
+class _CalendarState extends State<Calendar> {
+  late Map<DateTime, List<Event>> selectedEvents;
+  CalendarFormat format = CalendarFormat.month;
+  DateTime selectedDay = DateTime.now();
+  DateTime focusedDay = DateTime.now();
 
-    if (pickedDate != null && pickedDate != selectedDate) {
-      setState(() {
-        selectedDate = pickedDate;
-      });
-    }
+  TextEditingController _eventController = TextEditingController();
+
+  @override
+  void initState() {
+    selectedEvents = {};
+    super.initState();
   }
 
-  Future<void> _selectTime() async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
-    );
+  List<Event> _getEventsfromDay(DateTime date) {
+    return selectedEvents[date] ?? [];
+  }
 
-    if (pickedTime != null && pickedTime != selectedTime) {
-      setState(() {
-        selectedTime = pickedTime;
-      });
-    }
+  @override
+  void dispose() {
+    _eventController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Plan Ekleme Formu
-            TextFormField(
-              controller: planController,
-              decoration: InputDecoration(
-                labelText: 'Yeni Plan Ekle',
+      appBar: AppBar(
+        title: Text("Aktiviteler"),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          TableCalendar(
+            focusedDay: selectedDay,
+            firstDay: DateTime(1990),
+            lastDay: DateTime(2050),
+            calendarFormat: format,
+            onFormatChanged: (CalendarFormat _format) {
+              setState(() {
+                format = _format;
+              });
+            },
+            startingDayOfWeek: StartingDayOfWeek.monday,
+            daysOfWeekVisible: true,
+
+            //Day Changed
+            onDaySelected: (DateTime selectDay, DateTime focusDay) {
+              setState(() {
+                selectedDay = selectDay;
+                focusedDay = focusDay;
+              });
+              print(focusedDay);
+            },
+            selectedDayPredicate: (DateTime date) {
+              return isSameDay(selectedDay, date);
+            },
+
+            eventLoader: _getEventsfromDay,
+
+            //To style the Calendar
+            calendarStyle: CalendarStyle(
+              isTodayHighlighted: true,
+              selectedDecoration: BoxDecoration(
+                color: Color.fromARGB(255, 143, 51, 240),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              selectedTextStyle: TextStyle(color: Colors.white),
+              todayDecoration: BoxDecoration(
+                color: const Color.fromARGB(255, 81, 80, 81),
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              defaultDecoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              weekendDecoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(5.0),
               ),
             ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () async {
-                await _selectDate();
-                await _selectTime();
-
-                if (selectedDate != null && selectedTime != null) {
-                  setState(() {
-                    final formattedDate =
-                        DateFormat.yMd().format(selectedDate!);
-                    final formattedTime = DateFormat.Hm().format(DateTime(
-                      selectedDate!.year,
-                      selectedDate!.month,
-                      selectedDate!.day,
-                      selectedTime!.hour,
-                      selectedTime!.minute,
-                    ));
-
-                    planlar.add({
-                      'text': planController.text,
-                      'date': selectedDate,
-                      'time': selectedTime,
-                    });
-
-                    planController.clear();
-                    selectedDate = null;
-                    selectedTime = null;
-
-                    // Gelecekteki planları tarih ve saat olarak sırala
-                    planlar.sort((a, b) {
-                      final dateA = DateTime(
-                        a['date'].year,
-                        a['date'].month,
-                        a['date'].day,
-                        a['time'].hour,
-                        a['time'].minute,
-                      );
-                      final dateB = DateTime(
-                        b['date'].year,
-                        b['date'].month,
-                        b['date'].day,
-                        b['time'].hour,
-                        b['time'].minute,
-                      );
-                      return dateA.compareTo(dateB);
-                    });
-                  });
-                }
-              },
-              child: Text("Plan Ekle"),
-            ),
-            SizedBox(height: 24.0),
-            // Plan Listesi
-            Text(
-              'Gelecekteki Planlar',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+            headerStyle: HeaderStyle(
+              formatButtonVisible: true,
+              titleCentered: true,
+              formatButtonShowsNext: false,
+              formatButtonDecoration: BoxDecoration(
+                color: Color.fromARGB(255, 205, 131, 247),
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              formatButtonTextStyle: TextStyle(
+                color: Colors.white,
               ),
             ),
-            SizedBox(height: 8.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: planlar.length,
-                itemBuilder: (context, index) {
-                  final plan = planlar[index];
-                  final formattedDate =
-                      DateFormat.yMd().format(plan['date'] as DateTime);
-                  final formattedTime = DateFormat.Hm().format(DateTime(
-                    plan['date'].year,
-                    plan['date'].month,
-                    plan['date'].day,
-                    (plan['time'] as TimeOfDay).hour,
-                    (plan['time'] as TimeOfDay).minute,
-                  ));
-
-                  return ListTile(
-                    title:
-                        Text('${plan['text']} - $formattedDate $formattedTime'),
-                  );
+          ),
+          ..._getEventsfromDay(selectedDay).map(
+            (Event event) => ListTile(
+              title: Text(
+                event.title,
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Add Event"),
+            content: TextFormField(
+              controller: _eventController,
+            ),
+            actions: [
+              TextButton(
+                child: Text("Cancel"),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  if (_eventController.text.isEmpty) {
+                  } else {
+                    if (selectedEvents[selectedDay] != null) {
+                      selectedEvents[selectedDay]!.add(
+                        Event(title: _eventController.text),
+                      );
+                    } else {
+                      selectedEvents[selectedDay] = [
+                        Event(title: _eventController.text)
+                      ];
+                    }
+                  }
+                  Navigator.pop(context);
+                  _eventController.clear();
+                  setState(() {});
+                  return;
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        label: Text("Add Event"),
+        icon: Icon(Icons.add),
       ),
     );
   }
