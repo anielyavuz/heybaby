@@ -14,7 +14,7 @@ class IlacTakip extends StatefulWidget {
 }
 
 class _IlacTakipState extends State<IlacTakip> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat format = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
   late DateTime _selectedDay;
   TextEditingController _ilacEkleTextFieldController = TextEditingController();
@@ -118,7 +118,7 @@ class _IlacTakipState extends State<IlacTakip> {
             firstDay: DateTime.utc(2020, 10, 16),
             lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: _focusedDay,
-            calendarFormat: _calendarFormat,
+            calendarFormat: format,
             selectedDayPredicate: (day) {
               return isSameDay(_selectedDay, day);
             },
@@ -147,17 +147,26 @@ class _IlacTakipState extends State<IlacTakip> {
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
             },
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                // Call `setState()` when updating calendar format
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
+            onFormatChanged: (CalendarFormat _format) {
+              setState(() {
+                format = _format;
+              });
             },
             calendarStyle: CalendarStyle(
               // Use `CalendarStyle` to customize the UI
               canMarkersOverflow: true,
+            ),
+            headerStyle: HeaderStyle(
+              formatButtonVisible: true,
+              titleCentered: true,
+              formatButtonShowsNext: false,
+              formatButtonDecoration: BoxDecoration(
+                color: Color.fromARGB(255, 160, 131, 247),
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              formatButtonTextStyle: TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
           Expanded(
