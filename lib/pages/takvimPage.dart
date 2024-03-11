@@ -118,11 +118,14 @@ class _CalendarState extends State<Calendar> {
           ),
         ],
       ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.startFloat, // FAB'ı sola konumlandırır
+
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Add Event"),
+            title: Text("Aktivite Ekle"),
             content: TextFormField(
               controller: _eventController,
             ),
@@ -155,7 +158,7 @@ class _CalendarState extends State<Calendar> {
             ],
           ),
         ),
-        label: Text("Add Event"),
+        label: Text("Aktivite Ekle"),
         icon: Icon(Icons.add),
       ),
     );
