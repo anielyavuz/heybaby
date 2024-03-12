@@ -7,6 +7,7 @@ class NotlarPage extends StatefulWidget {
     this.userData,
   }) : super(key: key);
   final Map<String, dynamic>? userData;
+
   @override
   _NotlarPageState createState() => _NotlarPageState();
 }
@@ -86,8 +87,10 @@ class _NotlarPageState extends State<NotlarPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(255, 92, 64, 219),
+        foregroundColor: Colors.white,
         onPressed: () {
-          _eklemePopup(context);
+          _showChatModalBottomSheet(context);
         },
         child: Icon(Icons.add),
       ),
@@ -95,41 +98,53 @@ class _NotlarPageState extends State<NotlarPage> {
     );
   }
 
-  Future<void> _eklemePopup(BuildContext context) async {
+  Future<void> _showChatModalBottomSheet(BuildContext context) async {
     TextEditingController notController = TextEditingController();
 
-    return showDialog(
+    await showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Not Ekle"),
-          content: TextFormField(
-            controller: notController,
-            decoration: InputDecoration(
-              labelText: 'Notunuzu Buraya Ekleyin',
-            ),
+        return Container(
+          color: Colors.white,
+          padding: EdgeInsets.all(16.0),
+          height: MediaQuery.of(context).size.height *
+              0.95, // İstediğiniz yükseklik
+
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        notlar.add({
+                          'icerik': notController.text,
+                          'tarih': DateTime.now(),
+                          'favori': false,
+                        });
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Bitti"),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: TextFormField(
+                  controller: notController,
+                  decoration: InputDecoration(
+                    hintText:
+                        'Yazmaya başlayın...', // labelText yerine hintText kullanıldı
+                    border: InputBorder.none, // Alt çizgiyi kaldırır
+                  ),
+                  maxLines: null, // Yeni satırlara izin vermek için
+                ),
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("İptal"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  notlar.add({
-                    'icerik': notController.text,
-                    'tarih': DateTime.now(),
-                    'favori': false,
-                  });
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text("Ekle"),
-            ),
-          ],
         );
       },
     );
