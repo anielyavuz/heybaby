@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,86 +12,77 @@ class NotlarPage extends StatefulWidget {
 }
 
 class _NotlarPageState extends State<NotlarPage> {
-  List<Not> notlar = [];
-
-  @override
-  void initState() {
-    // init();  //firebase messaging modülü ama çalışmıyor.
-    super.initState();
-  }
-
-  init() async {
-    String deviceToken = await getDeviceToken();
-    print("###### PRINT DEVICE TOKEN TO USE FOR PUSH NOTIFCIATION ######");
-    print(deviceToken);
-    print("############################################################");
-
-    // listen for user to click on notification
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
-      String? title = remoteMessage.notification!.title;
-      String? description = remoteMessage.notification!.body;
-      print(title);
-      print(description);
-      //im gonna have an alertdialog when clicking from push notification
-      // Alert(
-      //   context: context,
-      //   type: AlertType.error,
-      //   title: title, // title from push notification data
-      //   desc: description, // description from push notifcation data
-      //   buttons: [
-      //     DialogButton(
-      //       child: Text(
-      //         "COOL",
-      //         style: TextStyle(color: Colors.white, fontSize: 20),
-      //       ),
-      //       onPressed: () => Navigator.pop(context),
-      //       width: 120,
-      //     )
-      //   ],
-      // ).show();
-    });
-  }
-
-  //get device token to use for push notification
-  Future getDeviceToken() async {
-    //request user permission for push notification
-    FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging _firebaseMessage = FirebaseMessaging.instance;
-    String? deviceToken = await _firebaseMessage.getToken();
-    return (deviceToken == null) ? "" : deviceToken;
-  }
+  List<Map<String, dynamic>> notlar = [];
 
   @override
   Widget build(BuildContext context) {
+    // Kalplenen notları en üstte göstermek için sıralama yapılıyor
+    notlar.sort((a, b) {
+      if (a['favori'] && !b['favori']) {
+        return -1;
+      } else if (!a['favori'] && b['favori']) {
+        return 1;
+      } else {
+        return b['tarih'].compareTo(a['tarih']);
+      }
+    });
+
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Notlar',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: notlar.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(notlar[index].icerik),
-                    subtitle: Text(
-                      DateFormat.yMd().add_jm().format(notlar[index].tarih),
-                      style: TextStyle(fontSize: 10.0),
+      appBar: AppBar(
+        title: Text('Günlük'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromARGB(255, 116, 0, 248),
+              Color.fromARGB(255, 154, 118, 232)
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: ListView.builder(
+            itemCount: notlar.length,
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 5,
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(notlar[index]['icerik']),
+                      subtitle: Text(
+                        DateFormat.yMd()
+                            .add_jm()
+                            .format(notlar[index]['tarih']),
+                        style: TextStyle(fontSize: 10.0),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(notlar[index]['favori']
+                            ? Icons.favorite
+                            : Icons.favorite_border),
+                        onPressed: () {
+                          setState(() {
+                            notlar[index]['favori'] = !notlar[index]['favori'];
+                          });
+                        },
+                      ),
                     ),
-                  );
-                },
-              ),
-            ),
-          ],
+                    Divider(), // Yatay çizgi
+                    Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Text(
+                        "Tarih: ${DateFormat.yMd().add_jm().format(notlar[index]['tarih'])}",
+                        style: TextStyle(fontSize: 12.0),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -101,8 +91,7 @@ class _NotlarPageState extends State<NotlarPage> {
         },
         child: Icon(Icons.add),
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.startFloat, // FAB'ın konumunu sola alır
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -130,7 +119,11 @@ class _NotlarPageState extends State<NotlarPage> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  notlar.add(Not(notController.text, DateTime.now()));
+                  notlar.add({
+                    'icerik': notController.text,
+                    'tarih': DateTime.now(),
+                    'favori': false,
+                  });
                 });
                 Navigator.of(context).pop();
               },
@@ -141,13 +134,6 @@ class _NotlarPageState extends State<NotlarPage> {
       },
     );
   }
-}
-
-class Not {
-  String icerik;
-  DateTime tarih;
-
-  Not(this.icerik, this.tarih);
 }
 
 void main() {
