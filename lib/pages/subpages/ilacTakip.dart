@@ -422,7 +422,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                                               ),
                                             ),
                                             Container(
-                                              height: 40,
+                                              height: 38,
                                               width: 40,
                                               child: IconButton(
                                                 iconSize: 20,
