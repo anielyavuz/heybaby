@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -252,6 +253,22 @@ class IlacEkleScreen extends StatefulWidget {
   _IlacEkleScreenState createState() => _IlacEkleScreenState();
 }
 
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: capitalize(newValue.text),
+      selection: newValue.selection,
+    );
+  }
+}
+
+String capitalize(String value) {
+  if (value.trim().isEmpty) return "";
+  return "${value[0].toUpperCase()}${value.substring(1).toLowerCase()}";
+}
+
 class _IlacEkleScreenState extends State<IlacEkleScreen> {
   late List<TimeOfDay> ilacSaatleri;
   late DateTime baslangicTarihi;
@@ -293,30 +310,38 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+                    height: 50,
                     decoration: BoxDecoration(
                       // color: Colors.blue, // Arka plan rengi
                       borderRadius:
                           BorderRadius.circular(10), // Kenar yuvarlatma
                       border: Border.all(color: Colors.black), // Kenar çizgisi
                     ),
-                    child: TextField(
-                      controller: _ilacAdiController,
-                      decoration: InputDecoration(labelText: 'İlaç Adı'),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: TextField(
+                        controller: _ilacAdiController,
+                        inputFormatters: <TextInputFormatter>[
+                          UpperCaseTextFormatter()
+                        ],
+                        decoration: InputDecoration(hintText: 'İlaç Adı'),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   // Divider(),
 
                   // Günlerin listesi ve check kutuları
                   Container(
+                    height: 50,
                     decoration: BoxDecoration(
                       // color: Colors.blue, // Arka plan rengi
                       borderRadius:
                           BorderRadius.circular(10), // Kenar yuvarlatma
                       border: Border.all(color: Colors.black), // Kenar çizgisi
                     ),
-                    child: Wrap(
-                      spacing: 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: List.generate(
                         7,
                         (index) => FilterChip(
@@ -344,7 +369,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Container(
                     decoration: BoxDecoration(
@@ -356,7 +381,10 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Saat'),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Text('Saat'),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -369,33 +397,50 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                             Row(
                               children: ilacSaatleri
                                   .map(
-                                    (time) => Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Color.fromARGB(255, 153, 51,
-                                              255), // Çerçeve rengi
-                                          width: 1.0, // Çerçeve kalınlığı
+                                    (time) => Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Color.fromARGB(255, 153, 51,
+                                                255), // Çerçeve rengi
+                                            width: 1.0, // Çerçeve kalınlığı
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                              8.0), // Opsiyonel: Köşelerin yuvarlaklığı
                                         ),
-                                        borderRadius: BorderRadius.circular(
-                                            8.0), // Opsiyonel: Köşelerin yuvarlaklığı
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          IconButton(
-                                            icon: Icon(Icons.remove_circle),
-                                            onPressed: () {
-                                              setState(() {
-                                                ilacSaatleri.remove(time);
-                                              });
-                                              ilacSaatleri.sort((a, b) =>
-                                                  a.hour.compareTo(b.hour));
-                                            },
-                                          ),
-                                        ],
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8),
+                                              child: Text(
+                                                '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 40,
+                                              width: 40,
+                                              child: IconButton(
+                                                iconSize: 20,
+                                                icon: Icon(
+                                                  Icons.remove_circle,
+                                                  // size: 20,
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    ilacSaatleri.remove(time);
+                                                  });
+                                                  ilacSaatleri.sort((a, b) =>
+                                                      a.hour.compareTo(b.hour));
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )
@@ -407,7 +452,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     ),
                   ),
 
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   // Divider(),
                   // SizedBox(height: 2),
                   // TextButton(
@@ -431,7 +476,10 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Tok'),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Text('Tok'),
+                        ),
                         Switch(
                           value: tokMu,
                           onChanged: (newValue) {
@@ -444,8 +492,9 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
+                    height: 50,
                     decoration: BoxDecoration(
                       // color: Colors.blue, // Arka plan rengi
                       borderRadius:
@@ -455,7 +504,10 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Kaç Gün Kullanılacak'),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: Text('Kaç Gün Kullanılacak'),
+                        ),
                         NumberPicker(
                           value: kacGunKullanilacak,
                           minValue: 1,
@@ -480,14 +532,15 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                                 255, 101, 44, 243), // Seçili sayı rengi
                             fontWeight: FontWeight.bold,
                           ),
-                          itemWidth: 50,
+                          itemWidth: 30,
                           itemHeight: 30,
                           zeroPad: false,
+                          axis: Axis.horizontal,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
