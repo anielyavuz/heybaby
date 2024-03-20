@@ -9,6 +9,7 @@ import 'package:heybaby/functions/notificationSender.dart';
 import 'package:heybaby/pages/anasayfa.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:heybaby/pages/hesapSayfasi.dart';
+import 'package:heybaby/pages/kesfetPage.dart';
 import 'package:heybaby/pages/listelerPage.dart';
 import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/notlarPage.dart';
@@ -81,8 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Takvim',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Beğenilenler',
+            icon: Icon(Icons.explore),
+            label: 'Keşfet',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.note),
@@ -139,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Calendar();
 
       case 2:
-        return BegenilenlerPage();
+        return KesfetPage();
 
       case 3:
         return NotlarPage(userData: userData);

@@ -27,7 +27,6 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           backgroundImage: NetworkImage(widget.userData?['photoURL'] ??
               'https://placekitten.com/200/200'),
         ),
-        SizedBox(height: 16),
         Text(
           widget.userData?['name'] ?? 'Guest',
           style: TextStyle(
@@ -43,6 +42,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             color: Colors.grey,
           ),
         ),
+        SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(5, (index) {
@@ -75,6 +75,12 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             print(
                 'Geri Bildirim: ${noteController.text}, Seçilen yıldız: ${_selectedStarIndex + 1}');
           },
+        ),
+        ElevatedButton(
+          child: Text(
+            'Beğendiğim Storyler',
+          ),
+          onPressed: () {},
         ),
         SizedBox(height: 24),
         ElevatedButton(

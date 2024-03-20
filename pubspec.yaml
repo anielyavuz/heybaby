@@ -79,6 +79,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+  
+    - assets/chatbot.jpg
     - assets/babyImageData.json
     - assets/Bardak.png
     - assets/Buyuk_Bardak.png
@@ -86,6 +88,18 @@ flutter:
     - assets/Matara.png
     - assets/Sise.png
     - assets/Surahi.png
+    - assets/yiyecek_icicek.jpg
+    - assets/temel_gidalar.jpg
+    - assets/vitamin_mineraller.jpg
+    - assets/yapilacak_yapilmayacak.jpg
+    - assets/kiloAlimi.jpg
+    - assets/bedenDegisimi.jpg
+    - assets/bebekGelisim.jpg
+    - assets/bebekGuvenligi.jpg
+    - assets/huzurMutluluk.jpg
+    - assets/uyku.jpg
+    - assets/fizikselSaglik.jpg
+    - assets/hamilelikAgrisi.jpg
     # - images/a_dot_ham.jpeg -- D:\heybaby\assets\babyImageData.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

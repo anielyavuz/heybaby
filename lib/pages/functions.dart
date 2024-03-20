@@ -45,7 +45,7 @@ class FunctionsWidget extends StatelessWidget {
         ),
         _buildFunctionButton(
           onPressed: onFunction4Pressed,
-          icon: Icons.fitness_center,
+          icon: Icons.pending_actions,
           description: function4Description,
         ),
       ],

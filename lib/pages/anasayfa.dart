@@ -127,7 +127,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
               function1Description: 'Su',
               function2Description: 'Kilo Takibi',
               function3Description: 'İlaç/Vitamin',
-              function4Description: 'Aktivite',
+              function4Description: 'Yapılacaklar',
             ),
           ],
         ),
