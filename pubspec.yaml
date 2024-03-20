@@ -50,6 +50,7 @@ dependencies:
   flutter_slidable: ^3.0.1
   numberpicker: ^2.1.2
   image_picker: ^1.0.7
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +83,7 @@ flutter:
   
     - assets/chatbot.jpg
     - assets/babyImageData.json
+    - assets/kesfetMakale.json
     - assets/Bardak.png
     - assets/Buyuk_Bardak.png
     - assets/Buyuk Bardak.png

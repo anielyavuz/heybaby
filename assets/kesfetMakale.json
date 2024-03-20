@@ -1,4 +1,174 @@
 {
-    "Yiyecek & İçecek": {
-        "Kahvaltı": {
-            "Kahvaltılık": { }}}}
+  "Makaleler": {
+    "Yiyecek & İçecek": [
+      {
+        "baslik": "Hamilelik Döneminde Sağlıklı Beslenme",
+        "icerik": "Hamilelik, anne adaylarının yaşamlarında dönüm noktası olan bir süreçtir ve sağlıklı bir şekilde beslenmek, hem anne hem de bebek için kritik öneme sahiptir. Bu dönemde, dengeli bir diyet, anne adayının ve bebeğin sağlığı için gereklidir.\n\nİlk olarak, hamilelik döneminde tüketilen yiyeceklerin besleyici olması önemlidir. Bebeğin sağlıklı gelişimi için protein, demir, folik asit, kalsiyum, ve diğer temel besin maddelerini içeren bir diyet önemlidir. Bu nedenle, taze meyve, sebze, tam tahıllar, protein kaynakları (örneğin, yumurta, balık, tavuk, fasulye ve kuru yemişler) gibi besinler tercih edilmelidir.\n\nİkinci olarak, hamilelik döneminde sıvı tüketimi de büyük önem taşır. Bol miktarda su içmek, anne adayının vücut sıvılarını dengede tutmasına ve sindirim sisteminin düzgün çalışmasına yardımcı olur. Ayrıca, kafein ve alkol gibi zararlı maddelerden kaçınılmalıdır. Herhangi bir şüphe durumunda, doktorunuzun önerilerine başvurmalısınız. Hamilelik süresince sağlıklı beslenme alışkanlıkları edinmek, hem anne hem de bebek için uzun vadeli faydalar sağlayabilir.",
+        "kategori": "Yiyecek & İçecek",
+        "tarih": "2024-03-19",
+        "keyWords": "",
+        "premium": false
+      },
+      {
+        "baslik": "Hamilelikte Yenilmemesi Gereken Besinler",
+        "icerik": "Hamilelik sürecinde, anne adaylarının dikkat etmesi gereken bazı besinler vardır. Bunlar arasında hamilelik süresince tüketilmesi önerilmeyen bazı yiyecek ve içecekler bulunmaktadır. Örneğin, çiğ veya az pişmiş etler, çiğ balık, çiğ yumurta, pastörize edilmemiş süt ve süt ürünleri, çiğ sebzeler, çiğ deniz ürünleri gibi gıdalar bakteri veya parazitler içerebilir ve hamilelik sürecinde risk oluşturabilir. Ayrıca, kafein içeren içeceklerin aşırı tüketimi ve alkol kesinlikle kaçınılması gerekenler arasındadır. Bu besinleri tüketmek, anne adayının ve bebeğin sağlığına zarar verebilir, bu nedenle bu besinlerden uzak durmak önemlidir. Sağlıklı bir hamilelik için, anne adaylarının bu besinlerden kaçınması ve dengeli bir beslenme programı izlemesi önemlidir.",
+        "kategori": "Yiyecek & İçecek",
+        "tarih": "2024-03-20",
+        "keyWords": "",
+        "premium": false
+      }
+    ],
+    "Temel Gıdalar": [
+      {
+        "baslik": "Hamilelikte Temel Gıdalar",
+        "icerik": "Hamilelik döneminde, anne adaylarının sağlıklı bir şekilde beslenmesi hem kendileri hem de bebeği için hayati öneme sahiptir. Temel gıdalar olan meyve, sebze, tam tahıllar, protein kaynakları ve sağlıklı yağlar, anne adayının ve bebeğin sağlığını desteklemek için önemlidir. Meyve ve sebzeler, vitaminler, mineraller ve antioksidanlar bakımından zengindir ve bebeğin sağlıklı gelişimini destekler. Tam tahıllar, lif, vitaminler ve mineraller açısından zengin olduğu için sindirim sistemini düzenler ve enerji sağlar. Protein kaynakları, bebeğin büyümesi ve anne adayının kas yapısının korunması için gereklidir. Sağlıklı yağlar ise bebeğin beyin gelişimi için önemlidir ve anne adayının kardiyovasküler sağlığını destekler. Hamilelikte temel gıdaların dengeli bir şekilde tüketilmesi, anne adayının ve bebeğinin sağlığı için kritik bir faktördür.",
+        "kategori": "Temel Gıdalar",
+        "tarih": "2024-03-18",
+        "keyWords": "hamilelik, temel gıdalar, anne adayı, bebek, sağlıklı beslenme, meyve, sebze, tam tahıllar, protein, sağlıklı yağlar",
+        "premium": false
+      },
+      {
+        "baslik": "Hamilelikte Temel Gıdalar",
+        "icerik": "Hamilelik döneminde, anne adaylarının sağlıklı bir şekilde beslenmesi hem kendileri hem de bebeği için hayati öneme sahiptir. Ancak hamilelikte dikkat edilmesi gereken bazı özel durumlar da vardır. Örneğin, hamilelik sırasında çiğ et veya çiğ balık gibi potansiyel olarak bakteri içeren yiyeceklerden kaçınılmalıdır. Ayrıca, kafein ve alkol tüketimi de sınırlanmalıdır, çünkü bunlar bebeğe zarar verebilir. Bununla birlikte, sağlıklı temel gıdaların yanı sıra, demir ve folik asit gibi özel besin maddelerine de özellikle dikkat edilmelidir. Bu maddeler bebeğin sağlıklı gelişimi için önemlidir ve eksiklikleri riskli durumlara yol açabilir. Dolayısıyla, hamilelikte temel gıdaları seçerken, bu besin maddelerini içeren gıdaların tercih edilmesi önemlidir.",
+        "kategori": "Temel Gıdalar",
+        "tarih": "2024-03-20",
+        "keyWords": "hamilelik, temel gıdalar, anne adayı, bebek, sağlıklı beslenme, demir, folik asit, çiğ et, çiğ balık, kafein, alkol",
+        "premium": false
+        }
+        ],
+        "Vitamin Mineraller": [
+        {
+        "baslik": "Hamilelikte Önemli Vitaminler ve Mineraller",
+        "icerik": "Hamilelik döneminde, anne adaylarının vücutları ve bebeğin gelişimi için belirli vitaminler ve minerallerin yeterli miktarda alınması önemlidir. Özellikle folik asit, demir, kalsiyum ve D vitamini gibi besin maddeleri, sağlıklı bir hamilelik için kritik öneme sahiptir. Folik asit, nöral tüp defektlerinin riskini azaltırken, demir anemi riskini azaltır. Kalsiyum, bebeğin kemik ve diş gelişimi için gereklidir, D vitamini ise kemik sağlığı için önemlidir. Hamilelik sürecinde bu vitamin ve mineralleri içeren besinleri tüketmek, anne adayının ve bebeğin sağlığını korumak için önemlidir.",
+        "kategori": "Vitamin Mineraller",
+        "tarih": "2024-03-20",
+        "keyWords": "hamilelik, vitaminler, mineraller, anne adayı, folik asit, demir, kalsiyum, D vitamini, nöral tüp defektleri, anemi, kemik sağlığı",
+        "premium": false
+        },
+        {
+        "baslik": "C Vitamini: Bağışıklık Sisteminin Güçlendirici Vitamin",
+        "icerik": "C vitamini, bağışıklık sisteminin güçlenmesinde önemli bir rol oynayan su çözünür bir vitamindir. Hamilelik döneminde, anne adaylarının yeterli miktarda C vitamini alması, hem kendi sağlıkları hem de bebeğin sağlığı için önemlidir. C vitamini, vücudu serbest radikallerden koruyarak hücresel hasarı azaltır ve bağışıklık sisteminin düzgün çalışmasına yardımcı olur. Ayrıca, C vitamini, demir emilimini artırarak anemi riskini azaltabilir. Turunçgiller, kırmızı biber, çilek, brokoli gibi besinler C vitamini açısından zengindir ve hamilelik döneminde bu besinlerin tüketilmesi önemlidir.",
+        "kategori": "Vitamin Mineraller",
+        "tarih": "2024-03-20",
+        "keyWords": "C vitamini, hamilelik, bağışıklık sistemi, su çözünür vitamin, anne adayı, serbest radikaller, demir emilimi, anemi, turunçgiller, kırmızı biber, çilek, brokoli",
+        "premium": false
+        }
+        ],
+        "Yapılacak & Yapılmayacak": [
+        {
+        "baslik": "Hamilelikte Yapılacaklar",
+        "icerik": "Hamilelik döneminde yapılacaklar ve yapılmayacaklar, anne adaylarının ve bebeğin sağlığı açısından büyük önem taşır. Yapılacaklar arasında düzenli doktor kontrollerine gitmek, dengeli ve sağlıklı beslenmek, düzenli egzersiz yapmak ve yeterli miktarda su içmek bulunur. Ayrıca, prenatal vitaminlerin düzenli olarak alınması da önerilir. Yapılmayacaklar arasında ise alkol, sigara ve uyuşturucu kullanımından kaçınılmalıdır. Ayrıca, çiğ et, çiğ balık, kafein ve aşırıya kaçılmaması gereken balık tüketimi gibi riskli gıdalardan uzak durulmalıdır. Hamilelik döneminde yapılan doğru seçimler, anne adayının ve bebeğin sağlığını korumaya yardımcı olabilir.",
+        "kategori": "Yapılacak & Yapılmayacak",
+        "tarih": "2024-03-10",
+        "keyWords": "hamilelik, yapılacaklar, yapılmayacaklar, anne adayı, sağlıklı beslenme, egzersiz, doktor kontrolü, prenatal vitaminler, alkol, sigara, çiğ et, çiğ balık, kafein",
+        "premium": false
+        },
+        {
+        "baslik": "Hamilelikte Yapılmaması Gerekenler",
+        "icerik": "Hamilelik döneminde bazı davranışlardan kaçınılması önemlidir çünkü bunlar anne adayının ve bebeğin sağlığını olumsuz etkileyebilir. Örneğin, alkol, sigara ve uyuşturucu kullanımı kesinlikle yapılmaması gerekenler arasındadır çünkü bunlar bebeğin gelişimini olumsuz etkileyebilir ve ciddi komplikasyonlara yol açabilir. Ayrıca, hamilelik döneminde aşırı kafein tüketiminden kaçınılmalıdır çünkü bu bebeğin gelişimini etkileyebilir. Ayrıca, çiğ et,çiğ balık gibi potansiyel olarak bakteri içeren gıdalardan uzak durulmalıdır. Hamilelik döneminde bu olumsuz davranışlardan kaçınmak, sağlıklı bir gebelik süreci için önemlidir.",
+        "kategori": "Yapılacak & Yapılmayacak",
+        "tarih": "2024-03-20",
+        "keyWords": "hamilelik, yapılmaması gerekenler, anne adayı, alkol, sigara, uyuşturucu, kafein, çiğ et, çiğ balık, sağlıklı gebelik",
+        "premium": false
+        }
+        ],
+       
+      
+
+  "Kilo Alımı": [
+    {
+      "baslik": "Hamilelikte Kilo Alımı ve Beslenme",
+      "icerik": "Hamilelik döneminde sağlıklı kilo alımı, anne adayının ve bebeğin sağlığı açısından önemlidir. Ancak her anne adayının kilo alımı farklı olabilir ve buna uygun bir beslenme düzeni izlenmelidir.\n\nGenel olarak, hamilelik döneminde önerilen kilo alımı, anne adayının vücut kitle indeksine (VKİ) bağlı olarak değişiklik gösterir. VKİ normal aralıkta olan kadınlar için 11-16 kg arasında kilo alımı önerilirken, düşük VKİ'li kadınlar için 12-18 kg ve yüksek VKİ'li kadınlar için 7-11 kg arasında kilo alımı önerilir.\n\nSağlıklı kilo alımı için, dengeli bir diyet önemlidir. Bol miktarda meyve, sebze, tam tahıllar ve protein içeren besinler tüketilmelidir. Ayrıca, hamilelik döneminde gereksinim duyulan ek kaloriler de göz önünde bulundurulmalıdır. Doktorunuzun önerilerini dikkate alarak, sağlıklı kilo alımı ve beslenme programını takip etmek önemlidir.",
+      "kategori": "Kilo Alımı",
+      "tarih": "2024-03-20",
+      "keyWords": "hamilelik, kilo alımı, beslenme, vücut kitle indeksi, sağlıklı beslenme, meyve, sebze, tam tahıllar, protein, kalori",
+      "premium": false
+    },
+    {
+      "baslik": "Hamilelikte Kilo Kontrolü",
+      "icerik": "Hamilelik döneminde sağlıklı kilo kontrolü, anne adayının ve bebeğin sağlığı açısından önemlidir. Aşırı kilo alımı veya kilo kaybı, hamilelik sürecini olumsuz etkileyebilir ve anne adayında sağlık sorunlarına neden olabilir.\n\nSağlıklı kilo kontrolü için, dengeli ve çeşitli beslenme önemlidir. Her öğünde meyve, sebze, tam tahıllar ve protein içeren yiyecekler tüketilmelidir. Ayrıca, düzenli egzersiz yapmak da kilo kontrolüne yardımcı olabilir. Ancak, egzersiz programı için öncelikle doktora danışılmalıdır ve uzman önerileri doğrultusunda hareket edilmelidir.\n\nSağlıklı kilo kontrolü, hem anne adayının hem de bebeğin sağlığı için önemlidir. Doktorunuzun önerilerini dikkate alarak, kilo kontrolünü sağlamak için uygun bir beslenme ve yaşam tarzı benimsemek önemlidir.",
+      "kategori": "Kilo Alımı",
+      "tarih": "2024-03-20",
+      "keyWords": "hamilelik, kilo kontrolü, sağlıklı beslenme, egzersiz, anne adayı, bebek, vücut değişiklikleri",
+      "premium": false
+    }
+  ],
+  "Beden Değişimleri": [
+    {
+      "baslik": "Hamilelikte Beden Değişimleri",
+      "icerik": "Hamilelik döneminde anne adaylarının bedenleri birçok değişiklik geçirir. Bu değişiklikler, hormonel ve fizyolojik faktörlerden kaynaklanır ve bebeğin sağlıklı gelişimi için önemlidir.\n\nBeden değişimleri arasında kilo artışı, göğüslerin büyümesi, karın genişlemesi, vücutta su tutulması gibi durumlar bulunur. Bunlar normal bir hamilelik sürecinin parçalarıdır ve anne adayının vücudunun bebeği taşımak ve doğum yapmak için hazırlanmasına yardımcı olur.\n\nHamilelikte beden değişimleri her kadında farklılık gösterebilir ve bu süreçte kendinizi rahat hissetmeniz önemlidir. Sağlıklı bir hamilelik süreci için doktorunuzun önerilerini dikkate alarak bedeninizdeki değişimlere uyum sağlamak önemlidir.",
+      "kategori": "Beden Değişimleri",
+      "tarih": "2024-03-20",
+      "keyWords": "hamilelik, beden değişimleri, anne adayı, kilo artışı, göğüs büyümesi, karın genişlemesi, su tutulması, fizyolojik değişimler, hormonel değişimler",
+      "premium": false
+    }
+  ],
+  "Bebek Gelişimi": [
+    {
+      "baslik": "Hamilelikte Bebek Gelişimi",
+      "icerik": "Hamilelik döneminde, bebek anne karnında hızla büyür ve gelişir. Bu süreçte, bebek farklı aşamalardan geçer ve her aşamada belirli gelişim gösterir.\n\nİlk trimester boyunca, bebek temel organlarını oluşturur ve büyümeye başlar. İkinci trimesterde, bebek organlarının ve vücut sistemlerinin gelişimini tamamlar ve hızla büyür. Üçüncü trimesterde, bebek büyümeye devam eder ve doğuma hazırlanır.\n\nBebek gelişimi sürecinde, anne adayının sağlıklı beslenmesi ve düzenli doktor kontrollerine gitmesi önemlidir. Bu süreçte, bebeğin sağlıklı büyümesini destekler ve olası sorunları erken teşhis etmeye yardımcı olabilir. Anne adayının sigara, alkol ve zararlı maddelerden uzak durması da bebeğin sağlıklı gelişimi için önemlidir.\n\nHamilelikte bebek gelişimi sürecinde, anne adayının düzenli prenatal vitamin alması da önerilir. Bu vitaminler, bebeğin sağlıklı gelişimi için gerekli olan besin maddelerini sağlar. Doktorunuzun önerdiği şekilde, sağlıklı bir yaşam tarzı benimseyerek ve düzenli doktor kontrolünde olmak, bebek gelişimi sürecini destekleyebilir.",
+      "kategori": "Bebek Gelişimi",
+      "tarih": "2024-03-20",
+      "keyWords": "hamilelik, bebek gelişimi, anne adayı, prenatal bakım, sağlıklı beslenme, düzenli doktor kontrolü, sigara, alkol, zararlı maddeler, prenatal vitaminler",
+      "premium": false
+    }
+  ],
+  "Bebek Güvenliği": [
+    {
+      "baslik": "Hamilelikte Bebek Güvenliği",
+      "icerik": "Hamilelik döneminde bebek güvenliği, anne adayının ve bebeğin sağlığı açısından büyük önem taşır. Anne adayının güvenli bir ortamda bulunması ve güvenli davranışlar sergilemesi, bebeğin sağlıklı gelişimi için kritik öneme sahiptir.\n\nBebek güvenliği için, anne adayının evdeki tehlikeli maddelerden uzak durması ve evin güvenliğini sağlaması önemlidir. Ayrıca, hamilelik döneminde anne adayının düşme riskini azaltmak için dikkatli olması gerekir. Yüksek topuklu ayakkabılar giymekten kaçınmak, merdivenlerde dikkatli olmak ve kaygan zeminlerde kaymayı önlemek gibi önlemler alınabilir.\n\nBebek güvenliği aynı zamanda bebeğin doğum sonrası güvenliği için de önemlidir. Bebeğin uyuyacağı yerin güvenli olması, bebeğin uyku pozisyonunun doğru olması ve bebeği düzgün bir şekilde uyutmak bu konuda dikkat edilmesi gereken noktalardır.",
+      "kategori": "Bebek Güvenliği",
+      "tarih": "2024-03-20",
+      "keyWords": "hamilelik, bebek güvenliği, anne adayı, ev güvenliği, düşme riski, yüksek topuklu ayakkabılar, merdivenler, kaygan zeminler, bebek uyku güvenliği",
+      "premium": false
+    }
+  ],
+  "Huzur ve Mutluluk": [
+    {
+      "baslik": "Hamilelikte Huzur ve Mutluluk",
+      "icerik": "Hamilelik dönemi, anne adayının huzur ve mutluluğu için önemli bir zaman dilimidir. Bu dönemde anne adayının stresi azaltması, rahatlaması ve kendine zaman ayırması önemlidir.\n\nHuzur ve mutluluk için, anne adayının düzenli olarak dinlenmesi, rahatlama tekniklerini uygulaması ve stresli durumlardan kaçınması önerilir. Meditasyon, yoga, yürüyüş gibi aktiviteler hem bedeni hem de zihni rahatlatarak huzur ve mutluluğu artırabilir.\n\nAyrıca, anne adayının destekleyici bir çevrede bulunması ve duygusal olarak desteklenmesi de huzur ve mutluluğu artırabilir. Partneri, aile üyeleri veya arkadaşlarıyla konuşarak duygularını paylaşmak, anne adayının kendini daha iyi hissetmesine yardımcı olabilir.",
+      "kategori": "Huzur ve Mutluluk",
+      "tarih": "2024-03-20",
+      "keyWords": "hamilelik, huzur, mutluluk, stres azaltma, rahatlama teknikleri, meditasyon, yoga, destekleyici çevre, duygusal destek",
+      "premium": false
+    }
+  ],
+
+  
+    "Uyku": [
+      {
+        "baslik": "Hamilelikte Uyku ve Dinlenme",
+        "icerik": "Hamilelik döneminde uyku ve dinlenme, anne adayının ve bebeğin sağlığı açısından önemlidir. Ancak hamilelik sürecinde hormonal değişiklikler, fiziksel rahatsızlıklar ve stres gibi faktörler uyku düzenini etkileyebilir.\n\nUyku pozisyonunda rahatlık ve doğru destek sağlamak için gebeliğin ilerleyen dönemlerinde uyku yastıkları kullanılabilir. Ayrıca, düzenli egzersiz yapmak, sağlıklı beslenmek ve stresten kaçınmak da uyku kalitesini artırabilir.\n\nAnne adaylarının uyku ve dinlenme ihtiyaçlarına dikkat etmesi, hem kendi sağlığı hem de bebeğin sağlığı için önemlidir. Uyku düzenini sağlamak ve dinlenmeye zaman ayırmak, hamilelik sürecini daha rahat geçirmeye yardımcı olabilir.",
+        "kategori": "Uyku",
+        "tarih": "2024-03-20",
+        "keyWords": "hamilelik, uyku, dinlenme, anne adayı, gebelik, uyku pozisyonu, uyku kalitesi, egzersiz, stres yönetimi",
+        "premium": false
+      }
+    ],
+    "Fiziksel Sağlık": [
+      {
+        "baslik": "Hamilelikte Fiziksel Sağlık",
+        "icerik": "Hamilelik döneminde fiziksel sağlık, anne adayının ve bebeğin sağlığı için büyük önem taşır. Hamilelik sürecinde anne adayının bedeni birçok değişiklik geçirir ve bu değişikliklere uyum sağlamak için düzenli fiziksel aktivite ve sağlıklı beslenme önemlidir.\n\nDüzenli egzersiz yapmak, kasları güçlendirmek ve esnekliği artırmak için önemlidir. Yürüyüş, yüzme, yoga gibi hafif egzersizler hamilelik döneminde önerilen aktiviteler arasındadır. Ancak, ağır egzersizlerden kaçınılmalıdır.\n\nSağlıklı beslenme, anne adayının ve bebeğin ihtiyaç duyduğu besin maddelerini almasına yardımcı olur. Dengeli bir diyet, taze meyve ve sebzeler, tam tahıllar, protein kaynakları ve sağlıklı yağları içermelidir. Ayrıca, yeterli miktarda su içmek de önemlidir.\n\nAnne adaylarının fiziksel sağlık durumu, bebeğin sağlığı üzerinde doğrudan etkili olduğu için düzenli doktor kontrolleri ve uzman önerileri takip edilmelidir.",
+        "kategori": "Fiziksel Sağlık",
+        "tarih": "2024-03-20",
+        "keyWords": "hamilelik, fiziksel sağlık, anne adayı, egzersiz, sağlıklı beslenme, düzenli kontroller, gebelik, beden değişimleri",
+        "premium": false
+      }
+    ],
+    "Hamilelik Ağrısı": [
+      {
+        "baslik": "Hamilelikte Sık Görülen Ağrılar ve Rahatsızlıklar",
+        "icerik": "Hamilelik döneminde, anne adayları sık sık çeşitli ağrılar ve rahatsızlıklar yaşayabilirler. Bu durum, vücutta meydana gelen hormonal ve fiziksel değişikliklerden kaynaklanabilir.\n\nEn sık görülen hamilelik ağrıları arasında sırt ağrısı, bel ağrısı, kasık ağrısı, mide yanması ve bacak krampları bulunur. Bu ağrılar genellikle normaldir ve hamilelik sürecinin bir parçası olarak kabul edilir.\n\nAncak, şiddetli veya sürekli ağrılar varsa veya başka belirtiler de varsa, mutlaka bir doktora başvurulmalıdır. Doktor, uygun tedavi yöntemlerini ve rahatlama tekniklerini önererek anne adayının rahatlamasına yardımcı olabilir.\n\nHamilelikte ağrıların önlenmesi veya hafifletilmesi için düzenli egzersiz yapmak, doğru postürü korumak, rahat kıyafetler giymek ve dinlenmek önemlidir.",
+        "kategori": "Hamilelik Ağrısı",
+        "tarih": "2024-03-20",
+        "keyWords": "hamilelik, ağrılar, anne adayı, sırt ağrısı, bel ağrısı, kasık ağrısı, mide yanması, bacak krampları, fiziksel değişiklikler, hormonal değişiklikler",
+        "premium": false
+      }
+    ]
+  
+  
+
+
+}
+
+}
