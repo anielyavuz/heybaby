@@ -7,6 +7,7 @@ import 'package:heybaby/pages/subpages/ilacTakip.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
 import 'package:heybaby/pages/subpages/suTakip.dart';
+import 'package:heybaby/pages/subpages/yapilacaklarPage.dart';
 
 class AnaSayfa extends StatefulWidget {
   final List<String> storyImages;
@@ -119,9 +120,18 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 ).then((value) {
                   _fetchUserData();
                 });
-                ;
               },
               onFunction4Pressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => YapilacaklarPage(
+                            userData: widget.userData,
+                          )),
+                ).then((value) {
+                  _fetchUserData();
+                });
+
                 print("Test1");
               },
               function1Description: 'Su',
