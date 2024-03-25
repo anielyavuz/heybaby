@@ -3,12 +3,25 @@ import 'package:table_calendar/table_calendar.dart';
 
 class Event {
   final String title;
-  Event({required this.title});
+  final String category;
+  final String note;
+  final String icon;
+  Event(
+      {required this.title,
+      required this.category,
+      required this.note,
+      required this.icon});
 
-  String toString() => this.title;
+  @override
+  String toString() =>
+      'Event: { title: $title, category: $category, note: $note, icon: $icon }';
 }
 
 class Calendar extends StatefulWidget {
+  final Map<String, dynamic>? userData;
+
+  const Calendar({Key? key, this.userData}) : super(key: key);
+
   @override
   _CalendarState createState() => _CalendarState();
 }
@@ -18,11 +31,18 @@ class _CalendarState extends State<Calendar> {
   CalendarFormat format = CalendarFormat.week;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
-
+  int selectedWeek = 1;
+  String selectedCategory = 'Doktor Randevusu 👩‍⚕️'; // Varsayılan kategori
   TextEditingController _eventController = TextEditingController();
+  TextEditingController _subEventController = TextEditingController();
 
   @override
   void initState() {
+    selectedWeek = (((DateTime.now()
+                .difference(DateTime.parse(widget.userData?['sonAdetTarihi'])))
+            .inDays) ~/
+        7);
+
     selectedEvents = {};
     super.initState();
   }
@@ -34,7 +54,40 @@ class _CalendarState extends State<Calendar> {
   @override
   void dispose() {
     _eventController.dispose();
+    _subEventController.dispose();
     super.dispose();
+  }
+
+  void addEvent(a, b, c, d) {
+    print(b);
+    print(b.substring(b.length - 1));
+    var _tempIcon = "";
+    if (b == 'Doktor Randevusu 👩‍⚕️') {
+      _tempIcon = "\uD83D\uDC69\u200D\u2695\uFE0F";
+    } else if (b == "Sosyal ☕️") {
+      _tempIcon = "\u2615";
+    } else {
+      _tempIcon = "\u{1F483}";
+    }
+    if (d) {
+      setState(() {
+        selectedEvents[selectedDay]!.add(
+          Event(
+              title: a,
+              category: b,
+              note: c,
+              icon: _tempIcon // Not alanı buraya eklenebilir
+              ),
+        );
+      });
+    } else {
+      setState(() {
+        selectedEvents[selectedDay] = [
+          Event(title: a, category: b, note: c, icon: _tempIcon)
+        ];
+      });
+    }
+    print(selectedEvents[selectedDay]);
   }
 
   @override
@@ -64,6 +117,11 @@ class _CalendarState extends State<Calendar> {
               setState(() {
                 selectedDay = selectDay;
                 focusedDay = focusDay;
+
+                selectedWeek = (((selectDay.difference(
+                            DateTime.parse(widget.userData?['sonAdetTarihi'])))
+                        .inDays) ~/
+                    7);
               });
               print(focusedDay);
             },
@@ -109,11 +167,29 @@ class _CalendarState extends State<Calendar> {
               ),
             ),
           ),
+          Row(
+            children: [
+              Text(
+                  selectedWeek < 44
+                      ? "Hamileliğin $selectedWeek. haftası.🤰"
+                      : "Doğum tahmini olarak gerçekleşmiş olacak.👩‍🍼",
+                  style: TextStyle(fontSize: 20)),
+            ],
+          ),
           ..._getEventsfromDay(selectedDay).map(
             (Event event) => ListTile(
               title: Text(
                 event.title,
               ),
+              leading: Text(
+                // event.icon.toString()
+                event.icon,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
+              ),
+              subtitle: Text(event.note),
             ),
           ),
         ],
@@ -122,42 +198,109 @@ class _CalendarState extends State<Calendar> {
           FloatingActionButtonLocation.startFloat, // FAB'ı sola konumlandırır
 
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Aktivite Ekle"),
-            content: TextFormField(
-              controller: _eventController,
-            ),
-            actions: [
-              TextButton(
-                child: Text("Cancel"),
-                onPressed: () => Navigator.pop(context),
-              ),
-              TextButton(
-                child: Text("Ok"),
-                onPressed: () {
-                  if (_eventController.text.isEmpty) {
-                  } else {
-                    if (selectedEvents[selectedDay] != null) {
-                      selectedEvents[selectedDay]!.add(
-                        Event(title: _eventController.text),
-                      );
-                    } else {
-                      selectedEvents[selectedDay] = [
-                        Event(title: _eventController.text)
-                      ];
-                    }
-                  }
-                  Navigator.pop(context);
-                  _eventController.clear();
-                  setState(() {});
-                  return;
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Aktivite Ekle",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        DropdownButtonFormField<String>(
+                          value: selectedCategory,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedCategory = value!;
+                            });
+                            print(selectedCategory);
+                          },
+                          items: [
+                            'Doktor Randevusu 👩‍⚕️',
+                            'Sosyal ☕️',
+                            'Kişisel Zaman 💃'
+                          ].map((category) {
+                            return DropdownMenuItem<String>(
+                              value: category,
+                              child: Text(category),
+                            );
+                          }).toList(),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          controller: _eventController,
+                          decoration: InputDecoration(
+                            hintText: "Aktivite adını girin",
+                            labelText: "Aktivite",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: _subEventController,
+                          decoration: InputDecoration(
+                            hintText: "Not",
+                            labelText: "Not (isteğe bağlı)",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              child: Text("İptal"),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            SizedBox(width: 10.0),
+                            ElevatedButton(
+                              child: Text("Ekle"),
+                              onPressed: () {
+                                if (_eventController.text.isNotEmpty) {
+                                  if (selectedEvents[selectedDay] != null) {
+                                    print("a");
+                                    addEvent(
+                                        _eventController.text,
+                                        selectedCategory,
+                                        _subEventController.text,
+                                        true);
+                                  } else {
+                                    print("b");
+
+                                    addEvent(
+                                        _eventController.text,
+                                        selectedCategory,
+                                        _subEventController.text,
+                                        false);
+                                  }
+                                  setState(() {});
+                                }
+                                Navigator.pop(context);
+                                _eventController.clear();
+                                _subEventController.clear();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
                 },
-              ),
-            ],
-          ),
-        ),
+              );
+            },
+          );
+        },
         label: Text("Aktivite Ekle"),
         icon: Icon(Icons.add),
       ),

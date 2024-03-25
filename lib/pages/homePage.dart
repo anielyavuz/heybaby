@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return AnaSayfa(storyImages: storyImages, userData: userData);
 
       case 1:
-        return Calendar();
+        return Calendar(userData: userData);
 
       case 2:
         return KesfetPage();
