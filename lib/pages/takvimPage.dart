@@ -35,7 +35,6 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  late Map<DateTime, List<Event>> selectedEvents;
   late Map<DateTime, List> calendarListEvents;
   CalendarFormat format = CalendarFormat.week;
   DateTime selectedDay = DateTime.now();
