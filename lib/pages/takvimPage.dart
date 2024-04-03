@@ -316,6 +316,16 @@ class _CalendarState extends State<Calendar> {
                     } else {
                       selectedCategory = 'Kişisel Zaman 💃';
                     }
+                    if (item[0]['time'] == '') {
+                      isSwitchedTime = false;
+                    } else {
+                      isSwitchedTime = true;
+                      if (item[0]['alarm']) {
+                        isSwitchedAlarm = true;
+                      } else {
+                        isSwitchedAlarm = false;
+                      }
+                    }
                   });
                   showModalBottomSheet(
                     isScrollControlled: true,
@@ -395,21 +405,24 @@ class _CalendarState extends State<Calendar> {
                                         ),
                                       ],
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        showTimePicker(
-                                          context: context,
-                                          initialTime: TimeOfDay.now(),
-                                        ).then((pickedTime) {
-                                          if (pickedTime != null) {
-                                            setState(() {
-                                              _secilenZaman = pickedTime;
-                                            });
-                                          }
-                                        });
-                                      },
-                                      child: Text(_secilenZaman.toString()),
-                                    )
+                                    isSwitchedTime
+                                        ? GestureDetector(
+                                            onTap: () {
+                                              showTimePicker(
+                                                context: context,
+                                                initialTime: TimeOfDay.now(),
+                                              ).then((pickedTime) {
+                                                if (pickedTime != null) {
+                                                  setState(() {
+                                                    _secilenZaman = pickedTime;
+                                                  });
+                                                }
+                                              });
+                                            },
+                                            child:
+                                                Text(_secilenZaman.toString()),
+                                          )
+                                        : SizedBox()
                                   ],
                                 ),
                                 SizedBox(height: 20.0),
@@ -593,21 +606,23 @@ class _CalendarState extends State<Calendar> {
                                 ),
                               ],
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now(),
-                                ).then((pickedTime) {
-                                  if (pickedTime != null) {
-                                    setState(() {
-                                      _secilenZaman = pickedTime;
-                                    });
-                                  }
-                                });
-                              },
-                              child: Text(_secilenZaman.toString()),
-                            )
+                            isSwitchedTime
+                                ? GestureDetector(
+                                    onTap: () {
+                                      showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      ).then((pickedTime) {
+                                        if (pickedTime != null) {
+                                          setState(() {
+                                            _secilenZaman = pickedTime;
+                                          });
+                                        }
+                                      });
+                                    },
+                                    child: Text(_secilenZaman.toString()),
+                                  )
+                                : SizedBox()
                           ],
                         ),
                         SizedBox(height: 20.0),
