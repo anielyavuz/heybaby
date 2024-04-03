@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Event {
@@ -28,6 +30,7 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   late Map<DateTime, List<Event>> selectedEvents;
+  late Map<DateTime, List> calendarListEvents;
   CalendarFormat format = CalendarFormat.week;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
@@ -43,12 +46,12 @@ class _CalendarState extends State<Calendar> {
             .inDays) ~/
         7);
 
-    selectedEvents = {};
+    calendarListEvents = {};
     super.initState();
   }
 
-  List<Event> _getEventsfromDay(DateTime date) {
-    return selectedEvents[date] ?? [];
+  List _getEventsfromDay(DateTime date) {
+    return calendarListEvents[date] ?? [];
   }
 
   @override
@@ -59,8 +62,10 @@ class _CalendarState extends State<Calendar> {
   }
 
   void addEvent(a, b, c, d) {
-    print(b);
-    print(b.substring(b.length - 1));
+    var _tempMap = {};
+    var _tempList = [];
+    print(d);
+
     var _tempIcon = "";
     if (b == 'Doktor Randevusu 👩‍⚕️') {
       _tempIcon = "\uD83D\uDC69\u200D\u2695\uFE0F";
@@ -71,23 +76,105 @@ class _CalendarState extends State<Calendar> {
     }
     if (d) {
       setState(() {
-        selectedEvents[selectedDay]!.add(
-          Event(
-              title: a,
-              category: b,
-              note: c,
-              icon: _tempIcon // Not alanı buraya eklenebilir
-              ),
-        );
+        _tempMap['title'] = a;
+        _tempMap['category'] = b;
+        _tempMap['note'] = c;
+        _tempMap['icon'] = _tempIcon;
+        _tempMap['time'] =
+            '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}';
+        _tempMap['alarm'] = false;
+        _tempMap['id'] = DateTime.now().millisecondsSinceEpoch;
+        _tempList.add(_tempMap);
+        calendarListEvents[selectedDay]!.add(_tempList);
       });
     } else {
       setState(() {
-        selectedEvents[selectedDay] = [
-          Event(title: a, category: b, note: c, icon: _tempIcon)
-        ];
+        _tempMap['title'] = a;
+        _tempMap['category'] = b;
+        _tempMap['note'] = c;
+        _tempMap['icon'] = _tempIcon;
+        _tempMap['time'] =
+            '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}';
+        _tempMap['alarm'] = false;
+        _tempMap['id'] = DateTime.now().millisecondsSinceEpoch;
+
+        _tempList.add(_tempMap);
+
+        calendarListEvents[selectedDay] = [];
+        calendarListEvents[selectedDay]!.add(_tempList);
       });
     }
-    print(selectedEvents[selectedDay]);
+    print(calendarListEvents[selectedDay]);
+  }
+
+  silActivity(editId) {
+    // Seçili günün etkinliklerini kontrol et
+    if (calendarListEvents[selectedDay] != null) {
+      // Seçili günün etkinliklerini al
+
+      // Etkinlikleri döngüye al ve id'ye göre ara
+      for (var i = 0; i < calendarListEvents[selectedDay]!.length; i++) {
+        if (calendarListEvents[selectedDay]![i][0]['id'] == editId) {
+          // print(calendarListEvents[selectedDay]![i][0]['id']);
+          // print(editTitle);
+          // print(editNote);
+          // print(selectedCategory);
+          print("AAA");
+          print(calendarListEvents[selectedDay]!);
+          setState(() {
+            calendarListEvents[selectedDay]!
+                .removeWhere((item) => item[0]['id'] == editId);
+          });
+          print("BBB");
+          print(calendarListEvents[selectedDay]!);
+          // Etkinliği düzenle (Örneğin, zamanı değiştir)
+
+          // İşlem tamamlandı, döngüyü sonlandır
+          break;
+        }
+      }
+    }
+  }
+
+  duzenleActivity(editId, editTitle, editNote, selectedCategory) {
+    // Seçili günün etkinliklerini kontrol et
+    if (calendarListEvents[selectedDay] != null) {
+      // Seçili günün etkinliklerini al
+
+      // Etkinlikleri döngüye al ve id'ye göre ara
+      for (var i = 0; i < calendarListEvents[selectedDay]!.length; i++) {
+        if (calendarListEvents[selectedDay]![i][0]['id'] == editId) {
+          // print(calendarListEvents[selectedDay]![i][0]['id']);
+          // print(editTitle);
+          // print(editNote);
+          // print(selectedCategory);
+          var _tempIcon = "";
+          if (selectedCategory == 'Doktor Randevusu 👩‍⚕️') {
+            _tempIcon = "\uD83D\uDC69\u200D\u2695\uFE0F";
+          } else if (selectedCategory == "Sosyal ☕️") {
+            _tempIcon = "\u2615";
+          } else {
+            _tempIcon = "\u{1F483}";
+          }
+
+          print("AAA");
+          print(calendarListEvents[selectedDay]!);
+          setState(() {
+            calendarListEvents[selectedDay]![i][0]['title'] = editTitle;
+            calendarListEvents[selectedDay]![i][0]['note'] = editNote;
+            calendarListEvents[selectedDay]![i][0]['icon'] = _tempIcon;
+            // calendarListEvents[selectedDay]!
+            //     .removeWhere((item) => item[0]['id'] == editId);
+          });
+          print("BBB");
+          print(calendarListEvents[selectedDay]!);
+          // Etkinliği düzenle (Örneğin, zamanı değiştir)
+
+          // İşlem tamamlandı, döngüyü sonlandır
+          break;
+        }
+      }
+    }
   }
 
   @override
@@ -177,19 +264,170 @@ class _CalendarState extends State<Calendar> {
             ],
           ),
           ..._getEventsfromDay(selectedDay).map(
-            (Event event) => ListTile(
-              title: Text(
-                event.title,
-              ),
-              leading: Text(
-                // event.icon.toString()
-                event.icon,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
+            (item) => Dismissible(
+              key: Key(item[0]['title']),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: AlignmentDirectional.centerEnd,
+                color: Colors.red,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              subtitle: Text(event.note),
+              onDismissed: (direction) {
+                silActivity(item[0]['id']);
+              },
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    print(item[0]['icon']);
+                    _eventController.text = item[0]['title'];
+                    _subEventController.text = item[0]['note'];
+                    if (item[0]['icon'] == "👩‍⚕️") {
+                      selectedCategory = 'Doktor Randevusu 👩‍⚕️';
+                    } else if (item[0]['icon'] == "☕") {
+                      selectedCategory = 'Sosyal ☕️';
+                    } else {
+                      selectedCategory = 'Kişisel Zaman 💃';
+                    }
+                  });
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                          return Container(
+                            padding: EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Aktivite Düzenle",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                SizedBox(height: 10.0),
+                                DropdownButtonFormField<String>(
+                                  value: selectedCategory,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedCategory = value!;
+                                    });
+                                    print(selectedCategory);
+                                  },
+                                  items: [
+                                    'Doktor Randevusu 👩‍⚕️',
+                                    'Sosyal ☕️',
+                                    'Kişisel Zaman 💃'
+                                  ].map((category) {
+                                    return DropdownMenuItem<String>(
+                                      value: category,
+                                      child: Text(category),
+                                    );
+                                  }).toList(),
+                                ),
+                                SizedBox(height: 20.0),
+                                TextFormField(
+                                  controller: _eventController,
+                                  decoration: InputDecoration(
+                                    hintText: "Aktivite adını girin",
+                                    labelText: "Aktivite",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                SizedBox(height: 10.0),
+                                TextFormField(
+                                  controller: _subEventController,
+                                  decoration: InputDecoration(
+                                    hintText: "Not",
+                                    labelText: "Not (isteğe bağlı)",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                SizedBox(height: 20.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    TextButton(
+                                      child: Text("İptal"),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                    SizedBox(width: 10.0),
+                                    ElevatedButton(
+                                      child: Text("Düzenle"),
+                                      onPressed: () {
+                                        duzenleActivity(
+                                            item[0]['id'],
+                                            _eventController.text,
+                                            _subEventController.text,
+                                            selectedCategory);
+                                        Navigator.pop(context);
+                                        _eventController.clear();
+                                        _subEventController.clear();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    // color: Colors.blue, // Arka plan rengi
+                    borderRadius: BorderRadius.circular(10), // Kenar yuvarlatma
+                    border: Border.all(
+                        color:
+                            Color.fromARGB(255, 150, 69, 212)), // Kenar çizgisi
+                  ),
+                  child: ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item[0]['title'].toString(),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              item[0]['time'].toString(),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            GestureDetector(
+                              child: Icon(Icons.alarm_off),
+                              onTap: () {},
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    leading: Text(
+                      // event.icon.toString()
+                      item[0]['icon'].toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                    subtitle: Text(
+                      item[0]['note'].toString(),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
@@ -268,7 +506,7 @@ class _CalendarState extends State<Calendar> {
                               child: Text("Ekle"),
                               onPressed: () {
                                 if (_eventController.text.isNotEmpty) {
-                                  if (selectedEvents[selectedDay] != null) {
+                                  if (calendarListEvents[selectedDay] != null) {
                                     print("a");
                                     addEvent(
                                         _eventController.text,
