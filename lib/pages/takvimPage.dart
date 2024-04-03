@@ -8,15 +8,21 @@ class Event {
   final String category;
   final String note;
   final String icon;
-  Event(
-      {required this.title,
-      required this.category,
-      required this.note,
-      required this.icon});
+  final bool alarm;
+  final String time;
+
+  Event({
+    required this.title,
+    required this.category,
+    required this.note,
+    required this.icon,
+    required this.alarm,
+    required this.time,
+  });
 
   @override
   String toString() =>
-      'Event: { title: $title, category: $category, note: $note, icon: $icon }';
+      'Event: { title: $title, category: $category, note: $note, icon: $icon, alarm: $alarm, time: $time }';
 }
 
 class Calendar extends StatefulWidget {
@@ -34,10 +40,14 @@ class _CalendarState extends State<Calendar> {
   CalendarFormat format = CalendarFormat.week;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
+
   int selectedWeek = 1;
   String selectedCategory = 'Doktor Randevusu 👩‍⚕️'; // Varsayılan kategori
   TextEditingController _eventController = TextEditingController();
   TextEditingController _subEventController = TextEditingController();
+  bool isSwitchedTime = false;
+  bool isSwitchedAlarm = false;
+  TimeOfDay _secilenZaman = TimeOfDay.now();
 
   @override
   void initState() {
@@ -61,7 +71,8 @@ class _CalendarState extends State<Calendar> {
     super.dispose();
   }
 
-  void addEvent(a, b, c, d) {
+  void addEvent(
+      String a, String b, String c, bool d, String _time, bool _alarm) {
     var _tempMap = {};
     var _tempList = [];
     print(d);
@@ -80,9 +91,13 @@ class _CalendarState extends State<Calendar> {
         _tempMap['category'] = b;
         _tempMap['note'] = c;
         _tempMap['icon'] = _tempIcon;
-        _tempMap['time'] =
-            '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}';
-        _tempMap['alarm'] = false;
+        _tempMap['time'] = _time;
+
+        // isSwitchedTime
+        //     ? '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}'
+        //     : '';
+
+        _tempMap['alarm'] = _alarm;
         _tempMap['id'] = DateTime.now().millisecondsSinceEpoch;
         _tempList.add(_tempMap);
         calendarListEvents[selectedDay]!.add(_tempList);
@@ -93,9 +108,13 @@ class _CalendarState extends State<Calendar> {
         _tempMap['category'] = b;
         _tempMap['note'] = c;
         _tempMap['icon'] = _tempIcon;
-        _tempMap['time'] =
-            '${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}';
-        _tempMap['alarm'] = false;
+        _tempMap['time'] = _time;
+
+        // isSwitchedTime
+        //     ? '${_secilenZaman.hour.toString().padLeft(2, '0')}:${_secilenZaman.minute.toString().padLeft(2, '0')}'
+        //     : '';
+
+        _tempMap['alarm'] = _alarm;
         _tempMap['id'] = DateTime.now().millisecondsSinceEpoch;
 
         _tempList.add(_tempMap);
@@ -136,7 +155,8 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
-  duzenleActivity(editId, editTitle, editNote, selectedCategory) {
+  duzenleActivity(
+      editId, editTitle, editNote, selectedCategory, _time, _alarm) {
     // Seçili günün etkinliklerini kontrol et
     if (calendarListEvents[selectedDay] != null) {
       // Seçili günün etkinliklerini al
@@ -163,6 +183,8 @@ class _CalendarState extends State<Calendar> {
             calendarListEvents[selectedDay]![i][0]['title'] = editTitle;
             calendarListEvents[selectedDay]![i][0]['note'] = editNote;
             calendarListEvents[selectedDay]![i][0]['icon'] = _tempIcon;
+            calendarListEvents[selectedDay]![i][0]['time'] = _time;
+            calendarListEvents[selectedDay]![i][0]['alarm'] = _alarm;
             // calendarListEvents[selectedDay]!
             //     .removeWhere((item) => item[0]['id'] == editId);
           });
@@ -274,7 +296,7 @@ class _CalendarState extends State<Calendar> {
                   padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
                   child: Icon(
                     Icons.delete,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -296,6 +318,7 @@ class _CalendarState extends State<Calendar> {
                     }
                   });
                   showModalBottomSheet(
+                    isScrollControlled: true,
                     context: context,
                     builder: (context) {
                       return StatefulBuilder(
@@ -353,6 +376,59 @@ class _CalendarState extends State<Calendar> {
                                 ),
                                 SizedBox(height: 20.0),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('Zaman'),
+                                        Switch(
+                                          value: isSwitchedTime,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              isSwitchedTime = value;
+                                              if (!isSwitchedTime) {
+                                                isSwitchedAlarm = false;
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.now(),
+                                        ).then((pickedTime) {
+                                          if (pickedTime != null) {
+                                            setState(() {
+                                              _secilenZaman = pickedTime;
+                                            });
+                                          }
+                                        });
+                                      },
+                                      child: Text(_secilenZaman.toString()),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(height: 20.0),
+                                isSwitchedTime
+                                    ? Row(
+                                        children: [
+                                          Text('Alarm'),
+                                          Switch(
+                                            value: isSwitchedAlarm,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                isSwitchedAlarm = value;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox(),
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     TextButton(
@@ -367,7 +443,11 @@ class _CalendarState extends State<Calendar> {
                                             item[0]['id'],
                                             _eventController.text,
                                             _subEventController.text,
-                                            selectedCategory);
+                                            selectedCategory,
+                                            isSwitchedTime
+                                                ? '${_secilenZaman.hour.toString().padLeft(2, '0')}:${_secilenZaman.minute.toString().padLeft(2, '0')}'
+                                                : '',
+                                            isSwitchedAlarm);
                                         Navigator.pop(context);
                                         _eventController.clear();
                                         _subEventController.clear();
@@ -406,10 +486,9 @@ class _CalendarState extends State<Calendar> {
                             SizedBox(
                               width: 15,
                             ),
-                            GestureDetector(
-                              child: Icon(Icons.alarm_off),
-                              onTap: () {},
-                            )
+                            item[0]['alarm']
+                                ? Icon(Icons.alarm_on)
+                                : Icon(Icons.alarm_off),
                           ],
                         ),
                       ],
@@ -438,6 +517,7 @@ class _CalendarState extends State<Calendar> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           showModalBottomSheet(
+            isScrollControlled: true,
             context: context,
             builder: (context) {
               return StatefulBuilder(
@@ -495,6 +575,61 @@ class _CalendarState extends State<Calendar> {
                         ),
                         SizedBox(height: 20.0),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text('Zaman'),
+                                Switch(
+                                  value: isSwitchedTime,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isSwitchedTime = value;
+                                      if (!isSwitchedTime) {
+                                        isSwitchedAlarm = false;
+                                      }
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now(),
+                                ).then((pickedTime) {
+                                  if (pickedTime != null) {
+                                    setState(() {
+                                      _secilenZaman = pickedTime;
+                                    });
+                                  }
+                                });
+                              },
+                              child: Text(_secilenZaman.toString()),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 20.0),
+                        isSwitchedTime
+                            ? Row(
+                                children: [
+                                  Text('Alarm'),
+                                  Switch(
+                                    value: isSwitchedAlarm,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isSwitchedAlarm = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              )
+                            : SizedBox(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
@@ -512,7 +647,11 @@ class _CalendarState extends State<Calendar> {
                                         _eventController.text,
                                         selectedCategory,
                                         _subEventController.text,
-                                        true);
+                                        true,
+                                        isSwitchedTime
+                                            ? '${_secilenZaman.hour.toString().padLeft(2, '0')}:${_secilenZaman.minute.toString().padLeft(2, '0')}'
+                                            : '',
+                                        isSwitchedAlarm);
                                   } else {
                                     print("b");
 
@@ -520,7 +659,11 @@ class _CalendarState extends State<Calendar> {
                                         _eventController.text,
                                         selectedCategory,
                                         _subEventController.text,
-                                        false);
+                                        false,
+                                        isSwitchedTime
+                                            ? '${_secilenZaman.hour.toString().padLeft(2, '0')}:${_secilenZaman.minute.toString().padLeft(2, '0')}'
+                                            : '',
+                                        isSwitchedAlarm);
                                   }
                                   setState(() {});
                                 }
@@ -530,6 +673,9 @@ class _CalendarState extends State<Calendar> {
                               },
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          height: 20,
                         ),
                       ],
                     ),
