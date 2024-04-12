@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Event {
@@ -35,9 +37,10 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  late Map<DateTime, List> calendarListEvents;
+  var calendarListEvents;
   CalendarFormat format = CalendarFormat.week;
   DateTime selectedDay = DateTime.now();
+
   DateTime focusedDay = DateTime.now();
 
   int selectedWeek = 1;
@@ -50,16 +53,46 @@ class _CalendarState extends State<Calendar> {
 
   @override
   void initState() {
+    setState(() {
+      calendarListEvents = {};
+      selectedDay =
+          DateTime(selectedDay.year, selectedDay.month, selectedDay.day, 0, 0);
+
+      // print(DateTime.parse(
+      // widget.userData?['calendarListEvents'].keys.toList()[0]));
+      // calendarListEvents[DateTime.parse(
+      // widget.userData?['calendarListEvents'].keys.toList()[0])]= widget.userData?['calendarListEvents']
+      int count = 0;
+      if (widget.userData != null &&
+          widget.userData!.containsKey('calendarListEvents')) {
+        widget.userData!['calendarListEvents'].forEach((key, value) {
+          print(DateTime.parse(key));
+
+          calendarListEvents[DateTime.parse(key)] = [];
+          calendarListEvents[DateTime.parse(key)] = value;
+          print("---");
+          print(value);
+          print(count);
+          count++;
+        });
+      } else {
+        print('calendarListEvents parametresi bulunamadı veya null.');
+      }
+      print(calendarListEvents);
+      // calendarListEvents = (widget.userData?['calendarListEvents'] ?? {});
+    });
     selectedWeek = (((DateTime.now()
                 .difference(DateTime.parse(widget.userData?['sonAdetTarihi'])))
             .inDays) ~/
         7);
 
-    calendarListEvents = {};
     super.initState();
   }
 
   List _getEventsfromDay(DateTime date) {
+    date = DateTime(date.year, date.month, date.day, 0, 0);
+    print(date);
+    print(calendarListEvents[date]);
     return calendarListEvents[date] ?? [];
   }
 
@@ -99,7 +132,7 @@ class _CalendarState extends State<Calendar> {
         _tempMap['alarm'] = _alarm;
         _tempMap['id'] = DateTime.now().millisecondsSinceEpoch;
         _tempList.add(_tempMap);
-        calendarListEvents[selectedDay]!.add(_tempList);
+        calendarListEvents[selectedDay]!.add(_tempMap);
       });
     } else {
       setState(() {
@@ -119,10 +152,13 @@ class _CalendarState extends State<Calendar> {
         _tempList.add(_tempMap);
 
         calendarListEvents[selectedDay] = [];
-        calendarListEvents[selectedDay]!.add(_tempList);
+        calendarListEvents[selectedDay]!.add(_tempMap);
       });
     }
-    print(calendarListEvents[selectedDay]);
+
+    FirestoreFunctions.updateCalendarDataRecord(_tempList, selectedDay);
+
+    print(calendarListEvents);
   }
 
   silActivity(editId) {
@@ -132,16 +168,18 @@ class _CalendarState extends State<Calendar> {
 
       // Etkinlikleri döngüye al ve id'ye göre ara
       for (var i = 0; i < calendarListEvents[selectedDay]!.length; i++) {
-        if (calendarListEvents[selectedDay]![i][0]['id'] == editId) {
+        if (calendarListEvents[selectedDay]![i]['id'] == editId) {
           // print(calendarListEvents[selectedDay]![i][0]['id']);
           // print(editTitle);
           // print(editNote);
           // print(selectedCategory);
           print("AAA");
-          print(calendarListEvents[selectedDay]!);
+          print(calendarListEvents[selectedDay]![i]);
           setState(() {
+            FirestoreFunctions.deleteCalendarDataRecord(
+                selectedDay, calendarListEvents[selectedDay]![i]);
             calendarListEvents[selectedDay]!
-                .removeWhere((item) => item[0]['id'] == editId);
+                .removeWhere((item) => item['id'] == editId);
           });
           print("BBB");
           print(calendarListEvents[selectedDay]!);
@@ -162,7 +200,7 @@ class _CalendarState extends State<Calendar> {
 
       // Etkinlikleri döngüye al ve id'ye göre ara
       for (var i = 0; i < calendarListEvents[selectedDay]!.length; i++) {
-        if (calendarListEvents[selectedDay]![i][0]['id'] == editId) {
+        if (calendarListEvents[selectedDay]![i]['id'] == editId) {
           // print(calendarListEvents[selectedDay]![i][0]['id']);
           // print(editTitle);
           // print(editNote);
@@ -179,16 +217,19 @@ class _CalendarState extends State<Calendar> {
           print("AAA");
           print(calendarListEvents[selectedDay]!);
           setState(() {
-            calendarListEvents[selectedDay]![i][0]['title'] = editTitle;
-            calendarListEvents[selectedDay]![i][0]['note'] = editNote;
-            calendarListEvents[selectedDay]![i][0]['icon'] = _tempIcon;
-            calendarListEvents[selectedDay]![i][0]['time'] = _time;
-            calendarListEvents[selectedDay]![i][0]['alarm'] = _alarm;
+            calendarListEvents[selectedDay]![i]['title'] = editTitle;
+            calendarListEvents[selectedDay]![i]['note'] = editNote;
+            calendarListEvents[selectedDay]![i]['icon'] = _tempIcon;
+            calendarListEvents[selectedDay]![i]['time'] = _time;
+            calendarListEvents[selectedDay]![i]['alarm'] = _alarm;
             // calendarListEvents[selectedDay]!
             //     .removeWhere((item) => item[0]['id'] == editId);
           });
-          print("BBB");
-          print(calendarListEvents[selectedDay]!);
+
+          FirestoreFunctions.duzenleCalendarDataRecord(
+              selectedDay, calendarListEvents[selectedDay]);
+          // print("BBB");
+          // print(calendarListEvents[selectedDay]!);
           // Etkinliği düzenle (Örneğin, zamanı değiştir)
 
           // İşlem tamamlandı, döngüyü sonlandır
@@ -224,6 +265,8 @@ class _CalendarState extends State<Calendar> {
             onDaySelected: (DateTime selectDay, DateTime focusDay) {
               setState(() {
                 selectedDay = selectDay;
+                selectedDay = DateTime(
+                    selectedDay.year, selectedDay.month, selectedDay.day, 0, 0);
                 focusedDay = focusDay;
 
                 selectedWeek = (((selectDay.difference(
@@ -231,7 +274,7 @@ class _CalendarState extends State<Calendar> {
                         .inDays) ~/
                     7);
               });
-              print(focusedDay);
+              print(calendarListEvents);
             },
             selectedDayPredicate: (DateTime date) {
               return isSameDay(selectedDay, date);
@@ -258,6 +301,7 @@ class _CalendarState extends State<Calendar> {
                 borderRadius: BorderRadius.circular(5.0),
               ),
               weekendDecoration: BoxDecoration(
+                color: Color.fromARGB(255, 221, 204, 241),
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(5.0),
               ),
@@ -286,7 +330,7 @@ class _CalendarState extends State<Calendar> {
           ),
           ..._getEventsfromDay(selectedDay).map(
             (item) => Dismissible(
-              key: Key(item[0]['title']),
+              key: Key(item['id'].toString()),
               direction: DismissDirection.endToStart,
               background: Container(
                 alignment: AlignmentDirectional.centerEnd,
@@ -300,26 +344,26 @@ class _CalendarState extends State<Calendar> {
                 ),
               ),
               onDismissed: (direction) {
-                silActivity(item[0]['id']);
+                silActivity(item['id']);
               },
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    print(item[0]['icon']);
-                    _eventController.text = item[0]['title'];
-                    _subEventController.text = item[0]['note'];
-                    if (item[0]['icon'] == "👩‍⚕️") {
+                    print(item['icon']);
+                    _eventController.text = item['title'];
+                    _subEventController.text = item['note'];
+                    if (item['icon'] == "👩‍⚕️") {
                       selectedCategory = 'Doktor Randevusu 👩‍⚕️';
-                    } else if (item[0]['icon'] == "☕") {
+                    } else if (item['icon'] == "☕") {
                       selectedCategory = 'Sosyal ☕️';
                     } else {
                       selectedCategory = 'Kişisel Zaman 💃';
                     }
-                    if (item[0]['time'] == '') {
+                    if (item['time'] == '') {
                       isSwitchedTime = false;
                     } else {
                       isSwitchedTime = true;
-                      if (item[0]['alarm']) {
+                      if (item['alarm']) {
                         isSwitchedAlarm = true;
                       } else {
                         isSwitchedAlarm = false;
@@ -352,7 +396,7 @@ class _CalendarState extends State<Calendar> {
                                     setState(() {
                                       selectedCategory = value!;
                                     });
-                                    print(selectedCategory);
+                                    // print(selectedCategory);
                                   },
                                   items: [
                                     'Doktor Randevusu 👩‍⚕️',
@@ -452,7 +496,7 @@ class _CalendarState extends State<Calendar> {
                                       child: Text("Düzenle"),
                                       onPressed: () {
                                         duzenleActivity(
-                                            item[0]['id'],
+                                            item['id'],
                                             _eventController.text,
                                             _subEventController.text,
                                             selectedCategory,
@@ -488,17 +532,17 @@ class _CalendarState extends State<Calendar> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          item[0]['title'].toString(),
+                          item['title'].toString(),
                         ),
                         Row(
                           children: [
                             Text(
-                              item[0]['time'].toString(),
+                              item['time'].toString(),
                             ),
                             SizedBox(
                               width: 15,
                             ),
-                            item[0]['alarm']
+                            item['alarm']
                                 ? Icon(Icons.alarm_on)
                                 : Icon(Icons.alarm_off),
                           ],
@@ -507,14 +551,14 @@ class _CalendarState extends State<Calendar> {
                     ),
                     leading: Text(
                       // event.icon.toString()
-                      item[0]['icon'].toString(),
+                      item['icon'].toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20.0,
                       ),
                     ),
                     subtitle: Text(
-                      item[0]['note'].toString(),
+                      item['note'].toString(),
                     ),
                   ),
                 ),
@@ -524,7 +568,7 @@ class _CalendarState extends State<Calendar> {
         ],
       ),
       floatingActionButtonLocation:
-          FloatingActionButtonLocation.startFloat, // FAB'ı sola konumlandırır
+          FloatingActionButtonLocation.startFloat, // Float'ı sola konumlandırır
 
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

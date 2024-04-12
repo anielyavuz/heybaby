@@ -117,6 +117,124 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<void> deleteCalendarDataRecord(selectedDay, _liste) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String userID = user.uid;
+      String _tempselectedDay = selectedDay
+          .toString()
+          .substring(0, selectedDay.toString().length - 7);
+      print("UserID: " + userID);
+      List k = [];
+      k.add(_liste);
+
+      await FirebaseFirestore.instance.collection("Users").doc(userID).update({
+        "calendarListEvents.$_tempselectedDay": FieldValue.arrayRemove(k)
+      }).whenComplete(() {
+        print("takvimden veri silindi");
+      });
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
+  static Future<void> duzenleCalendarDataRecord(
+      selectedDay, calendarListEventsForDay) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String userID = user.uid;
+      print("UserID: " + userID);
+      String _tempselectedDay = selectedDay
+          .toString()
+          .substring(0, selectedDay.toString().length - 7);
+      print("CCCCC");
+      FirebaseFirestore.instance.collection("Users").doc(userID).update({
+        "calendarListEvents.$_tempselectedDay": calendarListEventsForDay,
+      });
+
+      // String _tempselectedDay = selectedDay
+      //     .toString()
+      //     .substring(0, selectedDay.toString().length - 7);
+      // print("CCCCC");
+      // // print(_tempList);
+      // int _tempIndex = 0;
+      // await FirebaseFirestore.instance
+      //     .collection("Users")
+      //     .doc(userID)
+      //     .get()
+      //     .then((gelenVeri) {
+      //   print(gelenVeri.data()!['calendarListEvents'][_tempselectedDay]);
+      //   for (var _elemanlar in gelenVeri
+      //       .data()!['calendarListEvents'][_tempselectedDay]
+      //       .toList()) {
+      //     print(_elemanlar['id']);
+      //     if (_elemanlar['id'] == editId) {
+      //       print(_elemanlar['id'].toString() + " için düzenleme yapılacak");
+
+      //       FirebaseFirestore.instance.collection("Users").doc(userID).update({
+      //         "calendarListEvents.$_tempselectedDay":
+      //             calendarListEventsForDay,
+      //       });
+      //     }
+      //     _tempIndex = _tempIndex + 1;
+    }
+
+    // if (gelenVeri.data()!["settings"]["host"] == widget.userName) {
+    //   var _geciciKeyListe = gelenVeri.data().keys.toList();
+
+    //   for (var item in _geciciKeyListe) {
+    //     if (item != "settings") {
+    //       if (item != widget.userName) {
+    //         if (!_hostuDegistirdimMi) {
+    //           _hostuDegistirdimMi = true;
+    //           print(item);
+    //           FirebaseFirestore.instance
+    //               .collection('Multiplayer')
+    //               .doc(widget.lobbyid)
+    //               .update({
+    //             "settings.host": item,
+    //             item + ".ready": true,
+    //           }).whenComplete(() {
+    //             FirebaseFirestore.instance
+    //                 .collection('MultiplayerLobby')
+    //                 .doc(widget.lobbyid)
+    //                 .update({
+    //               "host": item,
+    //             });
+    //           });
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // print("Kazanan " + kazanan.toString());
+  }
+
+  static Future<void> updateCalendarDataRecord(
+    _tempList,
+    selectedDay,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String userID = user.uid;
+      print("UserID: " + userID);
+      String _tempselectedDay = selectedDay
+          .toString()
+          .substring(0, selectedDay.toString().length - 7);
+      print(_tempselectedDay);
+      print(_tempList);
+
+      await FirebaseFirestore.instance.collection("Users").doc(userID).update({
+        "calendarListEvents.$_tempselectedDay": FieldValue.arrayUnion(_tempList)
+      });
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
   // static Future<void> addIlacDataRecord(
   //   Map<String, dynamic> newData,
   // ) async {
