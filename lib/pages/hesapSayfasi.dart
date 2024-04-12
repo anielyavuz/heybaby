@@ -76,13 +76,13 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                 'Geri Bildirim: ${noteController.text}, Seçilen yıldız: ${_selectedStarIndex + 1}');
           },
         ),
-        ElevatedButton(
-          child: Text(
-            'Beğendiğim Storyler',
-          ),
-          onPressed: () {},
-        ),
-        SizedBox(height: 24),
+        // ElevatedButton(
+        //   child: Text(
+        //     'Beğendiğim Storyler',
+        //   ),
+        //   onPressed: () {},
+        // ),
+        SizedBox(height: 44),
         ElevatedButton(
           onPressed: widget.onSignOutPressed,
           child: Text('Çıkış Yap'),

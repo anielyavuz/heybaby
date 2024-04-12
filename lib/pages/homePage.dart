@@ -126,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onItemTapped(int index) {
+    _fetchUserData();
     setState(() {
       _selectedIndex = index;
     });

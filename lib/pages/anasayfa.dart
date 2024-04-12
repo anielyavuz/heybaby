@@ -63,10 +63,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
         widget.userData!['calendarListEvents'].forEach((key, value) {
           if (bugun.difference(DateTime.parse(key)).inDays <
               calendarListEventsSoonDay) {
-            print(DateTime.parse(key));
+            // print(DateTime.parse(key));
 
-            print("---");
-            print(bugun.difference(DateTime.parse(key)).inDays);
+            // print("---");
+            // print(bugun.difference(DateTime.parse(key)).inDays);
 
             calendarListEventsSoon[DateTime.parse(key)] = [];
 
@@ -103,9 +103,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
       } else {
         print('calendarListEvents parametresi bulunamadı veya null.');
       }
-      print("---");
-      print(calendarListEventsSoon);
-      print("---Final-----");
+      // print("---");
+      // print(calendarListEventsSoon);
+      // print("---Final-----");
       orderSoonEvents(calendarListEventsSoon);
     } else {
       print("Data yok");

@@ -34,6 +34,106 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<void> notlarDataDeleteRecord(_index) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    List _tempList = [];
+    _tempList.add(_index);
+    print(_tempList);
+
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"notlar": FieldValue.arrayRemove(_tempList)});
+
+        print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
+  static Future<void> notlarDataRecord(_tempList) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({
+          "notlar": _tempList
+
+          //       {
+
+          //   "dataRecord": {
+          //     "waterDrinkData": {
+          //       "type": "Bardak",
+          //       "amount": 200,
+          //       "count": 1,
+          //       "date": DateTime.now()
+          //     }
+          //   }
+          // }
+        });
+
+        print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
+  static Future<void> yapilacaklarDataRecord(_tempList) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({
+          "dataRecord.yapilacaklarData": _tempList
+
+          //       {
+
+          //   "dataRecord": {
+          //     "waterDrinkData": {
+          //       "type": "Bardak",
+          //       "amount": 200,
+          //       "count": 1,
+          //       "date": DateTime.now()
+          //     }
+          //   }
+          // }
+        });
+
+        print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
   static Future<void> updateDataRecord(
       Map<String, dynamic> newData, String _type) async {
     User? user = FirebaseAuth.instance.currentUser;

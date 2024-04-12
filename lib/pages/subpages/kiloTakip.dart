@@ -41,30 +41,31 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
     print(widget.userData);
     if (widget.userData != null) {
       print(widget.userData!['isPregnant']);
-    } else {
-      print("user data null");
-    }
-    setState(() {
-      DateTime now = DateTime.now();
-      String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
-      _weightHistory.insert(
-        0,
-        WeightEntry(
-          weight: _currentWeight,
-          dateTime: formattedDate,
-          isMotherWeight: _isMotherWeight,
-          dogumOnceSonra: widget.userData!['dogumOnceSonra'],
-        ), // Insert at the beginning
-      );
-      FirestoreFunctions.updateKiloDataRecord(
+
+      setState(() {
+        DateTime now = DateTime.now();
+        String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+        _weightHistory.insert(
+          0,
           WeightEntry(
             weight: _currentWeight,
             dateTime: formattedDate,
             isMotherWeight: _isMotherWeight,
             dogumOnceSonra: widget.userData!['dogumOnceSonra'],
-          ),
-          "KiloSaveData");
-    });
+          ), // Insert at the beginning
+        );
+        FirestoreFunctions.updateKiloDataRecord(
+            WeightEntry(
+              weight: _currentWeight,
+              dateTime: formattedDate,
+              isMotherWeight: _isMotherWeight,
+              dogumOnceSonra: widget.userData!['dogumOnceSonra'],
+            ),
+            "KiloSaveData");
+      });
+    } else {
+      print("user data null");
+    }
   }
 
   @override
