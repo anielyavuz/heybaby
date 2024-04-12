@@ -21,6 +21,31 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
+  var calendarListEvents;
+  Map calendarListEventsSoon = {};
+  int calendarListEventsSoonDay = 15;
+  DateTime bugun = DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
+  Map<String, String> activities = {};
+
+  orderSoonEvents(calendarListEventsSoon) {
+    String _tempKey = "";
+    String _tempValue = "";
+    calendarListEventsSoon.forEach((key, value) {
+      for (var _element in value.toList()) {
+        setState(() {
+          _tempKey = _element['id'].toString();
+          _tempValue = key.toString() +
+              "%%%" +
+              _element['title'].toString() +
+              "%%%" +
+              _element['time'].toString();
+          activities[_tempKey] = _tempValue;
+        });
+      }
+    });
+  }
+
   Future<void> _fetchUserData() async {
     Map<String, dynamic>? data = await FirestoreFunctions.getUserData();
     if (data != null) {
@@ -28,6 +53,70 @@ class _AnaSayfaState extends State<AnaSayfa> {
         widget.userData = data;
       });
     }
+    soonActivitiesCheck();
+  }
+
+  soonActivitiesCheck() {
+    if (widget.userData != null) {
+      if (widget.userData != null &&
+          widget.userData!.containsKey('calendarListEvents')) {
+        widget.userData!['calendarListEvents'].forEach((key, value) {
+          if (bugun.difference(DateTime.parse(key)).inDays <
+              calendarListEventsSoonDay) {
+            print(DateTime.parse(key));
+
+            print("---");
+            print(bugun.difference(DateTime.parse(key)).inDays);
+
+            calendarListEventsSoon[DateTime.parse(key)] = [];
+
+            // Zamanı dolu olanları ayır ve sırala
+            List<Map<String, dynamic>> filledTimes = [];
+            List<Map<String, dynamic>> emptyTimes = [];
+
+            for (var appointment in value) {
+              if (appointment['time'].isNotEmpty) {
+                filledTimes.add(appointment);
+              } else {
+                emptyTimes.add(appointment);
+              }
+            }
+
+            filledTimes.sort((a, b) => a['time'].compareTo(b['time']));
+
+            // Sıralanmış randevuları yazdır
+            List<Map<String, dynamic>> sortedAppointments = [];
+            sortedAppointments.addAll(filledTimes);
+            sortedAppointments.addAll(emptyTimes);
+
+            // sortedAppointments.forEach((appointment) {
+            //   print(appointment);
+            // });
+            calendarListEventsSoon[DateTime.parse(key)] = sortedAppointments;
+          }
+
+          // calendarListEvents[DateTime.parse(key)] = [];
+          // calendarListEvents[DateTime.parse(key)] = value;
+
+          // print(value);
+        });
+      } else {
+        print('calendarListEvents parametresi bulunamadı veya null.');
+      }
+      print("---");
+      print(calendarListEventsSoon);
+      print("---Final-----");
+      orderSoonEvents(calendarListEventsSoon);
+    } else {
+      print("Data yok");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchUserData();
   }
 
   @override
@@ -148,6 +237,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
           child: Container(
             width: MediaQuery.of(context).size.width * 0.95,
             decoration: BoxDecoration(
+              color: Color.fromARGB(255, 214, 172, 238),
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -156,24 +246,19 @@ class _AnaSayfaState extends State<AnaSayfa> {
               children: [
                 ExpansionTile(
                   title: Text(
-                    'Yaklaşan Aktiviteler',
+                    'Yaklaşan Aktiviteler' +
+                        (activities.keys.toList().length != 0
+                            ? " (${activities.keys.toList().length.toString()})"
+                            : ""),
                     style:
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
-                  children: [
-                    ListTile(
-                      title: Text('Yürüyüş'),
-                      subtitle: Text('23 Ocak 2024, 15:00'),
-                    ),
-                    ListTile(
-                      title: Text('Kahve Buluşması'),
-                      subtitle: Text('25 Ocak 2024, 18:30'),
-                    ),
-                    ListTile(
-                      title: Text('Kitap Okuma'),
-                      subtitle: Text('27 Ocak 2024, 20:00'),
-                    ),
-                  ],
+                  children: activities.entries.map((entry) {
+                    return ListTile(
+                      title: Text(entry.value.split('%%%')[1]),
+                      subtitle: Text(entry.value.split('%%%')[0].split(' ')[0]),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
