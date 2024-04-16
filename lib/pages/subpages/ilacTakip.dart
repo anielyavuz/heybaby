@@ -23,6 +23,7 @@ class _IlacTakipState extends State<IlacTakip> {
   var ilacListesi = [];
   Map<String, dynamic>? currentUserData;
   bool _shouldFetchUserData = true;
+  int _bildirimID = 199999;
 
   // [
   //   {
@@ -82,14 +83,26 @@ class _IlacTakipState extends State<IlacTakip> {
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
-    print("lkfdlkfdk");
-    print(ilacListesi);
+    // print("lkfdlkfdk");
+    // print(ilacListesi);
     setState(() {
       ilacListesi = (widget.userData?['dataRecord']['ilacListesiData'] ?? [])
           .map((item) => item as Map<String, dynamic>)
           .toList();
+
+      _bildirimID = int.parse(
+              widget.userData?['bildirimler']['ilac'].keys.toList()[
+                  widget.userData?['bildirimler']['ilac'].keys.toList().length -
+                      1]) +
+          1;
       print("ASDSDSADSAD");
-      print(ilacListesi.toString());
+      print(_bildirimID);
+
+      // (widget.userData?['bildirimler']['ilac'].keys.toList()[
+      //             widget.userData?['bildirimler']['ilac'].keys.toList().length -
+      //                 1] +
+      //         1 ??
+      //     199999);
     });
 
     // Initialize the checkbox values for each medication for each day
@@ -235,7 +248,9 @@ class _IlacTakipState extends State<IlacTakip> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => IlacEkleScreen(),
+              builder: (context) => IlacEkleScreen(
+                bildirimID: _bildirimID,
+              ),
             ),
           ).then((value) {
             _fetchUserData();
@@ -249,6 +264,10 @@ class _IlacTakipState extends State<IlacTakip> {
 }
 
 class IlacEkleScreen extends StatefulWidget {
+  int? bildirimID;
+
+  IlacEkleScreen({Key? key, this.bildirimID}) : super(key: key);
+
   @override
   _IlacEkleScreenState createState() => _IlacEkleScreenState();
 }
@@ -332,44 +351,44 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                   // Divider(),
 
                   // Günlerin listesi ve check kutuları
-                  Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      // color: Colors.blue, // Arka plan rengi
-                      borderRadius:
-                          BorderRadius.circular(10), // Kenar yuvarlatma
-                      border: Border.all(color: Colors.black), // Kenar çizgisi
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        7,
-                        (index) => FilterChip(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          showCheckmark: false,
-                          selectedColor: Color.fromARGB(255, 164, 38, 243),
-                          disabledColor: Colors.grey,
-                          label: Text(_getDayName(index)),
-                          selected: selectedDays[index],
-                          onSelected: (isSelected) {
-                            setState(() {
-                              selectedDays[index] = isSelected;
-                            });
-                            print(selectedDays
-                                .asMap()
-                                .entries
-                                .where((entry) => entry.value)
-                                .map((entry) => entry.key)
-                                .toList());
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   height: 50,
+                  //   decoration: BoxDecoration(
+                  //     // color: Colors.blue, // Arka plan rengi
+                  //     borderRadius:
+                  //         BorderRadius.circular(10), // Kenar yuvarlatma
+                  //     border: Border.all(color: Colors.black), // Kenar çizgisi
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     children: List.generate(
+                  //       7,
+                  //       (index) => FilterChip(
+                  //         shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(25),
+                  //         ),
+                  //         showCheckmark: false,
+                  //         selectedColor: Color.fromARGB(255, 164, 38, 243),
+                  //         disabledColor: Colors.grey,
+                  //         label: Text(_getDayName(index)),
+                  //         selected: selectedDays[index],
+                  //         onSelected: (isSelected) {
+                  //           setState(() {
+                  //             selectedDays[index] = isSelected;
+                  //           });
+                  //           print(selectedDays
+                  //               .asMap()
+                  //               .entries
+                  //               .where((entry) => entry.value)
+                  //               .map((entry) => entry.key)
+                  //               .toList());
+                  //         },
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
 
                   Container(
                     decoration: BoxDecoration(
@@ -549,7 +568,15 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                             SnackBar(content: Text('İlaç Adı boş olamaz.')),
                           );
                         } else {
-                          _ilacEkle();
+                          if (ilacSaatleri.length > 0) {
+                            _ilacEkle();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'En az bir adet ilac saati eklemesiniz.')),
+                            );
+                          }
                         }
                       },
                       child: Text('Ekle'),
@@ -629,11 +656,78 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
           .map((entry) => entry.key)
           .toList(),
     };
-    print(newMedication);
-    // widget.ilacListesi.add(newMedication);
-    // var _result = await FirestoreFunctions.addIlacDataRecord(newMedication);
+    for (var i = 0; i < kacGunKullanilacak; i++) {
+      if (i == 0) {
+        print("Havaaaa");
+        for (var _ilacSaat in ilacSaatleri) {
+          print("Suuuu");
+          if (DateTime.now().hour < _ilacSaat.hour) {
+            var _simdiGun = DateTime.now().day;
+            var _simdiAy = DateTime.now().month;
+            var _simdiYil = DateTime.now().year;
+            // print(_ilacSaat.hour);
+            print(widget.bildirimID.toString() +
+                '  ${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+            var _result3 = await FirestoreFunctions.bildirimEkleme(
+                'ilac',
+                widget.bildirimID,
+                _ilacAdiController.text,
+                '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+
+            setState(() {
+              widget.bildirimID = (widget.bildirimID! + 1);
+            });
+          } else if (DateTime.now().hour == _ilacSaat.hour) {
+            if (DateTime.now().minute < _ilacSaat.minute) {
+              var _simdiGun = DateTime.now().day;
+              var _simdiAy = DateTime.now().month;
+              var _simdiYil = DateTime.now().year;
+              // print(_ilacSaat.hour);
+              print(widget.bildirimID.toString() +
+                  '  ${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+              var _result3 = await FirestoreFunctions.bildirimEkleme(
+                  'ilac',
+                  widget.bildirimID,
+                  _ilacAdiController.text,
+                  '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+
+              setState(() {
+                widget.bildirimID = (widget.bildirimID! + 1);
+              });
+            } else {
+              print("aralıkta değil");
+            }
+          } else {
+            print("aralıkta değil");
+          }
+        }
+      } else {
+        for (var _ilacSaat in ilacSaatleri) {
+          var _simdiGun = DateTime.now().add(Duration(days: i)).day;
+          var _simdiAy = DateTime.now().add(Duration(days: i)).month;
+          var _simdiYil = DateTime.now().add(Duration(days: i)).year;
+          // print(_ilacSaat.hour);
+          print(widget.bildirimID.toString() +
+              '  ${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+          var _result3 = await FirestoreFunctions.bildirimEkleme(
+              'ilac',
+              widget.bildirimID,
+              _ilacAdiController.text,
+              '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+
+          setState(() {
+            widget.bildirimID = (widget.bildirimID! + 1);
+          });
+        }
+      }
+    }
+
+    // print(newMedication);
+
     var _result2 = await FirestoreFunctions.updateDataRecord(
         newMedication, "ilacListesiData");
+    // var _result3 = await FirestoreFunctions.bildirimEkleme(
+    //     'ilac', widget.bildirimID, _ilacAdiController.text, '22:30-15.04.2024');
     Navigator.pop(context);
   }
 

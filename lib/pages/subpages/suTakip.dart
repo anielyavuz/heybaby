@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/anasayfa.dart';
@@ -262,7 +263,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                         GestureDetector(
                           child: IconButton(
                             icon: Icon(Icons.add),
-                            onPressed: () {
+                            onPressed: () async {
                               setState(() {
                                 _count += 1;
                               });

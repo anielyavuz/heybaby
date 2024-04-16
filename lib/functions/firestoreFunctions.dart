@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
 
 class FirestoreFunctions {
@@ -51,6 +52,37 @@ class FirestoreFunctions {
             .update({"notlar": FieldValue.arrayRemove(_tempList)});
 
         print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
+  static Future<void> bildirimEkleme(_kategori, _id, _isim, _zaman) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"bildirimler.$_kategori.$_id": "$_isim%%%$_zaman"});
+
+        BildirimTakip().ilacBildirim(
+            _id = _id,
+            _isim,
+            int.parse(_zaman.toString().split('-')[0].split(':')[0]),
+            int.parse(_zaman.toString().split('-')[0].split(':')[1]),
+            int.parse(_zaman.toString().split('-')[1].split('.')[0]),
+            int.parse(_zaman.toString().split('-')[1].split('.')[1]),
+            int.parse(_zaman.toString().split('-')[1].split('.')[2]));
+        print('Veri başarıyla güncellendi. Bildirimler...');
       } catch (e) {
         // Firestore'a veri güncelleme sırasında bir hata oluştu
         print('Firestore veri güncelleme hatası: $e');

@@ -2,6 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heybaby/functions/authFunctions.dart';
+import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/chatgptService.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/functions/notificationController.dart';
@@ -96,8 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          NotificationSetup.scheduleWeeklyNotification(1);
+        onPressed: () async {
+          // BildirimTakip().bildirimKur();
+          // NotificationSetup.scheduleWeeklyNotification(1);
           // AwesomeNotifications().createNotification(
           //   content: NotificationContent(
           //       id: 1,
