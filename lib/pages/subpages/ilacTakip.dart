@@ -75,6 +75,13 @@ class _IlacTakipState extends State<IlacTakip> {
         ilacListesi = (widget.userData?['dataRecord']['ilacListesiData'] ?? [])
             .map((item) => item as Map<String, dynamic>)
             .toList();
+
+        _bildirimID = int.parse(widget.userData?['bildirimler']['ilac'].keys
+                    .toList()[
+                widget.userData?['bildirimler']['ilac'].keys.toList().length -
+                    1]) +
+            1;
+        print("yeni bildirim id --- $_bildirimID");
       });
     }
   }
@@ -293,6 +300,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   late DateTime baslangicTarihi;
   late int kacGunKullanilacak;
   bool tokMu = false;
+  bool _tokMu = false;
   List<bool> selectedDays =
       List.generate(7, (index) => false); // Haftanın günleri için seçim listesi
 
@@ -301,6 +309,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   @override
   void initState() {
     super.initState();
+    print("şuanin bildirim id: " + widget.bildirimID.toString());
 
     ilacSaatleri = [TimeOfDay(hour: 20, minute: 00)];
 
@@ -388,7 +397,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                   //   ),
                   // ),
 
-                  // const SizedBox(height: 10),
+                  // const SizedBox(height: 10),""
 
                   Container(
                     decoration: BoxDecoration(
@@ -435,9 +444,34 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 8),
-                                              child: Text(
-                                                '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                                                style: TextStyle(fontSize: 16),
+                                              child: GestureDetector(
+                                                child: Text(
+                                                  '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onTap: () {
+                                                  print(ilacSaatleri);
+                                                  showTimePicker(
+                                                    context: context,
+                                                    initialTime: time,
+                                                  ).then((pickedTime) {
+                                                    if (pickedTime != null) {
+                                                      setState(() {
+                                                        ilacSaatleri
+                                                            .remove(time);
+                                                        ilacSaatleri
+                                                            .add(pickedTime);
+                                                        ilacSaatleri.sort(
+                                                            (a, b) => a.hour
+                                                                .compareTo(
+                                                                    b.hour));
+                                                      });
+
+                                                      print(ilacSaatleri);
+                                                    }
+                                                  });
+                                                },
                                               ),
                                             ),
                                             Container(
@@ -497,7 +531,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Text('Tok'),
+                          child: Text("Tok"),
                         ),
                         Switch(
                           value: tokMu,
@@ -671,7 +705,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
             var _result3 = await FirestoreFunctions.bildirimEkleme(
                 'ilac',
                 widget.bildirimID,
-                _ilacAdiController.text,
+                _ilacAdiController.text + "%%" + (tokMu ? "Tok" : "Aç"),
                 '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
 
             setState(() {
@@ -688,7 +722,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
               var _result3 = await FirestoreFunctions.bildirimEkleme(
                   'ilac',
                   widget.bildirimID,
-                  _ilacAdiController.text,
+                  _ilacAdiController.text + "%%" + (tokMu ? "Tok" : "Aç"),
                   '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
 
               setState(() {
@@ -712,7 +746,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
           var _result3 = await FirestoreFunctions.bildirimEkleme(
               'ilac',
               widget.bildirimID,
-              _ilacAdiController.text,
+              _ilacAdiController.text + "%%" + (tokMu ? "Tok" : "Aç"),
               '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
 
           setState(() {

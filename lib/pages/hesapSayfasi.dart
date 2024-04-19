@@ -1,4 +1,7 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:heybaby/functions/bildirimTakip.dart';
 
 class HesapSayfasi extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -27,11 +30,22 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           backgroundImage: NetworkImage(widget.userData?['photoURL'] ??
               'https://placekitten.com/200/200'),
         ),
-        Text(
-          widget.userData?['name'] ?? 'Guest',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: () async {
+            // BildirimTakip.haftalikBoyutBilgisi(1021, "_testBenzerlik",
+            //     "https://placekitten.com/200/200", 10, 00, 29, 04, 2025);
+
+            var _bildirimler = await AwesomeNotifications().cancelAll();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Bütün bildirimler temizlendi !!!')),
+            );
+          },
+          child: Text(
+            widget.userData?['name'] ?? 'Guest',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         SizedBox(height: 8),

@@ -76,12 +76,13 @@ class FirestoreFunctions {
 
         BildirimTakip().ilacBildirim(
             _id = _id,
-            _isim,
+            _isim.toString().split("%%")[0],
             int.parse(_zaman.toString().split('-')[0].split(':')[0]),
             int.parse(_zaman.toString().split('-')[0].split(':')[1]),
             int.parse(_zaman.toString().split('-')[1].split('.')[0]),
             int.parse(_zaman.toString().split('-')[1].split('.')[1]),
-            int.parse(_zaman.toString().split('-')[1].split('.')[2]));
+            int.parse(_zaman.toString().split('-')[1].split('.')[2]),
+            _isim.toString().split("%%")[1]);
         print('Veri başarıyla güncellendi. Bildirimler...');
       } catch (e) {
         // Firestore'a veri güncelleme sırasında bir hata oluştu

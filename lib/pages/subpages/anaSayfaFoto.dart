@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/jsonFiles.dart';
 
 class TrimesterProgressWidget extends StatefulWidget {
@@ -15,6 +17,8 @@ class TrimesterProgressWidget extends StatefulWidget {
 class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
   late List<dynamic> jsonList = []; // Global değişken tanımı
   late List<dynamic> jsonList0 = [];
+  late int _kacinciHafta = 5;
+  late DateTime _currentDay = DateTime.now();
   imageandInfoJsonFileLoad() async {
     jsonList0 = await JsonReader.readJson();
     setState(() {
@@ -23,12 +27,77 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     // print(jsonList);
   }
 
+  haftalikBoyutBildirimOlustur() async {
+    var _bildirimler =
+        await AwesomeNotifications().listScheduledNotifications();
+    List _bildirimIdleri = [];
+    for (var _bildirim in _bildirimler) {
+      _bildirimIdleri.add(_bildirim.content!.id);
+    }
+    bool _kontrol = true;
+    for (var _bildirimId in _bildirimIdleri) {
+      if (_bildirimId < 1999) {
+        _kontrol = false;
+      } else {}
+    }
+    if (_kontrol) {
+      int sayac = 0;
+      for (var i = _kacinciHafta + 1; i < 41; i++) {
+        String _testImageLink = "";
+        String _testBenzerlik = "";
+
+        if (i < 41) {
+          if (i >= 4) {
+            _testImageLink = jsonList[i - 3]['foto_link'];
+            _testBenzerlik = jsonList[i - 3]['benzerlik'];
+          } else {
+            _testImageLink = jsonList[0]['foto_link'];
+            _testBenzerlik = jsonList[0]['benzerlik'];
+          }
+        } else {
+          _testImageLink = jsonList[36]['foto_link'];
+          _testBenzerlik = jsonList[36]['benzerlik'];
+        }
+
+        Future.delayed(const Duration(milliseconds: 50), () {
+          imageandInfoJsonFileLoad();
+        });
+
+        await BildirimTakip.haftalikBoyutBilgisi(
+            (i + 1000),
+            _testBenzerlik,
+            _testImageLink,
+            10,
+            00,
+            _currentDay
+                .add(Duration(days: (8 - _currentDay.weekday) + sayac))
+                .day,
+            _currentDay
+                .add(Duration(days: (8 - _currentDay.weekday) + sayac))
+                .month,
+            _currentDay
+                .add(Duration(days: (8 - _currentDay.weekday) + sayac))
+                .year);
+
+        print("Ana sayfa boyut bildirimleri yok, yazılıyor. -- " +
+            (i + 1000).toString());
+        sayac = sayac + 7;
+      }
+    } else {
+      print("haftalık bildirimler kurulu durumda.");
+      print(_bildirimIdleri);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
     Future.delayed(const Duration(milliseconds: 50), () {
       imageandInfoJsonFileLoad();
+    });
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      haftalikBoyutBildirimOlustur();
     });
   }
 
@@ -66,6 +135,8 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     String _imageLink = "";
     String _gifLink = "";
     String _benzerlik = "";
+
+    _kacinciHafta = weeks;
     if (jsonList.isNotEmpty) {
       if (weeks < 41) {
         if (weeks >= 4) {

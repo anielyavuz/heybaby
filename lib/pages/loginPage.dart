@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heybaby/functions/authFunctions.dart';
+import 'package:heybaby/functions/bildirimTakip.dart';
+import 'package:heybaby/functions/jsonFiles.dart';
 
 void main() {
   runApp(IntroPage());
@@ -17,11 +19,31 @@ class IntroPage extends StatelessWidget {
   }
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   AuthService _authService = AuthService();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late List<dynamic> jsonList = [];
+  // Global değişken tanımı
+  late List<dynamic> jsonList0 = [];
+
+  imageandInfoJsonFileLoad() async {
+    jsonList0 = await JsonReader.readJson();
+    setState(() {
+      jsonList = jsonList0;
+    });
+    // print(jsonList);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +143,34 @@ class GuestLoginContent extends StatefulWidget {
 class _GuestLoginContentState extends State<GuestLoginContent> {
   String _dogumOnceSonra = "Once";
   bool isPregnant = true;
-  DateTime lastPeriodDate = DateTime.now();
+  DateTime lastPeriodDate = DateTime.now().add(Duration(days: -30));
   AuthService _authService = AuthService();
+  late List<dynamic> jsonList = [];
+  // Global değişken tanımı
+  late List<dynamic> jsonList0 = [];
+
+  String _tahminiKilo = "";
+  String _tahminiBoy = "";
+  String _imageLink = "";
+  String _gifLink = "";
+  String _benzerlik = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 50), () {
+      imageandInfoJsonFileLoad();
+    });
+  }
+
+  imageandInfoJsonFileLoad() async {
+    jsonList0 = await JsonReader.readJson();
+    setState(() {
+      jsonList = jsonList0;
+    });
+    // print(jsonList);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,8 +196,8 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content:
-                            Text('Yeni doğum modu henüz desteklenmemektedir.')),
+                        content: Text(
+                            'Yeni doğum modu henüz geliştirme adımındadır.')),
                   );
                 }
               },
@@ -187,10 +235,9 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
             SizedBox(height: 16.0),
             ElevatedButton(
                 onPressed: () async {
+                  Navigator.of(context).pop();
                   var a = await _authService.anonymSignIn(
                       isPregnant, lastPeriodDate);
-
-                  Navigator.of(context).pop();
                 },
                 child: Text('Giriş Yap'))
           ],
