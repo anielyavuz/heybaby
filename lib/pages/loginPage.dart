@@ -36,6 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late List<dynamic> jsonList = [];
   // Global değişken tanımı
   late List<dynamic> jsonList0 = [];
+  bool emailValid = true;
+  bool passwordValid = true;
 
   imageandInfoJsonFileLoad() async {
     jsonList0 = await JsonReader.readJson();
@@ -57,16 +59,35 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Kullanıcı adı alanı
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: 'E-posta'),
+              decoration: InputDecoration(
+                labelText: 'E-posta',
+                // Hata varsa altını kırmızı çizgiyle vurgula
+                errorText: emailValid ? null : 'E-posta alanı boş olamaz',
+                // Eğer hata varsa kırmızı çerçeve ekle
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 2.0),
+                ),
+              ),
             ),
             SizedBox(height: 16.0),
+// Şifre alanı
             TextField(
               controller: passwordController,
-              decoration: InputDecoration(labelText: 'Şifre'),
+              decoration: InputDecoration(
+                labelText: 'Şifre',
+                // Hata varsa altını kırmızı çizgiyle vurgula
+                errorText: passwordValid ? null : 'Şifre alanı boş olamaz',
+                // Eğer hata varsa kırmızı çerçeve ekle
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 2.0),
+                ),
+              ),
               obscureText: true,
             ),
+
             SizedBox(height: 8.0),
             TextButton(
               onPressed: () {
@@ -79,8 +100,92 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 24.0),
             ElevatedButton(
               onPressed: () async {
-                var a = await _authService.signIn(
-                    emailController.text, passwordController.text);
+                if (emailController.text != "" &&
+                    passwordController.text != "") {
+                  var a = await _authService.signIn(
+                      emailController.text, passwordController.text);
+                  if (!a['status']) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          a['value'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                        backgroundColor: Color.fromARGB(
+                            255, 126, 52, 253), // Snackbar arka plan rengi
+                        duration:
+                            Duration(seconds: 3), // Snackbar gösterim süresi
+                        behavior:
+                            SnackBarBehavior.floating, // Snackbar davranışı
+                        shape: RoundedRectangleBorder(
+                          // Snackbar şekli
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 4, // Snackbar yükseltilmesi
+                        margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+                      ),
+                    );
+                  }
+                } else if (emailController.text == "") {
+                  setState(() {
+                    emailValid = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Kullanıcı adı alanı boş olamaz!',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      backgroundColor: Color.fromARGB(
+                          255, 126, 52, 253), // Snackbar arka plan rengi
+                      duration:
+                          Duration(seconds: 3), // Snackbar gösterim süresi
+                      behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                      shape: RoundedRectangleBorder(
+                        // Snackbar şekli
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 4, // Snackbar yükseltilmesi
+                      margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+                    ),
+                  );
+                } else if (passwordController.text == "") {
+                  setState(() {
+                    passwordValid = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Password alanı boş olamaz!',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      backgroundColor: Color.fromARGB(
+                          255, 126, 52, 253), // Snackbar arka plan rengi
+                      duration:
+                          Duration(seconds: 3), // Snackbar gösterim süresi
+                      behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                      shape: RoundedRectangleBorder(
+                        // Snackbar şekli
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 4, // Snackbar yükseltilmesi
+                      margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+                    ),
+                  );
+                }
+
                 // Burada giriş işlemlerini gerçekleştirebilirsiniz.
                 // Örneğin, emailController.text ve passwordController.text'i kullanarak kontrol yapabilirsiniz.
                 // Eğer giriş başarılıysa başka bir ekran açabilir veya işlemleri gerçekleştirebilirsiniz.

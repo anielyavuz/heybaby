@@ -96,7 +96,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       returnCode['status'] = false;
       returnCode['value'] = e.code;
-      print('Failed with error code: ${e.code}');
+      // print('Failed with error code: ${e.code}');
       print(e.message);
       return returnCode;
     }
