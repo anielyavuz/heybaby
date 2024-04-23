@@ -41,7 +41,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             );
           },
           child: Text(
-            widget.userData?['name'] ?? 'Guest',
+            widget.userData?['userName'] ?? 'Guest',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -53,6 +53,16 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           widget.userData?['email'] ?? '',
           style: TextStyle(
             fontSize: 16,
+            color: Colors.grey,
+          ),
+        ),
+        Text(
+          widget.userData?['id'].substring(0, 3) +
+              '....' +
+              widget.userData?['id']
+                  .substring(widget.userData?['id'].length - 3),
+          style: TextStyle(
+            fontSize: 12,
             color: Colors.grey,
           ),
         ),
