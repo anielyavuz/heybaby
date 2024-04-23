@@ -368,6 +368,37 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<Map> sendFeedBack(userName, star, feedBackNote, tarih) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      List _tempList = [];
+      Map _tempMap = {};
+      _tempMap['userName'] = userName;
+      _tempMap['tarih'] = tarih;
+      _tempMap['star'] = star;
+      _tempMap['feedBackNote'] = feedBackNote;
+      _tempList.add(_tempMap);
+      try {
+        await FirebaseFirestore.instance
+            .collection("System")
+            .doc('geriBildirim')
+            .update({"note": FieldValue.arrayUnion(_tempList)}).whenComplete(
+                () {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
   // static Future<void> addIlacDataRecord(
   //   Map<String, dynamic> newData,
   // ) async {

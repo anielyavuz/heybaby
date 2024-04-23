@@ -2,6 +2,8 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
+import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:intl/intl.dart';
 
 class HesapSayfasi extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -95,9 +97,85 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
         SizedBox(height: 16),
         ElevatedButton(
           child: Text('Geri Bildirim Gönder'),
-          onPressed: () {
-            print(
-                'Geri Bildirim: ${noteController.text}, Seçilen yıldız: ${_selectedStarIndex + 1}');
+          onPressed: () async {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Geri bildirim başarılı olarak iletildi.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: Color.fromARGB(
+                    255, 126, 52, 253), // Snackbar arka plan rengi
+                duration: Duration(seconds: 3), // Snackbar gösterim süresi
+                behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                shape: RoundedRectangleBorder(
+                  // Snackbar şekli
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 4, // Snackbar yükseltilmesi
+                margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+              ),
+            );
+            var sonuc = await FirestoreFunctions.sendFeedBack(
+                {widget.userData?['userName'] ?? 'Guest'},
+                {_selectedStarIndex + 1},
+                noteController.text,
+                DateFormat('yyyy-MM-dd HH:mm:ss')
+                    .format(DateTime.now())
+                    .toString());
+            print(sonuc);
+            if (sonuc['status']) {
+              noteController.clear();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Geri bildirim başarılı olarak iletildi.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Color.fromARGB(
+                      255, 126, 52, 253), // Snackbar arka plan rengi
+                  duration: Duration(seconds: 3), // Snackbar gösterim süresi
+                  behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                  shape: RoundedRectangleBorder(
+                    // Snackbar şekli
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 4, // Snackbar yükseltilmesi
+                  margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    sonuc['value'].toString(),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Color.fromARGB(
+                      255, 126, 52, 253), // Snackbar arka plan rengi
+                  duration: Duration(seconds: 3), // Snackbar gösterim süresi
+                  behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                  shape: RoundedRectangleBorder(
+                    // Snackbar şekli
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 4, // Snackbar yükseltilmesi
+                  margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+                ),
+              );
+            }
           },
         ),
         // ElevatedButton(
