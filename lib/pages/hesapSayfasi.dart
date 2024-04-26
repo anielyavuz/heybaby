@@ -20,6 +20,25 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
   int _selectedStarIndex = -1;
   final TextEditingController feedbackController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
+  String lastPeriodDate = "";
+
+  String formatDate(String dateString) //yıl-ay-gün formatı gün-ay-yıl a çevirir
+  {
+    // İlk olarak, verilen stringi DateTime nesnesine dönüştürüyoruz
+    DateTime dateTime = DateTime.parse(dateString);
+
+    // Ardından, istediğimiz tarih formatını belirleyip uyguluyoruz
+    String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
+
+    // Son olarak, yeni formatlanmış tarih string'ini döndürüyoruz
+    return formattedDate;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    lastPeriodDate = widget.userData?['sonAdetTarihi'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +49,10 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
         CircleAvatar(
           radius: 50,
           backgroundImage: NetworkImage(widget.userData?['photoURL'] ??
-              'https://placekitten.com/200/200'),
+              'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f'),
         ),
         GestureDetector(
           onTap: () async {
-            // BildirimTakip.haftalikBoyutBilgisi(1021, "_testBenzerlik",
-            //     "https://placekitten.com/200/200", 10, 00, 29, 04, 2025);
-
             var _bildirimler = await AwesomeNotifications().cancelAll();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Bütün bildirimler temizlendi !!!')),
@@ -69,6 +85,47 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           ),
         ),
         SizedBox(height: 16),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Son adet tarihi: ${formatDate(lastPeriodDate)}',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black,
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                print("asd");
+                final DateTime? picked = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.parse(lastPeriodDate),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                if (picked != null &&
+                    DateFormat('yyyy-MM-dd').format(picked) != lastPeriodDate) {
+                  setState(() {
+                    print(lastPeriodDate);
+                    lastPeriodDate = DateFormat('yyyy-MM-dd').format(picked);
+                    print(lastPeriodDate);
+                  });
+                  var sonuc = await FirestoreFunctions.sonAdetTarihiGuncelle(
+                      lastPeriodDate);
+                }
+              },
+              child: Icon(
+                Icons.settings,
+                color: const Color.fromARGB(255, 139, 87, 149),
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 16,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(5, (index) {
