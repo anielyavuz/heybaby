@@ -1,9 +1,11 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
+import 'package:heybaby/pages/subpages/haftalikGuncelleme.dart';
 import 'package:heybaby/pages/subpages/ilacTakip.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
@@ -30,6 +32,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   DateTime bugun = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
   Map<String, String> activities = {};
+  int selectedWeek = 4;
 
   orderSoonEvents(calendarListEventsSoon) {
     String _tempKey = "";
@@ -66,6 +69,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
     if (data != null) {
       setState(() {
         widget.userData = data;
+        selectedWeek =
+            (((DateTime.now().difference(DateTime.parse(data['sonAdetTarihi'])))
+                    .inDays) ~/
+                7);
       });
     }
     soonActivitiesCheck();
@@ -261,47 +268,59 @@ class _AnaSayfaState extends State<AnaSayfa> {
             ),
             SizedBox(height: 10),
 
-            Container(
-              width: MediaQuery.of(context).size.width * 0.95,
-              height: MediaQuery.of(context).size.width *
-                  0.95 *
-                  (90 / MediaQuery.of(context).size.width),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    'assets/background.jpeg',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        HaftalikGuncellemeWidget(userData: widget.userData),
                   ),
-                  Positioned(
-                    bottom: 1,
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 52, 19, 57).withOpacity(
-                            0.7), // Opaklık değerini ayarlayabilirsiniz
+                );
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.95,
+                height: MediaQuery.of(context).size.width *
+                    0.95 *
+                    (90 / MediaQuery.of(context).size.width),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/background.jpeg',
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                    Positioned(
+                      bottom: 1,
+                      child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 52, 19, 57).withOpacity(
+                              0.7), // Opaklık değerini ayarlayabilirsiniz
 
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Text(
-                        'Haftalık Güncellemeler',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          color: Colors
-                              .white, // Metin rengini beyaz olarak ayarladık
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors
+                                .white, // Metin rengini beyaz olarak ayarladık
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],

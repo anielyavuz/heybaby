@@ -15,7 +15,7 @@ class NotlarPage extends StatefulWidget {
 
 class _NotlarPageState extends State<NotlarPage> {
   List notlar = [];
-  int selectedWeek = 1;
+  int selectedWeek = 4;
 
   gunlukDBEkle() async {
     var _result2 = await FirestoreFunctions.notlarDataRecord(notlar);

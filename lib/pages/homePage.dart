@@ -45,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _shouldFetchUserData = true;
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
+  int selectedWeek = 4;
 
   List storyImages = [
     // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
@@ -178,6 +179,10 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         userData = data;
         _shouldFetchUserData = false;
+        selectedWeek = (((DateTime.now()
+                    .difference(DateTime.parse(userData?['sonAdetTarihi'])))
+                .inDays) ~/
+            7);
       });
     }
   }
