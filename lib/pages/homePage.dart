@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
@@ -43,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Map<String, dynamic>? userData;
   bool _shouldFetchUserData = true;
   bool _isActivitiesExpanded = true;
+  bool _AIStatus = false;
 
   List<String> storyImages = [
     'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
@@ -63,68 +65,70 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     if (userData == null || _shouldFetchUserData) {
       _fetchUserData();
+      _systemData();
     }
 
     return Scaffold(
-      body: SafeArea(child: _buildBody()),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Ana Sayfa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Takvim',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Keşfet',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note),
-            label: 'Günlük',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Hesap',
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          // BildirimTakip().bildirimKur();
-          // NotificationSetup.scheduleWeeklyNotification(1);
-          // AwesomeNotifications().createNotification(
-          //   content: NotificationContent(
-          //       id: 1,
-          //       channelKey: "basic_channel",
-          //       title: "Title",
-          //       body: "This is a body"),
-          // );
-          _showChatModalBottomSheet(context);
-        },
-        child: Container(
-          width: 56.0, // Genişlik ayarı
-          height: 56.0, // Yükseklik ayarı
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: NetworkImage(
-                'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/aiChatBotIcon2.jpg?alt=media&token=9b56d1e4-bb29-431d-bdc3-d9a4b880562c',
-              ),
-              fit: BoxFit
-                  .fill, // Resmi butona tam olarak dolduracak şekilde ayarla
+        body: SafeArea(child: _buildBody()),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.grey,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Ana Sayfa',
             ),
-          ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_today),
+              label: 'Takvim',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.explore),
+              label: 'Keşfet',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.note),
+              label: 'Günlük',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Hesap',
+            ),
+          ],
         ),
-      ),
-    );
+        floatingActionButton: _AIStatus
+            ? FloatingActionButton(
+                onPressed: () async {
+                  // BildirimTakip().bildirimKur();
+                  // NotificationSetup.scheduleWeeklyNotification(1);
+                  // AwesomeNotifications().createNotification(
+                  //   content: NotificationContent(
+                  //       id: 1,
+                  //       channelKey: "basic_channel",
+                  //       title: "Title",
+                  //       body: "This is a body"),
+                  // );
+                  _showChatModalBottomSheet(context);
+                },
+                child: Container(
+                  width: 56.0, // Genişlik ayarı
+                  height: 56.0, // Yükseklik ayarı
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/aiChatBotIcon2.jpg?alt=media&token=9b56d1e4-bb29-431d-bdc3-d9a4b880562c',
+                      ),
+                      fit: BoxFit
+                          .fill, // Resmi butona tam olarak dolduracak şekilde ayarla
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox());
   }
 
   void _onItemTapped(int index) {
@@ -173,6 +177,17 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         userData = data;
         _shouldFetchUserData = false;
+      });
+    }
+  }
+
+  Future<void> _systemData() async {
+    Map<String, dynamic>? data = await FirestoreFunctions.getSystemData();
+    if (data != null) {
+      print(data);
+      setState(() {
+        _AIStatus = data['AIBot']['Enable'];
+        print(_AIStatus);
       });
     }
   }

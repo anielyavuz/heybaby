@@ -9,6 +9,7 @@ import 'package:heybaby/pages/subpages/kiloTakip.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
 import 'package:heybaby/pages/subpages/suTakip.dart';
 import 'package:heybaby/pages/subpages/yapilacaklarPage.dart';
+import 'package:intl/intl.dart';
 
 class AnaSayfa extends StatefulWidget {
   final List<String> storyImages;
@@ -45,6 +46,18 @@ class _AnaSayfaState extends State<AnaSayfa> {
         });
       }
     });
+  }
+
+  String formatDate(String dateString) //yıl-ay-gün formatı gün-ay-yıl a çevirir
+  {
+    // İlk olarak, verilen stringi DateTime nesnesine dönüştürüyoruz
+    DateTime dateTime = DateTime.parse(dateString);
+
+    // Ardından, istediğimiz tarih formatını belirleyip uyguluyoruz
+    String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
+
+    // Son olarak, yeni formatlanmış tarih string'ini döndürüyoruz
+    return formattedDate;
   }
 
   Future<void> _fetchUserData() async {
@@ -257,7 +270,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   children: activities.entries.map((entry) {
                     return ListTile(
                       title: Text(entry.value.split('%%%')[1]),
-                      subtitle: Text(entry.value.split('%%%')[0].split(' ')[0]),
+                      subtitle: Text(formatDate(
+                          entry.value.split('%%%')[0].split(' ')[0])),
                     );
                   }).toList(),
                 ),

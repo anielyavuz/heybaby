@@ -128,6 +128,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                     .format(DateTime.now())
                     .toString());
             print(sonuc);
+            FocusScope.of(context).unfocus();
             if (sonuc['status']) {
               noteController.clear();
               ScaffoldMessenger.of(context).showSnackBar(
