@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class StoryScreen extends StatefulWidget {
-  final List<String> storyImages;
+  final List storyImages;
   final int startingPage;
 
   StoryScreen({required this.storyImages, required this.startingPage});
@@ -134,9 +134,65 @@ class _StoryScreenState extends State<StoryScreen>
                 _animationController.forward();
               },
               itemBuilder: (context, index) {
-                return Image.network(
-                  widget.storyImages[index],
-                  fit: BoxFit.cover,
+                return Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context)
+                          .size
+                          .width, // Ekran genişliği kadar
+                      height: MediaQuery.of(context)
+                          .size
+                          .height, // Ekran yüksekliği kadar
+                      child: Image.network(
+                        widget.storyImages[index],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom:
+                          40, // İstenilen boşluk miktarını ayarlayabilirsiniz
+                      child: GestureDetector(
+                        onTap: () {
+                          print("object");
+                        },
+                        child: Container(
+                          // alignment: Alignment.center,
+
+                          width: MediaQuery.of(context).size.width /
+                              3, // Yarısı kadar genişlik
+                          height: 70, // Butonun yüksekliği
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 90), // Butonun kenarlardan boşluğu
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Butonun arkaplan rengi
+                            borderRadius: BorderRadius.circular(
+                                80), // Butonun kenar yuvarlaklığı
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                size: 35,
+                                Icons.link,
+                                color: Color.fromARGB(255, 167, 0, 244),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "DETAYLAR İÇİN TIKLA",
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color.fromARGB(255, 54, 9, 75)),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

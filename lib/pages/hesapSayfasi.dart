@@ -98,7 +98,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             ),
             GestureDetector(
               onTap: () async {
-                print("asd");
+                print("Test");
                 final DateTime? picked = await showDatePicker(
                   context: context,
                   initialDate: DateTime.parse(lastPeriodDate),

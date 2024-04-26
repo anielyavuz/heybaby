@@ -12,7 +12,7 @@ import 'package:heybaby/pages/subpages/yapilacaklarPage.dart';
 import 'package:intl/intl.dart';
 
 class AnaSayfa extends StatefulWidget {
-  final List<String> storyImages;
+  final List storyImages;
   Map<String, dynamic>? userData;
 
   AnaSayfa({Key? key, this.userData, required this.storyImages})
@@ -26,6 +26,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   var calendarListEvents;
   Map calendarListEventsSoon = {};
   int calendarListEventsSoonDay = 15;
+  List _storyImagesLink = [];
   DateTime bugun = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
   Map<String, String> activities = {};
@@ -128,6 +129,12 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   void initState() {
+    setState(() {
+      for (var storyElement in widget.storyImages) {
+        _storyImagesLink.add(storyElement['imageLink']);
+      }
+    });
+
     super.initState();
 
     _fetchUserData();
@@ -155,7 +162,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => StoryScreen(
-                            storyImages: widget.storyImages,
+                            storyImages: _storyImagesLink,
                             startingPage: index,
                           ),
                         ),
@@ -163,10 +170,20 @@ class _AnaSayfaState extends State<AnaSayfa> {
                     },
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage:
-                            NetworkImage(widget.storyImages[index]),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 30.0,
+                            backgroundImage:
+                                NetworkImage(_storyImagesLink[index]),
+                          ),
+                          Text(
+                            widget.storyImages[index]['header'].toString(),
+                            style: TextStyle(
+                              fontSize: 12.0,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   );
@@ -242,6 +259,51 @@ class _AnaSayfaState extends State<AnaSayfa> {
               function3Description: 'İlaç/Vitamin',
               function4Description: 'Yapılacaklar',
             ),
+            SizedBox(height: 10),
+
+            Container(
+              width: MediaQuery.of(context).size.width * 0.95,
+              height: MediaQuery.of(context).size.width *
+                  0.95 *
+                  (90 / MediaQuery.of(context).size.width),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    'assets/background.jpeg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                  Positioned(
+                    bottom: 1,
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 52, 19, 57).withOpacity(
+                            0.7), // Opaklık değerini ayarlayabilirsiniz
+
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Text(
+                        'Haftalık Güncellemeler',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: Colors
+                              .white, // Metin rengini beyaz olarak ayarladık
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
 
