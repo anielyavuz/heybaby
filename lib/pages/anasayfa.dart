@@ -167,10 +167,30 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       padding: EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          CircleAvatar(
-                            radius: 30.0,
-                            backgroundImage:
-                                NetworkImage(_storyImagesLink[index]),
+                          Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color.fromARGB(255, 55, 105, 245),
+                                  // Color.fromARGB(255, 50, 200, 255),
+                                  Color.fromARGB(255, 168, 60, 187),
+                                ],
+                              ),
+                              border: Border.all(
+                                color: Colors.transparent,
+                                width: 3.0,
+                              ), // Halkanın rengi ve genişliği
+                            ),
+                            child: CircleAvatar(
+                              radius: 30.0,
+                              backgroundImage:
+                                  NetworkImage(_storyImagesLink[index]),
+                            ),
                           ),
                           Text(
                             widget.storyImages[index]['header'].toString(),
