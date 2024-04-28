@@ -29,6 +29,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   Map calendarListEventsSoon = {};
   int calendarListEventsSoonDay = 15;
   List _storyImagesLink = [];
+  List _storyIDlist = [];
   DateTime bugun = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
   Map<String, String> activities = {};
@@ -83,13 +84,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
       if (widget.userData != null &&
           widget.userData!.containsKey('calendarListEvents')) {
         widget.userData!['calendarListEvents'].forEach((key, value) {
-          if (bugun.difference(DateTime.parse(key)).inDays <
-              calendarListEventsSoonDay) {
-            // print(DateTime.parse(key));
-
-            // print("---");
-            // print(bugun.difference(DateTime.parse(key)).inDays);
-
+          // Bugün ve sonraki tarihler için etkinlikleri kontrol et
+          if (DateTime.parse(key).isAtSameMomentAs(bugun) ||
+              DateTime.parse(key).isAfter(bugun)) {
             calendarListEventsSoon[DateTime.parse(key)] = [];
 
             // Zamanı dolu olanları ayır ve sırala
@@ -111,23 +108,13 @@ class _AnaSayfaState extends State<AnaSayfa> {
             sortedAppointments.addAll(filledTimes);
             sortedAppointments.addAll(emptyTimes);
 
-            // sortedAppointments.forEach((appointment) {
-            //   print(appointment);
-            // });
             calendarListEventsSoon[DateTime.parse(key)] = sortedAppointments;
           }
-
-          // calendarListEvents[DateTime.parse(key)] = [];
-          // calendarListEvents[DateTime.parse(key)] = value;
-
-          // print(value);
         });
       } else {
         print('calendarListEvents parametresi bulunamadı veya null.');
       }
-      // print("---");
-      // print(calendarListEventsSoon);
-      // print("---Final-----");
+      // Bugün ve sonraki tarihler içeren etkinlikleri düzenle
       orderSoonEvents(calendarListEventsSoon);
     } else {
       print("Data yok");
@@ -139,6 +126,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
     setState(() {
       for (var storyElement in widget.storyImages) {
         _storyImagesLink.add(storyElement['imageLink']);
+        _storyIDlist.add(storyElement['id']);
       }
     });
 
@@ -169,9 +157,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => StoryScreen(
-                            storyImages: _storyImagesLink,
-                            startingPage: index,
-                          ),
+                              storyImages: _storyImagesLink,
+                              startingPage: index,
+                              storyIDlist: _storyIDlist),
                         ),
                       );
                     },

@@ -125,7 +125,6 @@ class _KesfetPageState extends State<KesfetPage> {
                     MaterialPageRoute(
                       builder: (context) => KesfetMakaleWidget(
                         baslik: _kartlar[index]['baslik']!,
-                       
                         resimUrl: _kartlar[index]['resimUrl']!,
                       ),
                     ),

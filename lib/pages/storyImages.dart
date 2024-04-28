@@ -1,11 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 
 class StoryScreen extends StatefulWidget {
   final List storyImages;
   final int startingPage;
+  final List storyIDlist;
 
-  StoryScreen({required this.storyImages, required this.startingPage});
+  StoryScreen(
+      {required this.storyImages,
+      required this.startingPage,
+      required this.storyIDlist});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -20,9 +27,31 @@ class _StoryScreenState extends State<StoryScreen>
       5; // Her bir fotoğrafın ekranda kalma süresi saniye cinsinden
   Timer? _timer;
   bool _isTouching = false;
+  Map _data = {};
+  Future<void> _getData() async {
+    print(widget.storyImages);
+    String data = await rootBundle.loadString('assets/kesfetMakale.json');
+    Map<String, dynamic> jsonResult = json.decode(data);
+    setState(() {
+      for (var key in jsonResult['Makaleler'].keys.toList()) {
+        // print(key);
+        // print(jsonResult['Makaleler'][key]);
+        for (var key2 in jsonResult['Makaleler'][key]) {
+          // print(key2['id']);
+          _data[key2['id']] = {
+            'baslik': key2['baslik'],
+            'icerik': key2['icerik']
+          };
+        }
+      }
+      // print(_data);
+      // print(jsonResult['Makaleler'].keys.toList());
+    });
+  }
 
   @override
   void initState() {
+    _getData();
     // print("Baslangic story no: " + widget.startingPage.toString());
     super.initState();
     _pageController = PageController(initialPage: widget.startingPage);
@@ -92,6 +121,9 @@ class _StoryScreenState extends State<StoryScreen>
         children: [
           // Story Images
           GestureDetector(
+            onVerticalDragEnd: (details) {
+              Navigator.pop(context);
+            },
             onHorizontalDragEnd: (DragEndDetails details) {
               if (details.primaryVelocity! > 0) {
                 // Sağa doğru dokunma, önceki resme geç
@@ -155,7 +187,19 @@ class _StoryScreenState extends State<StoryScreen>
                           40, // İstenilen boşluk miktarını ayarlayabilirsiniz
                       child: GestureDetector(
                         onTap: () {
-                          print("object");
+                          print(widget.storyIDlist[index]);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MakaleDetay(
+                                    baslik: _data[widget.storyIDlist[index]]
+                                        ['baslik'],
+                                    icerik: _data[widget.storyIDlist[index]]
+                                        ['icerik'],
+                                    resimURL: widget.storyImages[index])),
+                          ).then((value) {
+                            Navigator.pop(context);
+                          });
                         },
                         child: Container(
                           // alignment: Alignment.center,
@@ -197,6 +241,7 @@ class _StoryScreenState extends State<StoryScreen>
               },
             ),
           ),
+
           // Progress Bar
           Positioned(
             top: 40.0,
@@ -214,7 +259,8 @@ class _StoryScreenState extends State<StoryScreen>
             right: 16.0,
             child: IconButton(
               icon: Icon(Icons.close),
-              color: Colors.white,
+              iconSize: 30,
+              color: Colors.black,
               onPressed: () {
                 Navigator.pop(context);
               },

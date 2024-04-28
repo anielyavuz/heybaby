@@ -436,6 +436,38 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<Map> makaleGeriBildirim(userName, durum, tarih) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+      List _tempList = [];
+      Map _tempMap = {};
+      _tempMap['userID'] = userID;
+      _tempMap['tarih'] = tarih;
+      _tempMap['durum'] = durum;
+
+      _tempList.add(_tempMap);
+      try {
+        await FirebaseFirestore.instance
+            .collection("System")
+            .doc('geriBildirim')
+            .update({"makale": FieldValue.arrayUnion(_tempList)}).whenComplete(
+                () {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
   static Future<Map> sendFeedBack(userName, star, feedBackNote, tarih) async {
     User? user = FirebaseAuth.instance.currentUser;
     Map returnCode = {};

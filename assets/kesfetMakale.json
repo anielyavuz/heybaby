@@ -7,7 +7,8 @@
         "kategori": "Yiyecek & İçecek",
         "tarih": "2024-04-19",
         "keyWords": "sağlıklı beslenme, gebelik dönemi, anne sağlığı, bebek sağlığı, dengeli beslenme, meyve, sebze, protein, tam tahıllar, demir, kalsiyum, su tüketimi",
-        "premium": false
+        "premium": false,
+        "id":0
     },
     {
       "baslik": "Gebelikte Yeme İçme İstekleri ve Hoşlanmama Durumları",
@@ -15,7 +16,8 @@
       "kategori": "Yiyecek & İçecek",
       "tarih": "2024-04-19",
       "keyWords": "gebelik, anne adayı, yeme içme istekleri, hoşlanmama durumları, hormonal değişiklikler, fizyolojik faktörler, duygusal etkiler, beslenme dengesi",
-      "premium": false
+      "premium": false,
+      "id":1
   },
   {
     "baslik": "Su Tüketimi ve Hidrasyon",
@@ -23,7 +25,8 @@
     "kategori": "Yiyecek & İçecek",
     "tarih": "2024-04-19",
     "keyWords": "gebelik, su tüketimi, hidrasyon, vücut fonksiyonları, dehidrasyon, sağlık, anne adayı",
-    "premium": false
+    "premium": false,
+    "id":2
 },
 {
   "baslik": "Kafein ve Alkol Tüketimi",
@@ -31,7 +34,8 @@
   "kategori": "Yiyecek & İçecek",
   "tarih": "2024-04-19",
   "keyWords": "gebelik, kafein, alkol, sağlık, anne adayı, fetal alkol sendromu",
-  "premium": false
+  "premium": false,
+  "id":3
 }
 
 
@@ -42,7 +46,8 @@
   "kategori": "Yiyecek & İçecek",
   "tarih": "2024-04-19",
   "keyWords": "gebelik, anne adayı, beslenme, ham et, çiğ yumurta, pastörize edilmemiş süt, kafein, alkol, yüksek cıva içeren balıklar",
-  "premium": false
+  "premium": false,
+  "id":4
 }
 ,  
       {
@@ -51,7 +56,8 @@
         "kategori": "Yiyecek & İçecek",
         "tarih": "2024-03-19",
         "keyWords": "",
-        "premium": false
+        "premium": false,
+        "id":5
       },
       {
         "baslik": "Hamilelikte Yenilmemesi Gereken Besinler",
@@ -59,7 +65,8 @@
         "kategori": "Yiyecek & İçecek",
         "tarih": "2024-03-20",
         "keyWords": "",
-        "premium": false
+        "premium": false,
+        "id":6
       }
     ],
     "Temel Gıdalar": [
@@ -69,7 +76,8 @@
         "kategori": "Temel Gıdalar",
         "tarih": "2024-03-18",
         "keyWords": "hamilelik, temel gıdalar, anne adayı, bebek, sağlıklı beslenme, meyve, sebze, tam tahıllar, protein, sağlıklı yağlar",
-        "premium": false
+        "premium": false,
+        "id":7
       },
       {
         "baslik": "Balığın Hamilelikteki Önemi",
@@ -77,7 +85,9 @@
         "kategori": "Balık",
         "tarih": "2024-04-19",
         "premium": false,
-        "keywords": ["hamilelik", "beslenme", "balık", "omega-3 yağ asitleri", "protein", "DHA", "EPA", "D vitamini", "B vitaminleri", "demir", "çinko", "civa", "sağlık"]
+        
+        "keywords": ["hamilelik", "beslenme", "balık", "omega-3 yağ asitleri", "protein", "DHA", "EPA", "D vitamini", "B vitaminleri", "demir", "çinko", "civa", "sağlık"],
+        "id":8
     },
     {
       "baslik": "Yumurtanın Hamilelikteki Önemi",
@@ -86,7 +96,8 @@
       "tarih": "2024-04-19",
       "premium": false,
       "keywords": ["hamilelik", "beslenme", "yumurta", "protein", "demir", "folik asit", "kolin", "D vitamini", "B12 vitamini", "çinko", "sağlık"]
-  },
+      ,"id":9
+    },
         {
           "baslik": "Yapraklı Yeşil Sebzeler",
           "icerik": "Hamilelik döneminde sağlıklı bir beslenme düzeni kurmanın önemli bir parçası, yeterli miktarda besin alımını sağlamaktır. Yapraklı yeşil sebzeler, bu dönemde anne ve bebeğin sağlığı için gerekli olan birçok önemli besin maddesini içerir. İçerdikleri folik asit, demir, kalsiyum, lif ve diğer vitamin ve minerallerle, hamilelik döneminde yapraklı yeşil sebzelerin tüketilmesi önerilir.",
@@ -94,6 +105,7 @@
           "tarih": "2024-04-19",
           "keyWords": "hamilelik, yapraklı yeşil sebzeler, folik asit, demir, kalsiyum, lif, mineraller",
           "premium": false
+          ,"id":10
         },
         {
           "baslik": "Folik Asit İçeriği",
@@ -101,7 +113,8 @@
           "kategori": "Temel Gıdalar",
           "tarih": "2024-04-19",
           "keyWords": "hamilelik, yapraklı yeşil sebzeler, folik asit, folat, nöral tüp defektleri, sinir sistemi",
-          "premium": false
+          "premium": false ,
+          "id":11
         },
        
        
@@ -112,6 +125,7 @@
           "tarih": "2024-04-19",
           "keyWords": "hamilelik, yapraklı yeşil sebzeler, lif, sindirim sağlığı, kabızlık, tokluk hissi",
           "premium": false
+          ,"id":12
         }
         ],
         "Vitamin Mineraller": [
@@ -122,6 +136,7 @@
         "tarih": "2024-03-20",
         "keyWords": "hamilelik, vitaminler, mineraller, anne adayı, folik asit, demir, kalsiyum, D vitamini, nöral tüp defektleri, anemi, kemik sağlığı",
         "premium": false
+        ,"id":13
         },
         {
         "baslik": "C Vitamini: Bağışıklık Sisteminin Güçlendirici Vitamin",
@@ -130,6 +145,7 @@
         "tarih": "2024-03-20",
         "keyWords": "C vitamini, hamilelik, bağışıklık sistemi, su çözünür vitamin, anne adayı, serbest radikaller, demir emilimi, anemi, turunçgiller, kırmızı biber, çilek, brokoli",
         "premium": false
+        ,"id":14
         },
         {
           "baslik": "Kalsiyum ve Diğer Mineraller",
@@ -138,6 +154,7 @@
           "tarih": "2024-04-19",
           "keyWords": "hamilelik, yapraklı yeşil sebzeler, kalsiyum, mineraller, kemik gelişimi, magnezyum, potasyum",
           "premium": false
+          ,"id":15
         },
         {
           "baslik": "Süt ve Süt Ürünlerinin Hamilelikteki Önemi",
@@ -145,8 +162,10 @@
           "kategori": "Süt ve Süt Ürünleri",
           "tarih": "2024-04-19",
           "premium": false,
+          
           "keywords": ["hamilelik", "beslenme", "süt", "süt ürünleri", "kalsiyum", "protein", "B vitaminleri", "pastörize", "şeker", "yağ", "sağlık"]
-      },
+          ,"id":16
+        },
       {
         "baslik": "Tam Tahılların Hamilelikteki Önemi",
         "icerik": "Hamilelik döneminde sağlıklı bir beslenme düzeni oluşturmanın önemli bir parçası, yeterli miktarda lif, vitamin, mineral ve kompleks karbonhidrat içeren gıdaların tüketilmesidir. Tam tahıllar, bu besin öğelerinin zengin bir kaynağıdır ve hamilelik döneminde anne ve bebeğin sağlığı için önemlidir.\n\nLif İçeriği:\nTam tahıllar, lif açısından zengindir. Lif, sindirim sağlığını destekler, kabızlığı önler ve tokluk hissini artırır. Hamilelik döneminde, sindirim sisteminin düzenli çalışması ve aşırı kilo alımının önlenmesi için yeterli lif alımı önemlidir.\n\nB Vitaminleri:\nTam tahıllar, B vitaminleri (özellikle folik asit, tiamin ve niyasin) açısından zengindir. Folik asit, nöral tüp defektleri riskini azaltırken, diğer B vitaminleri de bebeğin sağlıklı gelişimi ve anne adayının enerji seviyesi için önemlidir.\n\nDemir ve Çinko:\nTam tahıllar ayrıca demir ve çinko gibi mineraller açısından da zengindir. Demir, hamilelik döneminde artan kan hacmini desteklerken, çinko bebeğin sağlıklı gelişimi ve anne adayının bağışıklık sistemi için gereklidir.\n\nKompleks Karbonhidratlar:\nTam tahıllar, kompleks karbonhidratlar açısından zengindir. Bu karbonhidratlar, kan şekerinin dengelenmesine yardımcı olur ve enerji seviyelerini sabit tutar. Ayrıca, uzun süre tokluk hissi sağlayarak aşırı yeme riskini azaltır.\n\nÖrnekler:\n- Kepekli buğday ekmeği\n- Yulaf ezmesi\n- Bulgur\n- Kahverengi pirinç\n- Tam buğday makarnası\n- Çavdar ekmeği\n- Tam buğday unu ile yapılmış kurabiyeler ve tatlılar\n\nTüketim Önerileri:\nHamilelik döneminde tam tahılların düzenli olarak tüketilmesi önemlidir. Kahvaltıda yulaf ezmesi veya kepekli buğday ekmeği, öğle veya akşam yemeklerinde tam buğday makarnası veya bulgur gibi tam tahıllı alternatifler tercih edilebilir.\n\nTam tahıllar, hamilelik döneminde anne ve bebeğin sağlığı için önemli bir besin kaynağıdır. Lif, B vitaminleri, demir, çinko ve kompleks karbonhidrat içeriği ile, tam tahılların düzenli tüketimi bebeğin sağlıklı gelişimini destekler ve anne adayının genel sağlığını iyileştirir.",
@@ -154,7 +173,8 @@
         "tarih": "2024-04-19",
         "premium": false,
         "keywords": ["hamilelik", "beslenme", "tam tahıllar", "lif", "B vitaminleri", "folik asit", "demir", "çinko", "kompleks karbonhidratlar", "sağlık"]
-    },
+        ,"id":17
+      },
     {
       "baslik": "Kuru Baklagillerin Hamilelikteki Önemi",
       "icerik": "Hamilelik döneminde sağlıklı bir beslenme düzeni oluşturmanın önemli bir parçası, yeterli miktarda protein, lif, folik asit, demir ve diğer besin maddelerini sağlamaktır. Kuru baklagiller, bu besin öğelerinin zengin bir kaynağıdır ve hamilelik döneminde anne ve bebeğin sağlığı için önemlidir.\n\nYüksek Protein İçeriği:\nKuru baklagiller, yüksek kaliteli ve bitkisel protein açısından zengindir. Protein, bebeğin hücre ve dokularının gelişimi için önemlidir. Ayrıca, hamilelik döneminde anne adayının protein ihtiyacı artar ve kuru baklagillerin düzenli tüketimi bu ihtiyacı karşılamaya yardımcı olabilir.\n\nLif Kaynağı:\nKuru baklagiller, lif açısından da zengindir. Lif, sindirim sağlığını destekler, kabızlığı önler ve tokluk hissini artırır. Hamilelik döneminde, sindirim sisteminin düzenli çalışması ve aşırı kilo alımının önlenmesi için yeterli lif alımı önemlidir.\n\nFolik Asit İçeriği:\nKuru baklagiller, folik asit açısından zengin bir kaynaktır. Folik asit, nöral tüp defektleri riskini azaltmaya yardımcı olan bir B vitamini türüdür. Bu nedenle, hamilelik planlandığında ve hamilelik süresince yeterli folik asit alımı önemlidir.\n\nDemir ve Diğer Mineraller:\nKuru baklagiller, demir, magnezyum, potasyum ve çinko gibi mineraller açısından da zengindir. Demir, hamilelik döneminde artan kan hacmini desteklerken, diğer mineraller de bebeğin sağlıklı gelişimi ve anne adayının genel sağlığı için gereklidir.\n\nÖrnekler:\n- Nohut\n- Mercimek\n- Kırmızı fasulye\n- Siyah fasulye\n- Yeşil mercimek\n- Bezelye\n- Barbunya\n\nTüketim Önerileri:\nKuru baklagiller, çorba, salata, pilav veya güveç gibi çeşitli yemeklerde kullanılabilir. Bunlar ayrıca et yemeklerinin alternatifi olarak da kullanılabilir. Düşük sodyumlu ve konserve edilmemiş kuru baklagiller tercih edilmelidir.\n\nKuru baklagiller, hamilelik döneminde anne ve bebeğin sağlığı için önemli bir besin kaynağıdır. Yüksek protein, lif, folik asit, demir ve diğer besin maddeleri içeriği ile, kuru baklagillerin düzenli tüketimi bebeğin sağlıklı gelişimini destekler ve anne adayının genel sağlığını iyileştirir.",
@@ -162,7 +182,8 @@
       "tarih": "2024-04-19",
       "premium": false,
       "keywords": ["hamilelik", "beslenme", "kuru baklagiller", "protein", "lif", "folik asit", "demir", "mineraller", "sağlık"]
-  },
+      ,"id":18
+    },
   {
     "baslik": "Kalsiyum İçeren Yiyeceklerin Hamilelikteki Önemi",
     "icerik": "Hamilelik döneminde sağlıklı bir beslenme düzeni oluşturmanın önemli bir parçası, yeterli miktarda kalsiyum alımını sağlamaktır. Kalsiyum, bebeğin kemik ve diş gelişimi için kritik öneme sahiptir ve anne adayının kemik sağlığını korur.\n\nSüt ve Süt Ürünleri:\nSüt, yoğurt, peynir ve ayran gibi süt ürünleri, kalsiyumun en iyi doğal kaynaklarından biridir. Bu ürünler ayrıca protein ve diğer önemli besin maddeleri açısından da zengindir.\n\nKoyu Yeşil Yapraklı Sebzeler:\nIspanak, pazı, brokoli, lahana gibi koyu yeşil yapraklı sebzeler, kalsiyum açısından zengin ve sindirimi kolay bir kaynaktır. Ayrıca, bu sebzeler lif, folik asit ve diğer vitaminler ve mineraller açısından da zengindir.\n\nBalık ve Deniz Ürünleri:\nSomon, sardalya, uskumru gibi yağlı balıklar ve karides, istiridye gibi deniz ürünleri, kalsiyum ve omega-3 yağ asitleri açısından zengindir. Bu yiyecekler aynı zamanda protein ve diğer temel besin maddeleri sağlar.\n\nTofu ve Soya Ürünleri:\nTofu, soya sütü, soya peyniri gibi soya ürünleri, kalsiyum açısından zengin ve bitkisel bazlı bir seçenektir. Ayrıca, soya ürünleri protein ve demir açısından da zengindir.\n\nBadem ve Fındık:\nBadem, fındık ve diğer kuruyemişler, kalsiyum açısından iyi bir kaynak olabilir. Ayrıca, bu kuruyemişler sağlıklı yağlar, protein ve lif açısından da zengindir.\n\nNohut ve Diğer Kuru Baklagiller:\nNohut, mercimek, kırmızı fasulye gibi kuru baklagiller, kalsiyum ve protein açısından zengin bir bitkisel kaynaktır. Ayrıca, bu gıdalar lif ve diğer önemli besin maddeleri içerir.\n\nTahıllar ve Tahıl Ürünleri:\nTam buğday ekmeği, yulaf ezmesi, tam buğday makarnası gibi tam tahıllar, kalsiyum ve lif açısından zengin bir seçenektir. Ayrıca, bu tahıllar folik asit, demir ve diğer vitaminler açısından da zengindir.\n\nKalsiyum İçeren Diğer Yiyecekler:\nPortakal suyu, kuru incir, kuru kayısı gibi bazı meyve suları ve kuru meyveler de kalsiyum içerebilir.\n\nHamilelik döneminde kalsiyum içeren yiyeceklerin düzenli olarak tüketilmesi, bebeğin kemik ve diş gelişimini destekler, anne adayının kemik sağlığını korur ve genel sağlığı iyileştirir.",
@@ -170,7 +191,8 @@
     "tarih": "2024-04-19",
     "premium": false,
     "keywords": ["hamilelik", "beslenme", "kalsiyum", "süt ürünleri", "sebzeler", "balık", "soya ürünleri", "kuruyemişler", "kuru baklagiller", "tahıllar", "sağlık"]
-},
+    ,"id":19
+  },
         {
           "baslik": "Demir Kaynağı",
           "icerik": "Koyu yeşil yapraklı sebzeler, demir açısından da zengindir. Özellikle ıspanak, demir açısından oldukça zengin bir kaynaktır. Hamilelik döneminde, anne adayının demir ihtiyacı artar ve demir eksikliği, anemi riskini artırabilir. Yapraklı yeşil sebzelerin düzenli olarak tüketilmesi, demir ihtiyacını karşılamaya yardımcı olabilir.",
@@ -178,6 +200,7 @@
           "tarih": "2024-04-19",
           "keyWords": "hamilelik, yapraklı yeşil sebzeler, demir, anemi, koyu yeşil sebzeler, ıspanak",
           "premium": false
+          ,"id":20
         }
         ],
         "Yapılacak & Yapılmayacak": [
@@ -188,6 +211,7 @@
             "tarih": "2024-03-10",
             "keyWords": "hamilelik, yapılacaklar, sağlıklı beslenme",
             "premium": false
+            ,"id":21
           },
           {
             "baslik": "Düzenli Doktor Kontrollerine Katılın",
@@ -196,6 +220,7 @@
             "tarih": "2024-03-10",
             "keyWords": "hamilelik, doktor kontrolü, sağlık izleme",
             "premium": false
+            ,"id":22
           },
           {
             "baslik": "Folik Asit Takviyesi Alın",
@@ -204,6 +229,7 @@
             "tarih": "2024-03-10",
             "keyWords": "hamilelik, folik asit, prenatal vitaminler",
             "premium": false
+            ,"id":23
           },
           {
             "baslik": "Düzenli Egzersiz Yapın",
@@ -212,6 +238,7 @@
             "tarih": "2024-03-10",
             "keyWords": "hamilelik, egzersiz, fiziksel sağlık",
             "premium": false
+            ,"id":24
           },
           {
             "baslik": "Yeterli Sıvı Alımına Dikkat Edin",
@@ -220,6 +247,7 @@
             "tarih": "2024-03-10",
             "keyWords": "hamilelik, su tüketimi, hidrasyon",
             "premium": false
+            ,"id":25
           },
           {
             "baslik": "Hijyen Kurallarına Uyun",
@@ -228,6 +256,7 @@
             "tarih": "2024-03-10",
             "keyWords": "hamilelik, hijyen, gıda güvenliği",
             "premium": false
+            ,"id":26
           },
           {
             "baslik": "Sigara ve Alkol Kullanımından Kaçının",
@@ -236,6 +265,7 @@
             "tarih": "2024-03-20",
             "keyWords": "hamilelik, alkol, sigara, zararları",
             "premium": false
+            ,"id":27
           },
           {
             "baslik": "İlaç Kullanımı İçin Doktora Danışın",
@@ -244,6 +274,7 @@
             "tarih": "2024-03-20",
             "keyWords": "hamilelik, ilaç kullanımı, doktor tavsiyesi",
             "premium": false
+            ,"id":28
           }
         ],
        
@@ -257,6 +288,7 @@
       "tarih": "2024-03-20",
       "keyWords": "hamilelik, kilo alımı, beslenme, vücut kitle indeksi, sağlıklı beslenme, meyve, sebze, tam tahıllar, protein, kalori",
       "premium": false
+      ,"id":29
     },
     
     {
@@ -266,6 +298,7 @@
       "tarih": "2024-03-20",
       "keyWords": "hamilelik, kilo kontrolü, sağlıklı beslenme, egzersiz, anne adayı, bebek, vücut değişiklikleri",
       "premium": false
+      ,"id":30
     },
     {
       "baslik": "Hamilelikte İdeal Kilo Değişimi",
@@ -274,6 +307,7 @@
       "tarih": "2024-03-20",
       "premium": false,
       "keyWords": ["hamilelik", "kilo alımı", "ideal", "sağlık", "beslenme", "trimester", "enerji", "dengeli beslenme", "egzersiz", "bebek sağlığı", "risk", "prematüre doğum"]
+      ,"id":31
     },
     {
       "baslik": "Aşırı Kilo Almanın Riskleri",
@@ -283,6 +317,7 @@
 
       "tarih": "2024-03-20",
       "premium": false
+      ,"id":32
       },
       {
         "baslik": "Yetersiz Kilo Alımının Etkileri",
@@ -291,7 +326,7 @@
         "tarih": "2024-04-19",
         "premium": false,
         "keyWords": "hamilelik, kilo kontrolü, yetersiz kilo alımı, anne adayı, bebek, yetersiz, beslenm"
-
+        ,"id":33
 
         } ,
         {
@@ -302,6 +337,7 @@
 ,
           "tarih": "2024-04-19",
           "premium": false
+          ,"id":34
       },
 
 
@@ -313,6 +349,7 @@
         "keyWords": "hamilelik, kilo kontrolü, faktörler, etkenler, yetersiz beslenme",
 
         "premium": false
+        ,"id":35
       },
       {
         "baslik": "Egzersizin Rolü ve Güvenli Egzersiz Tavsiyeleri",
@@ -321,6 +358,7 @@
         "tarih": "2024-04-19",
         "keyWords":"Hamilelik dönemi, egzersiz, anne sağlığı, bebek sağlığı, fiziksel sağlık, ruhsal sağlık, kilo kontrolü, doğum hazırlığı, doktor onayı, düşük etkili egzersizler, dengeli egzersiz, esneme, nefes egzersizleri, vücut dinleme, iç giyim",
         "premium": false
+        ,"id":36
         },
         {
           "baslik": "Hamilelikte Anoreksiya ve Bulimia Gibi Yeme Bozukluklarının Etkileri",
@@ -329,6 +367,7 @@
           "tarih": "2024-04-19",
           "keyWords":"Hamilelik, yeme bozuklukları, anoreksiya nervoza, bulimia nervoza, beslenme, tedavi, destek, sağlıklı beslenme, gebelik, riskler, kilo alımı, ruhsal sağlık",
           "premium": false
+          ,"id":37
           },
           {
             "baslik": "Beslenme Uzmanı ile İşbirliği ve Destek Almanın Önemi",
@@ -337,6 +376,7 @@
             "tarih": "2024-04-19",
             "keyWords":"Beslenme uzmanı, işbirliği, destek, sağlıklı beslenme, gebelik, risk azaltma, kilo alımı, beslenme planı, sağlıklı gebelik, doğum sonrası iyileşme, anne ve bebek sağlığı",
             "premium": false
+            ,"id":38
             }
     
     
@@ -349,6 +389,7 @@
       "tarih": "2024-03-20",
       "keyWords": "hamilelik, beden değişimleri, anne adayı, kilo artışı, göğüs büyümesi, karın genişlemesi, su tutulması, fizyolojik değişimler, hormonel değişimler",
       "premium": false
+      ,"id":39
     }
   ],
   "Bebek Gelişimi": [
@@ -359,6 +400,7 @@
       "tarih": "2024-03-20",
       "keyWords": "hamilelik, bebek gelişimi, anne adayı, prenatal bakım, sağlıklı beslenme, düzenli doktor kontrolü, sigara, alkol, zararlı maddeler, prenatal vitaminler",
       "premium": false
+      ,"id":40
     }
   ],
   "Bebek Güvenliği": [
@@ -369,6 +411,7 @@
       "tarih": "2024-03-20",
       "keyWords": "hamilelik, bebek güvenliği, anne adayı, ev güvenliği, düşme riski, yüksek topuklu ayakkabılar, merdivenler, kaygan zeminler, bebek uyku güvenliği",
       "premium": false
+      ,"id":41
     }
   ],
   "Huzur ve Mutluluk": [
@@ -379,6 +422,7 @@
       "tarih": "2024-03-20",
       "keyWords": "hamilelik, huzur, mutluluk, stres azaltma, rahatlama teknikleri, meditasyon, yoga, destekleyici çevre, duygusal destek",
       "premium": false
+      ,"id":42
     }
   ],
 
@@ -391,6 +435,7 @@
         "tarih": "2024-03-20",
         "keyWords": "hamilelik, uyku, dinlenme, anne adayı, gebelik, uyku pozisyonu, uyku kalitesi, egzersiz, stres yönetimi",
         "premium": false
+        ,"id":43
       }
     ],
     "Fiziksel Sağlık": [
@@ -401,6 +446,7 @@
         "tarih": "2024-03-20",
         "keyWords": "hamilelik, fiziksel sağlık, anne adayı, egzersiz, sağlıklı beslenme, düzenli kontroller, gebelik, beden değişimleri",
         "premium": false
+        ,"id":44
       }
     ],
     "Hamilelik Ağrısı": [
@@ -411,6 +457,7 @@
         "tarih": "2024-03-20",
         "keyWords": "hamilelik, ağrılar, anne adayı, sırt ağrısı, bel ağrısı, kasık ağrısı, mide yanması, bacak krampları, fiziksel değişiklikler, hormonal değişiklikler",
         "premium": false
+        ,"id":45
       }
     ]
   

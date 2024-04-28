@@ -132,6 +132,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _onItemTapped(int index) {
+    if (index == 0) {
+      _systemData();
+    }
+    // print(index);
     _fetchUserData();
     setState(() {
       _selectedIndex = index;
@@ -190,11 +194,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _systemData() async {
     Map<String, dynamic>? data = await FirestoreFunctions.getSystemData();
     if (data != null) {
-      print(data);
+      // print(data);
       setState(() {
         _AIStatus = data['AIBot']['Enable'];
         storyImages = data['Stories'];
-        print(storyImages);
+        // print(storyImages);
       });
     }
   }

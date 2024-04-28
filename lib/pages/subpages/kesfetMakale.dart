@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:intl/intl.dart';
 
 class KesfetMakaleWidget extends StatefulWidget {
   final String baslik;
@@ -124,12 +126,22 @@ class MakaleDetay extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                resimURL, // Burada widget.resimUrl yerine parametre olan resimURL kullanılıyor
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                fit: BoxFit.cover,
-              ),
+              resimURL.startsWith("https")
+                  ? Container(
+                      height: 250,
+                      decoration: new BoxDecoration(
+                          image: new DecorationImage(
+                        fit: BoxFit.fitWidth,
+                        alignment: FractionalOffset.center,
+                        image: new NetworkImage(resimURL),
+                      )),
+                    )
+                  : Image.asset(
+                      resimURL, // Burada widget.resimUrl yerine parametre olan resimURL kullanılıyor
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
               Text(
                 baslik,
                 style: TextStyle(
@@ -143,6 +155,49 @@ class MakaleDetay extends StatelessWidget {
                 style: TextStyle(fontSize: 18.0),
               ),
               SizedBox(height: 25.0),
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "Bu makaleyi beğendiniz mi?",
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.thumb_up),
+                          onPressed: () async {
+                            var _sonuc =
+                                await FirestoreFunctions.makaleGeriBildirim(
+                                    "Guest",
+                                    "Beğendi",
+                                    DateFormat('hh:mm - dd-MM-yyyy')
+                                        .format(DateTime.now()));
+                            print("Beğendi");
+                          },
+                        ),
+                        SizedBox(width: 20.0),
+                        IconButton(
+                          icon: Icon(Icons.thumb_down),
+                          onPressed: () async {
+                            var _sonuc =
+                                await FirestoreFunctions.makaleGeriBildirim(
+                                    "Guest",
+                                    "Beğenmedi",
+                                    DateFormat('hh:mm - dd-MM-yyyy')
+                                        .format(DateTime.now()));
+
+                            print("Beğenmedi");
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 15.0),
               Container(
                 color: Colors.grey[200],
                 child: Column(

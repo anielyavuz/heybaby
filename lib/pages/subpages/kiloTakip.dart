@@ -313,10 +313,15 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              (((DateTime.now().difference(
-                                                              DateTime.parse(widget
-                                                                      .userData![
-                                                                  'sonAdetTarihi'])))
+                                              ((((DateTime.parse(_weightHistory[
+                                                                      index]
+                                                                  .dateTime
+                                                                  .substring(
+                                                                      0, 10)))
+                                                              .difference(DateTime
+                                                                  .parse(widget
+                                                                          .userData![
+                                                                      'sonAdetTarihi'])))
                                                           .inDays) ~/
                                                       7)
                                                   .toString(),

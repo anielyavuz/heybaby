@@ -117,214 +117,223 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
     }
   }
 
+  Future<void> _refresh() async {
+    setState(() {
+      print("refresh");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 10,
-                child: Center(
-                  child: Text(
-                      "Su Hedefi " +
-                          _historyValue.toString() +
-                          "/" +
-                          _targetValue.toString(),
-                      style: TextStyle(fontSize: 22, color: Colors.black)),
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height / 10,
+                  child: Center(
+                    child: Text(
+                        "Su Hedefi " +
+                            _historyValue.toString() +
+                            "/" +
+                            _targetValue.toString(),
+                        style: TextStyle(fontSize: 22, color: Colors.black)),
+                  ),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height / 10 * 4,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width - 100,
-                        height: MediaQuery.of(context).size.width - 100,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 30,
-                          value: _historyValue / _targetValue,
-                          backgroundColor:
-                              Color.fromRGBO(0, 203, 255, 1).withOpacity(0.2),
-                          color: Color.fromRGBO(0, 203, 255, 1),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        width: 250,
-                        height: 250,
-                        child: ListWheelScrollView(
-                          itemExtent: 100,
-                          onSelectedItemChanged: (int index) {
-                            setState(() {
-                              widget.selectedItem =
-                                  widget.pageItems.keys.elementAt(index);
-                              widget.selectedValue = widget.pageItems[
-                                  widget.pageItems.keys.elementAt(index)]!;
-                            });
-                          },
-                          children: widget.pageItems.keys
-                              .map(
-                                (e) => Container(
-                                  decoration: BoxDecoration(
-                                      color: e == widget.selectedItem
-                                          ? Color.fromARGB(100, 50, 173, 54)
-                                          : Color.fromARGB(112, 234, 34, 20),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50))),
-                                  width: e == widget.selectedItem ? 100 : 60,
-                                  height: e == widget.selectedItem ? 100 : 60,
-                                  child: Center(
-                                    child: Image.asset(
-                                      'assets/$e.png', // Örneğin, bardak.png, şişe.png gibi
-                                      width: 200,
-                                      height: 200,
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                // flex: 5,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _count > 1
-                            ? Text(
-                                _count.toString() + "x ",
-                                style: TextStyle(
-                                    fontSize: 22, color: Colors.black),
-                              )
-                            : SizedBox(),
-                        Text(
-                          widget.selectedItem +
-                              " (" +
-                              widget.selectedValue +
-                              "ml)",
-                          style: TextStyle(fontSize: 22, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          child: IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () {
-                              if (_count > 1) {
-                                setState(() {
-                                  _count -= 1;
-                                });
-                              }
-                            },
+                Container(
+                  height: MediaQuery.of(context).size.height / 10 * 4,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 100,
+                          height: MediaQuery.of(context).size.width - 100,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 30,
+                            value: _historyValue / _targetValue,
+                            backgroundColor:
+                                Color.fromRGBO(0, 203, 255, 1).withOpacity(0.2),
+                            color: Color.fromRGBO(0, 203, 255, 1),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            var newData = {
-                              "type": widget.selectedItem,
-                              "unit": "ml",
-                              "amount": int.parse(widget.selectedValue),
-                              "count": _count,
-                              "date": DateTime.now()
-                            };
-                            setState(() {
-                              _history.insert(0, newData);
-                              if (_historyValue +
-                                      int.parse(widget.selectedValue) *
-                                          _count <=
-                                  _targetValue) {
-                                _historyValue +=
-                                    int.parse(widget.selectedValue) * _count;
-                              } else {
-                                _historyValue = _targetValue;
-                              }
-                            });
-
-                            var _result =
-                                await FirestoreFunctions.updateDataRecord(
-                                    newData, widget.pageType);
-                          },
-                          child: Text('Kaydet'),
-                        ),
-                        GestureDetector(
-                          child: IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () async {
+                      ),
+                      Center(
+                        child: Container(
+                          width: 250,
+                          height: 250,
+                          child: ListWheelScrollView(
+                            itemExtent: 100,
+                            onSelectedItemChanged: (int index) {
                               setState(() {
-                                _count += 1;
+                                widget.selectedItem =
+                                    widget.pageItems.keys.elementAt(index);
+                                widget.selectedValue = widget.pageItems[
+                                    widget.pageItems.keys.elementAt(index)]!;
                               });
                             },
+                            children: widget.pageItems.keys
+                                .map(
+                                  (e) => Container(
+                                    decoration: BoxDecoration(
+                                        color: e == widget.selectedItem
+                                            ? Color.fromARGB(100, 50, 173, 54)
+                                            : Color.fromARGB(112, 234, 34, 20),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(50))),
+                                    width: e == widget.selectedItem ? 100 : 60,
+                                    height: e == widget.selectedItem ? 100 : 60,
+                                    child: Center(
+                                      child: Image.asset(
+                                        'assets/$e.png', // Örneğin, bardak.png, şişe.png gibi
+                                        width: 200,
+                                        height: 200,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Bugünün Listesi",
-                      style: TextStyle(fontSize: 22, color: Colors.black),
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: _history
-                              .map(
-                                (item) => ListTile(
-                                    title: item['count'] > 1
-                                        ? Text(item['count'].toString() +
-                                            "x " +
-                                            item['type'] +
-                                            " - " +
-                                            item['amount'].toString() +
-                                            item['unit'])
-                                        : Text(item['type'] +
-                                            " - " +
-                                            item['amount'].toString() +
-                                            item['unit'])),
-                              )
-                              .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  // flex: 5,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _count > 1
+                              ? Text(
+                                  _count.toString() + "x ",
+                                  style: TextStyle(
+                                      fontSize: 22, color: Colors.black),
+                                )
+                              : SizedBox(),
+                          Text(
+                            widget.selectedItem +
+                                " (" +
+                                widget.selectedValue +
+                                "ml)",
+                            style: TextStyle(fontSize: 22, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            child: IconButton(
+                              icon: Icon(Icons.remove),
+                              onPressed: () {
+                                if (_count > 1) {
+                                  setState(() {
+                                    _count -= 1;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              var newData = {
+                                "type": widget.selectedItem,
+                                "unit": "ml",
+                                "amount": int.parse(widget.selectedValue),
+                                "count": _count,
+                                "date": DateTime.now()
+                              };
+                              setState(() {
+                                _history.insert(0, newData);
+                                if (_historyValue +
+                                        int.parse(widget.selectedValue) *
+                                            _count <=
+                                    _targetValue) {
+                                  _historyValue +=
+                                      int.parse(widget.selectedValue) * _count;
+                                } else {
+                                  _historyValue = _targetValue;
+                                }
+                              });
+
+                              var _result =
+                                  await FirestoreFunctions.updateDataRecord(
+                                      newData, widget.pageType);
+                            },
+                            child: Text('Kaydet'),
+                          ),
+                          GestureDetector(
+                            child: IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () async {
+                                setState(() {
+                                  _count += 1;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Bugünün Listesi",
+                        style: TextStyle(fontSize: 22, color: Colors.black),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: _history
+                                .map(
+                                  (item) => ListTile(
+                                      title: item['count'] > 1
+                                          ? Text(item['count'].toString() +
+                                              "x " +
+                                              item['type'] +
+                                              " - " +
+                                              item['amount'].toString() +
+                                              item['unit'])
+                                          : Text(item['type'] +
+                                              " - " +
+                                              item['amount'].toString() +
+                                              item['unit'])),
+                                )
+                                .toList(),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          Positioned(
-            left: 5,
-            top: 10,
-            child: Container(
-              height: 40,
-              child: IconButton(
-                  onPressed: () {
-                    // Navigator.pop(context);
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (_) {
-                      return CheckAuth();
-                    }));
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new_outlined,
-                    size: 35,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  )),
+                    ],
+                  ),
+                )
+              ],
             ),
-          )
-        ],
+            Positioned(
+              left: 5,
+              top: 10,
+              child: Container(
+                height: 40,
+                child: IconButton(
+                    onPressed: () {
+                      // Navigator.pop(context);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (_) {
+                        return CheckAuth();
+                      }));
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_outlined,
+                      size: 35,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    )),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
