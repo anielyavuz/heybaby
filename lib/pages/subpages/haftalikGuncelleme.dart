@@ -21,11 +21,13 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      selectedNumber = (((DateTime.now().difference(
+                  DateTime.parse(widget.userData?['sonAdetTarihi'])))
+              .inDays) ~/
+          7);
+    });
 
-    selectedNumber = (((DateTime.now()
-                .difference(DateTime.parse(widget.userData?['sonAdetTarihi'])))
-            .inDays) ~/
-        7);
     _getData();
   }
 

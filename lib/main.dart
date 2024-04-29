@@ -24,7 +24,7 @@ void main() async {
   if (!isAllowedToSendNotification) {
     AwesomeNotifications().requestPermissionToSendNotifications();
   } else {
-    print("Bildirim yetkisi var");
+    // print("Bildirim yetkisi var");
   }
   runApp(const MyApp());
 }

@@ -318,10 +318,12 @@ class _YapilacaklarPageState extends State<YapilacaklarPage> {
   @override
   void initState() {
     // print(widget.userData);
-    selectedWeek = (((DateTime.now()
-                .difference(DateTime.parse(widget.userData?['sonAdetTarihi'])))
-            .inDays) ~/
-        7);
+    setState(() {
+      selectedWeek = (((DateTime.now().difference(
+                  DateTime.parse(widget.userData?['sonAdetTarihi'])))
+              .inDays) ~/
+          7);
+    });
 
     if (widget.userData != null &&
         widget.userData!['dataRecord'].containsKey('yapilacaklarData')) {

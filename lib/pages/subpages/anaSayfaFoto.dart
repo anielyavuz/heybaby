@@ -85,8 +85,8 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
         sayac = sayac + 7;
       }
     } else {
-      print("haftalık bildirimler kurulu durumda.");
-      print(_bildirimIdleri);
+      // print("haftalık bildirimler kurulu durumda.");
+      // print(_bildirimIdleri);
     }
   }
 

@@ -39,6 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   AuthService _authService = AuthService();
   int _selectedIndex = 0;
   Map<String, dynamic>? userData;
@@ -46,6 +48,13 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
   int selectedWeek = 4;
+  List<String> drawerItems = [
+    'Bildirim 1',
+    'Bildirim 2',
+    'Bildirim 3',
+    'Bildirim 4',
+    // İhtiyacınıza göre diğer öğeleri ekleyin
+  ];
 
   List storyImages = [
     // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
@@ -69,6 +78,52 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
+        key: _scaffoldKey, // GlobalKey'i Scaffold'a ekleyin
+
+        // appBar: AppBar(
+        //   // title: Text('Uygulama Başlığı'),
+        //   actions: [
+        //     IconButton(
+        //       icon:
+        //           Icon(Icons.notifications), // İstediğiniz ikonu buraya ekleyin
+        //       onPressed: () {
+        //         // EndDrawer'ı açmak için onPressed fonksiyonunu buraya ekleyin
+        //         _scaffoldKey.currentState!.openEndDrawer();
+        //       },
+        //     ),
+        //   ],
+        // ),
+        // endDrawer: Drawer(
+        //   // Drawer içeriğini buraya ekleyin
+        //   child: ListView(
+        //     padding: EdgeInsets.zero,
+        //     children: [
+        //       Container(
+        //         height: 150,
+        //         child: DrawerHeader(
+        //           child: Text('Bildirimler'), // Drawer başlığını buraya ekleyin
+        //           decoration: BoxDecoration(
+        //             color: Colors.blue,
+        //           ),
+        //         ),
+        //       ),
+        //       SingleChildScrollView(
+        //         child: Column(
+        //           children: drawerItems
+        //               .map((item) => ListTile(
+        //                     title: Text(item),
+        //                     onTap: () {
+        //                       // Drawer öğesine tıklandığında yapılacak işlemi buraya ekleyin
+        //                     },
+        //                   ))
+        //               .toList(),
+        //         ),
+        //       ),
+        //       // İhtiyacınıza göre diğer drawer öğelerini buraya ekleyin
+        //     ],
+        //   ),
+        // ),
+
         body: SafeArea(child: _buildBody()),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
