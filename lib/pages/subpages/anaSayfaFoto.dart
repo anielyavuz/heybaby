@@ -48,8 +48,8 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
 
         if (i < 41) {
           if (i >= 4) {
-            _testImageLink = jsonList[i - 3]['foto_link'];
-            _testBenzerlik = jsonList[i - 3]['benzerlik'];
+            _testImageLink = jsonList[i - 4]['foto_link'];
+            _testBenzerlik = jsonList[i - 4]['benzerlik'];
           } else {
             _testImageLink = jsonList[0]['foto_link'];
             _testBenzerlik = jsonList[0]['benzerlik'];
@@ -58,6 +58,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
           _testImageLink = jsonList[36]['foto_link'];
           _testBenzerlik = jsonList[36]['benzerlik'];
         }
+        print("_testBenzerlik Test $_testBenzerlik");
 
         Future.delayed(const Duration(milliseconds: 50), () {
           imageandInfoJsonFileLoad();

@@ -90,7 +90,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Son adet tarihi: ${formatDate(lastPeriodDate)}',
+              'Son regl tarihi: ${formatDate(lastPeriodDate)}',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.black,
@@ -114,6 +114,19 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                   });
                   var sonuc = await FirestoreFunctions.sonAdetTarihiGuncelle(
                       lastPeriodDate);
+
+                  var _bildirimler =
+                      await AwesomeNotifications().listScheduledNotifications();
+                  List _bildirimIdleri = [];
+                  List _haftalikBildirimler = [];
+                  for (var _bildirim in _bildirimler) {
+                    if (_bildirim.content!.id! < 1999) {
+                      var a = await AwesomeNotifications()
+                          .cancel(_bildirim.content!.id!)
+                          .whenComplete(() => print(
+                              "${_bildirim.content!.id!}  id'li bildirim silindi"));
+                    }
+                  }
                 }
               },
               child: Icon(
