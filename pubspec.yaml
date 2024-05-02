@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.7.0+1
+version: 1.7.0+2
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -104,6 +104,43 @@ flutter:
     - assets/uyku.jpg
     - assets/fizikselSaglik.jpg
     - assets/hamilelikAgrisi.jpg
+    - assets/ultrason/4.png
+    - assets/ultrason/5.png
+    - assets/ultrason/6.png
+    - assets/ultrason/7.png
+    - assets/ultrason/8.png
+    - assets/ultrason/9.png
+    - assets/ultrason/10.png
+    - assets/ultrason/11.png
+    - assets/ultrason/12.png
+    - assets/ultrason/13.png
+    - assets/ultrason/14.png
+    - assets/ultrason/15.png
+    - assets/ultrason/16.png
+    - assets/ultrason/17.png
+    - assets/ultrason/18.png
+    - assets/ultrason/19.png
+    - assets/ultrason/20.png
+    - assets/ultrason/21.png
+    - assets/ultrason/22.png
+    - assets/ultrason/23.png
+    - assets/ultrason/24.png
+    - assets/ultrason/25.png
+    - assets/ultrason/26.png
+    - assets/ultrason/27.png
+    - assets/ultrason/28.png
+    - assets/ultrason/29.png
+    - assets/ultrason/30.png
+    - assets/ultrason/31.png
+    - assets/ultrason/32.png
+    - assets/ultrason/33.png
+    - assets/ultrason/34.png
+    - assets/ultrason/35.png
+    - assets/ultrason/36.png
+    - assets/ultrason/37.png
+    - assets/ultrason/38.png
+    - assets/ultrason/39.png
+    - assets/ultrason/40.png
     # - images/a_dot_ham.jpeg -- D:\heybaby\assets\babyImageData.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -53,6 +53,25 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 156.0, // Genişlik ayarı
+                        height: 156.0, // Yükseklik ayarı
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'assets/ultrason/$selectedNumber.png'), // Buradaki yol assets klasörünüzün kökünden itibaren belirtilmelidir
+                            fit: BoxFit
+                                .fill, // Resmi butona tam olarak dolduracak şekilde ayarla
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
                   Center(
                     child: Slider(
                       value: selectedNumber.toDouble(),

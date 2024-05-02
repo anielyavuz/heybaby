@@ -70,9 +70,9 @@ class _NotlarPageState extends State<NotlarPage> {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Günlük'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Günlük'),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

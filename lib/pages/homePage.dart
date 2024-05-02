@@ -138,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
-              label: 'Takvim',
+              label: 'Aktiviteler',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.explore),

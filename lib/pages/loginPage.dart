@@ -310,7 +310,7 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
             Column(
               children: [
                 isPregnant
-                    ? Text('Son adet tarihi giriniz:')
+                    ? Text('Son regl tarihi giriniz:')
                     : Text('Bebek doğum tarihini giriniz:'),
                 SizedBox(height: 8),
                 InkWell(
@@ -461,7 +461,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Column(
               children: [
                 isPregnant
-                    ? Text('Son adet tarihi giriniz:')
+                    ? Text('Son regl tarihi giriniz:')
                     : Text('Bebek doğum tarihini giriniz:'),
                 SizedBox(height: 8),
                 InkWell(

@@ -242,10 +242,10 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Aktiviteler"),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text("Aktiviteler"),
+      //   centerTitle: true,
+      // ),
       body: Column(
         children: [
           TableCalendar(

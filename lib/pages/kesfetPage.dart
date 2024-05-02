@@ -68,9 +68,9 @@ class _KesfetPageState extends State<KesfetPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Keşfet'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Keşfet'),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
