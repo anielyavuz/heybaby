@@ -89,18 +89,22 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                   ),
                   // Buraya kilo ve boy bilgilerinin girileceği alanlar eklenebilir.
                   SizedBox(height: 16.0),
-                  Text("Anne", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("Anne",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 8.0),
 
                   Text("${_data[selectedNumber.toString()]['anne']}",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontWeight: FontWeight.normal)),
 
                   // Buraya anneyle ilgili metin içeriği girilecek alan eklenebilir.
                   SizedBox(height: 16.0),
-                  Text("Bebek", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("Bebek",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 8.0),
                   Text("${_data[selectedNumber.toString()]['bebek']}",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontWeight: FontWeight.normal)),
 
                   // Buraya bebekle ilgili metin içeriği girilecek alan eklenebilir.
                   SizedBox(height: 16.0),
@@ -108,10 +112,12 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                       ? Column(
                           children: [
                             Text("Eşi",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
                             SizedBox(height: 8.0),
                             Text("${_data[selectedNumber.toString()]['esi']}",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                                style:
+                                    TextStyle(fontWeight: FontWeight.normal)),
 
                             // Buraya eşiyle ilgili metin içeriği girilecek alan eklenebilir.
                             SizedBox(height: 16.0),
@@ -123,11 +129,13 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                       ? Column(
                           children: [
                             Text("Sağlık İpuçları",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
                             SizedBox(height: 8.0),
                             Text(
                                 "${_data[selectedNumber.toString()]['saglikIpucu']}",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                                style:
+                                    TextStyle(fontWeight: FontWeight.normal)),
 
                             // Buraya eşiyle ilgili metin içeriği girilecek alan eklenebilir.
                             SizedBox(height: 16.0),
@@ -135,6 +143,25 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                         )
                       : SizedBox(),
                   // Buraya sağlık ipuçlarıyla ilgili metin içeriği girilecek alan eklenebilir.
+                  SizedBox(height: 46.0),
+
+                  Container(
+                    color: Colors.grey[200],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Sorumluluk reddi",
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "HeyBaby uygulaması, burada sunulan bilgiler ile eğitimli bir tıp doktorunun sağlayacağı tavsiyelerin yerini almayı hedeflemez. Bu bilgiler yalnızca genel bir temele dayanarak sunulmuştur. HeyBaby uygulaması ve sahibi olan Turn Eight bu uygulamadaki bilgilere dayanarak verdiğiniz kararlar için sorumluluk üstlenmez. Ayrıca, bu bilgiler kişiselleştirilmiş bir tıbbi tavsiyenin yerini tutmaz. Lütfen en doğru bilgiler için doktorunuza danışınız.",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
