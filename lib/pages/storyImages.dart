@@ -226,7 +226,7 @@ class _StoryScreenState extends State<StoryScreen>
                                 width: 5,
                               ),
                               Text(
-                                "DETAYLAR İÇİN TIKLA",
+                                "DETAYLI BİLGİ",
                                 style: TextStyle(
                                     fontSize: 13,
                                     color: Color.fromARGB(255, 54, 9, 75)),

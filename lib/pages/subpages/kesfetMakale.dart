@@ -22,6 +22,8 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
 
   @override
   void initState() {
+    print("TTTT");
+    print(widget.baslik.toString());
     super.initState();
     _getData();
   }

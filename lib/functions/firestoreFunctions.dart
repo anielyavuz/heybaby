@@ -274,6 +274,50 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<void> deleteKiloDataRecord(
+      WeightEntry newData, String _type) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    List _tempList = [];
+    Map _tempMap = {};
+    _tempMap['weight'] = newData.weight;
+    _tempMap['dateTime'] = newData.dateTime;
+    _tempMap['isMotherWeight'] = newData.isMotherWeight;
+    _tempMap['dogumOnceSonra'] = newData.dogumOnceSonra;
+    _tempList.add(_tempMap);
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({
+          "dataRecord.$_type": FieldValue.arrayRemove(_tempList)
+
+          //       {
+
+          //   "dataRecord": {
+          //     "waterDrinkData": {
+          //       "type": "Bardak",
+          //       "amount": 200,
+          //       "count": 1,
+          //       "date": DateTime.now()
+          //     }
+          //   }
+          // }
+        });
+
+        print('Kilo verisi başarıyla silindi');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
   static Future<void> updateKiloDataRecord(
       WeightEntry newData, String _type) async {
     User? user = FirebaseAuth.instance.currentUser;

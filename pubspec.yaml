@@ -141,6 +141,9 @@ flutter:
     - assets/ultrason/38.png
     - assets/ultrason/39.png
     - assets/ultrason/40.png
+    - assets/kesfet/kaydettigimMakaleler.png
+    - assets/kesfet/sizdenGelenler.png
+    - assets/kesfet/sorular.jpeg
     # - images/a_dot_ham.jpeg -- D:\heybaby\assets\babyImageData.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

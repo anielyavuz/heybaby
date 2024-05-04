@@ -68,24 +68,58 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
     }
   }
 
+  mevcutKilolariDiz() {
+    setState(() {
+      List _tempList = widget.userData!['dataRecord']['KiloSaveData'];
+      _tempList.sort((a, b) {
+        String dateStringA = (a['dateTime'] as String).replaceAll(' – ', ' ');
+        String dateStringB = (b['dateTime'] as String).replaceAll(' – ', ' ');
+        DateTime dateTimeA = DateTime.parse(dateStringA);
+        DateTime dateTimeB = DateTime.parse(dateStringB);
+        return dateTimeB.compareTo(dateTimeA);
+      });
+      _weightHistory = _tempList
+          .map((entry) => WeightEntry(
+                weight: entry['weight'],
+                dateTime: entry['dateTime'],
+                isMotherWeight: entry['isMotherWeight'],
+                dogumOnceSonra: entry['dogumOnceSonra'],
+              ))
+          .toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     if (widget.userData != null) {
       if (widget.userData!['dataRecord'] != null) {
         if (widget.userData!['dataRecord']['KiloSaveData'] != null) {
-          List _tempList = widget.userData!['dataRecord']['KiloSaveData'];
-          _weightHistory = _tempList
-              .map((entry) => WeightEntry(
-                    weight: entry['weight'],
-                    dateTime: entry['dateTime'],
-                    isMotherWeight: entry['isMotherWeight'],
-                    dogumOnceSonra: entry['dogumOnceSonra'],
-                  ))
-              .toList();
+          mevcutKilolariDiz();
         }
       }
     }
+  }
+
+  void silKilo(weightToRemove, dateTimeToRemove, isMotherWeightToRemove,
+      dogumOnceSonraToRemove) {
+    print(_weightHistory);
+
+    FirestoreFunctions.deleteKiloDataRecord(
+        WeightEntry(
+          weight: weightToRemove,
+          dateTime: dateTimeToRemove,
+          isMotherWeight: isMotherWeightToRemove,
+          dogumOnceSonra: dogumOnceSonraToRemove,
+        ),
+        "KiloSaveData");
+
+    _weightHistory.removeWhere((entry) =>
+        entry.weight == weightToRemove &&
+        entry.dateTime == dateTimeToRemove &&
+        entry.isMotherWeight == isMotherWeightToRemove &&
+        entry.dogumOnceSonra == dogumOnceSonraToRemove);
+    print(_weightHistory);
   }
 
   @override
@@ -276,29 +310,31 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                           : Colors.pink[100]!;
                       return Container(
                         color: bgColor,
-                        child: Slidable(
-                          endActionPane: const ActionPane(
-                            motion: ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                // An action can be bigger than the others.
-                                flex: 2,
-                                onPressed: null,
-                                backgroundColor:
-                                    Color.fromARGB(255, 133, 221, 106),
-                                foregroundColor: Colors.white,
-                                icon: Icons.archive,
-                                label: 'Düzenle',
+                        child: Dismissible(
+                          key: Key((_weightHistory[index].weight).toString() +
+                              (_weightHistory[index].dateTime).toString() +
+                              (_weightHistory[index].isMotherWeight)
+                                  .toString() +
+                              DateTime.now().microsecondsSinceEpoch.toString()),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            alignment: AlignmentDirectional.centerEnd,
+                            color: Colors.red,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.black,
                               ),
-                              SlidableAction(
-                                onPressed: null,
-                                backgroundColor: Color.fromARGB(255, 207, 3, 3),
-                                foregroundColor: Colors.white,
-                                icon: Icons.save,
-                                label: 'Sil',
-                              ),
-                            ],
+                            ),
                           ),
+                          onDismissed: (direction) {
+                            silKilo(
+                                _weightHistory[index].weight,
+                                _weightHistory[index].dateTime,
+                                _weightHistory[index].isMotherWeight,
+                                _weightHistory[index].dogumOnceSonra);
+                          },
                           child: ListTile(
                             title: widget.userData!['isPregnant']
                                 ? Row(
@@ -352,20 +388,20 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                               'Kayıt Tarihi: ${_weightHistory[index].dateTime}',
                               style: TextStyle(fontSize: 12.0),
                             ),
-                            trailing: Container(
-                              width: 60,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.edit_note_sharp,
-                                    size: 30,
-                                    // color: Color.fromARGB(255, 0, 0, 0),
-                                  ),
-                                  Text("Not Ekle"),
-                                ],
-                              ),
-                            ),
+                            // trailing: Container(
+                            //   width: 60,
+                            //   child: Column(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: [
+                            //       Icon(
+                            //         Icons.edit_note_sharp,
+                            //         size: 30,
+                            //         // color: Color.fromARGB(255, 0, 0, 0),
+                            //       ),
+                            //       Text("Not Ekle"),
+                            //     ],
+                            //   ),
+                            // ),
                           ),
                         ),
                       );

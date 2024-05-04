@@ -65,6 +65,17 @@ class _KesfetPageState extends State<KesfetPage> {
     },
   ];
 
+  final List<Map<String, String>> _kartlarSizeOzel = [
+    {
+      'baslik': 'Sıkça Sorulan Sorular',
+      'resimUrl': 'assets/kesfet/sorular.jpeg',
+    },
+    {
+      'baslik': 'Sizlerden Gelenler',
+      'resimUrl': 'assets/kesfet/sizdenGelenler.png',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,6 +89,7 @@ class _KesfetPageState extends State<KesfetPage> {
             _buildKartListesi("Beslenme", _kartlarBeslenme),
             _buildKartListesi("Anne & Bebek", _kartlarAnneBebek),
             _buildKartListesi("İyi Hissedin", _kartlarIyiHissedin),
+            _buildKartListesi("Size Özel", _kartlarSizeOzel),
             // Buraya ek alt başlıklar ve kartlar eklenebilir.
           ],
         ),
@@ -113,7 +125,7 @@ class _KesfetPageState extends State<KesfetPage> {
           ),
         ),
         SizedBox(
-          height: 200.0,
+          height: 150.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: _kartlar.length,

@@ -213,8 +213,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
             SizedBox(height: 10),
             FunctionsWidget(
               onFunction1Pressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (_) {
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return SpinningWheel(
                     userData: widget.userData,
                     pageType: 'waterDrinkData',
@@ -228,7 +227,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                     selectedItem: 'Bardak',
                     selectedValue: '200',
                   );
-                }));
+                })).then((value) {
+                  _fetchUserData();
+                });
+                ;
 
                 print("Test1");
               },
@@ -348,6 +350,54 @@ class _AnaSayfaState extends State<AnaSayfa> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ExpansionTile(
+                  onExpansionChanged: (value) {
+                    if (activities.keys.toList().length == 0) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Hiç aktiviteniz yok. Lütfen Aktiviteler ekranından aktivite ekleyin.',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                          // action: SnackBarAction(
+                          //   label: 'Aktiviteler',
+                          //   onPressed: () {
+                          //     print('');
+                          //   },
+                          // ),
+                          backgroundColor: Color.fromARGB(
+                              255, 215, 193, 228), // Snackbar arka plan rengi
+                          duration: Duration(
+                              milliseconds: 1500), // Snackbar gösterim süresi
+                          behavior:
+                              SnackBarBehavior.floating, // Snackbar davranışı
+                          shape: RoundedRectangleBorder(
+                            // Snackbar şekli
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 4, // Snackbar yükseltilmesi
+                          margin:
+                              EdgeInsets.all(10), // Snackbar kenar boşlukları
+                        ),
+                      );
+
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     content: Text(
+                      //         'Hiç aktiviteniz yok. Lütfen Aktiviteler ekranından aktivite ekleyin.'),
+                      //     // action: SnackBarAction(
+                      //     //   label: 'Aktiviteler',
+                      //     //   onPressed: () {
+                      //     //     print('');
+                      //     //   },
+                      //     // ),
+                      //   ),
+                      // );
+                    }
+                  },
                   title: Text(
                     'Yaklaşan Aktiviteler' +
                         (activities.keys.toList().length != 0
