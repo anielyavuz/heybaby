@@ -154,9 +154,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                           child: CircularProgressIndicator(
                             strokeWidth: 30,
                             value: _historyValue / _targetValue,
-                            backgroundColor:
-                                Color.fromRGBO(0, 203, 255, 1).withOpacity(0.2),
-                            color: Color.fromRGBO(0, 203, 255, 1),
+                            backgroundColor: Color.fromARGB(255, 76, 0, 255)
+                                .withOpacity(0.2),
+                            color: Color.fromARGB(255, 111, 0, 255),
                           ),
                         ),
                       ),
@@ -179,8 +179,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                   (e) => Container(
                                     decoration: BoxDecoration(
                                         color: e == widget.selectedItem
-                                            ? Color.fromARGB(100, 50, 173, 54)
-                                            : Color.fromARGB(112, 234, 34, 20),
+                                            ? Color.fromARGB(255, 111, 0, 255)
+                                            : Color.fromARGB(255, 76, 0, 255)
+                                                .withOpacity(0.2),
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(50))),
                                     width: e == widget.selectedItem ? 100 : 60,
@@ -266,7 +267,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                   await FirestoreFunctions.updateDataRecord(
                                       newData, widget.pageType);
                             },
-                            child: Text('Kaydet'),
+                            child: Text('Kaydet',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 46, 2, 100))),
                           ),
                           GestureDetector(
                             child: IconButton(
@@ -283,30 +286,62 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                       SizedBox(height: 10),
                       Text(
                         "Bugünün Listesi",
-                        style: TextStyle(fontSize: 22, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
                       ),
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
                             children: _history
                                 .map(
-                                  (item) => ListTile(
-                                      title: item['count'] > 1
-                                          ? Text(item['count'].toString() +
-                                              "x " +
-                                              item['type'] +
-                                              " - " +
-                                              item['amount'].toString() +
-                                              item['unit'])
-                                          : Text(item['type'] +
-                                              " - " +
-                                              item['amount'].toString() +
-                                              item['unit'])),
+                                  (item) => Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color.fromARGB(255, 76, 0, 255)
+                                              .withOpacity(0.1),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(50))),
+                                      child: ListTile(
+                                        title: item['count'] > 1
+                                            ? Container(
+                                                child: Text(item['count']
+                                                        .toString() +
+                                                    "x " +
+                                                    item['type'] +
+                                                    " - " +
+                                                    item['amount'].toString() +
+                                                    item['unit']),
+                                              )
+                                            : Container(
+                                                child: Text(item['type'] +
+                                                    " - " +
+                                                    item['amount'].toString() +
+                                                    item['unit']),
+                                              ),
+                                        subtitle: Text(
+                                          "${item['date'].hour.toString()} : ${item['date'].minute.toString()} - ${item['date'].day.toString()}.${item['date'].month.toString()}.${item['date'].year.toString()}",
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 )
                                 .toList(),
                           ),
                         ),
                       ),
+                      ElevatedButton(
+                          onPressed: () {},
+                          child: Icon(
+                            Icons.history,
+                            size: 25,
+                            color: Color.fromARGB(255, 46, 2, 100),
+                          ))
                     ],
                   ),
                 )

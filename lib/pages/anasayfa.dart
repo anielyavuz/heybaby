@@ -157,6 +157,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => StoryScreen(
+                              storyies: widget.storyImages,
                               storyImages: _storyImagesLink,
                               startingPage: index,
                               storyIDlist: _storyIDlist),

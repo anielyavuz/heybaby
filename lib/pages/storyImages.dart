@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 
 class StoryScreen extends StatefulWidget {
+  final List storyies;
   final List storyImages;
   final int startingPage;
   final List storyIDlist;
 
   StoryScreen(
-      {required this.storyImages,
+      {required this.storyies,
+      required this.storyImages,
       required this.startingPage,
       required this.storyIDlist});
 
@@ -192,10 +194,8 @@ class _StoryScreenState extends State<StoryScreen>
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MakaleDetay(
-                                    baslik: _data[widget.storyIDlist[index]]
-                                        ['baslik'],
-                                    icerik: _data[widget.storyIDlist[index]]
-                                        ['icerik'],
+                                    baslik: widget.storyies[index]['baslik'],
+                                    icerik: widget.storyies[index]['icerik'],
                                     resimURL: widget.storyImages[index])),
                           ).then((value) {
                             Navigator.pop(context);

@@ -5,10 +5,12 @@ import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
 
 class KesfetMakaleWidget extends StatefulWidget {
+  final List stories;
   final String baslik;
   final String resimUrl;
 
   KesfetMakaleWidget({
+    required this.stories,
     required this.baslik,
     required this.resimUrl,
   });
@@ -19,11 +21,12 @@ class KesfetMakaleWidget extends StatefulWidget {
 
 class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
   late Map<String, dynamic> _data;
+  late List makaleler;
 
   @override
   void initState() {
-    print("TTTT");
-    print(widget.baslik.toString());
+    // print(widget.stories);
+
     super.initState();
     _getData();
   }
@@ -33,6 +36,15 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
     Map<String, dynamic> jsonResult = json.decode(data);
     setState(() {
       _data = jsonResult;
+      for (var _story in widget.stories) {
+        if (_story['kategori'] == widget.baslik) {
+          // print(_story);
+          _data['Makaleler'][widget.baslik].add(_story);
+        }
+      }
+
+      makaleler = _data['Makaleler'][widget.baslik];
+      makaleler.sort((b, a) => a['id'].compareTo(b['id']));
     });
   }
 
@@ -52,7 +64,7 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: _data['Makaleler'][widget.baslik]
+                      children: makaleler
                           .map<Widget>((makale) => Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
@@ -62,34 +74,92 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
                                         builder: (context) => MakaleDetay(
                                           baslik: makale['baslik'],
                                           icerik: makale['icerik'],
-                                          resimURL: widget.resimUrl,
+                                          resimURL:
+                                              makale.containsKey('imageLink')
+                                                  ? makale['imageLink']
+                                                  : widget.resimUrl,
                                         ),
                                       ),
                                     );
                                   },
                                   child: Row(
                                     children: [
-                                      Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                              widget.resimUrl,
+                                      makale.containsKey('imageLink')
+                                          ? makale['imageLink']
+                                                  .startsWith("https")
+                                              ? Container(
+                                                  height: 60,
+                                                  width: 60,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
+                                                      image:
+                                                          new DecorationImage(
+                                                        fit: BoxFit.fitWidth,
+                                                        alignment:
+                                                            FractionalOffset
+                                                                .center,
+                                                        image: new NetworkImage(
+                                                            makale[
+                                                                'imageLink']),
+                                                      )),
+                                                )
+                                              : Image.asset(
+                                                  makale[
+                                                      'imageLink'], // Burada widget.resimUrl yerine parametre olan resimURL kullanılıyor
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 50,
+                                                  fit: BoxFit.cover,
+                                                )
+                                          : Container(
+                                              width: 60,
+                                              height: 60,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                    widget.resimUrl,
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
                                       SizedBox(width: 16.0),
                                       Expanded(
                                         child: Text(
                                           makale['baslik'],
                                           style: TextStyle(
-                                            fontSize: 20.0,
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 6.0),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 5.0, horizontal: 15.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          color: makale['premium']
+                                              ? const Color.fromARGB(
+                                                  255, 124, 33, 243)
+                                              : Color.fromARGB(
+                                                  255, 209, 185, 241),
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          makale['premium']
+                                              ? "Premium"
+                                              : "Free",
+                                          style: TextStyle(
+                                            fontSize: 12.0,
                                             fontWeight: FontWeight.bold,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),

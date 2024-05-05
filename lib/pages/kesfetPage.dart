@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 
 class KesfetPage extends StatefulWidget {
+  final List stories;
+  KesfetPage({
+    required this.stories,
+  });
   @override
   _KesfetPageState createState() => _KesfetPageState();
 }
@@ -76,6 +80,10 @@ class _KesfetPageState extends State<KesfetPage> {
     },
   ];
 
+  void
+      storiesAyristirma() //cloud da bulunan storyleri ayrıştırarak kendi alanlarına ekleriz
+  {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,9 +144,9 @@ class _KesfetPageState extends State<KesfetPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => KesfetMakaleWidget(
-                        baslik: _kartlar[index]['baslik']!,
-                        resimUrl: _kartlar[index]['resimUrl']!,
-                      ),
+                          baslik: _kartlar[index]['baslik']!,
+                          resimUrl: _kartlar[index]['resimUrl']!,
+                          stories: widget.stories),
                     ),
                   );
 

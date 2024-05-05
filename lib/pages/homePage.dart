@@ -208,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Calendar(userData: userData);
 
       case 2:
-        return KesfetPage();
+        return KesfetPage(stories: storyImages);
 
       case 3:
         return NotlarPage(userData: userData);
