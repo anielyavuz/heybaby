@@ -72,7 +72,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
   int _historyValue = 0;
   int _targetValue = 2000;
   int _count = 1;
-
+  late List pastItems;
   @override
   void initState() {
     super.initState();
@@ -95,6 +95,14 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
           var itemDateOnly =
               DateTime(itemDate.year, itemDate.month, itemDate.day);
           return itemDateOnly.isAtSameMomentAs(today);
+        }).toList();
+
+        pastItems = historyData.where((item) {
+          var itemDate =
+              item['date'].toDate(); // Timestamp'ı DateTime'a dönüştür
+          var itemDateOnly =
+              DateTime(itemDate.year, itemDate.month, itemDate.day);
+          return itemDateOnly.isBefore(today);
         }).toList();
 
         _history = List<Map<dynamic, dynamic>>.from(todayItems);
@@ -336,7 +344,16 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // print(pastItems);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) {
+                              return WaterTrackingHistory(
+                                pastItems: pastItems,
+                                dailyPurpose: 2000,
+                              );
+                            }));
+                          },
                           child: Icon(
                             Icons.history,
                             size: 25,
@@ -369,6 +386,97 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class WaterTrackingHistory extends StatefulWidget {
+  List pastItems;
+  int dailyPurpose;
+
+  WaterTrackingHistory({required this.pastItems, required this.dailyPurpose});
+
+  @override
+  _WaterTrackingHistoryState createState() => _WaterTrackingHistoryState();
+}
+
+class _WaterTrackingHistoryState extends State<WaterTrackingHistory> {
+  // Liste elemanları ve hedef sayıları burada tanımlanacak
+  List<String> entries = ['Su İçme', 'Egzersiz', 'Yeşil Çay', 'Meyve Suyu'];
+  List<int> goals = [8, 5, 3, 2]; // Her bir aktivite için günlük hedefler
+  late Map _gunlukListe = {};
+  late Map _gunlukListeFinal = {};
+  DateTime _dun = DateTime.now().add(Duration(days: -1));
+  @override
+  void initState() {
+    super.initState();
+    // print(widget.pastItems);
+    for (var element in widget.pastItems) {
+      // print(element['date'].toDate());
+      var _tempTarih =
+          "${element['date'].toDate().day}.${element['date'].toDate().month}.${element['date'].toDate().year}";
+      if (_gunlukListe.containsKey(_tempTarih)) {
+        _gunlukListe[_tempTarih] += element['amount'] * element['count'];
+      } else {
+        _gunlukListe[_tempTarih] = element['amount'] * element['count'];
+      }
+    }
+
+    for (var i = 1; i < 30; i++) //30 gün geriye doğru yazıcaz
+    {
+      DateTime _dun = DateTime.now().add(Duration(days: -i));
+      var _tempData = "${_dun.day}.${_dun.month}.${_dun.year}";
+      if (_gunlukListe.containsKey(_tempData)) {
+        _gunlukListeFinal[_tempData] =
+            _gunlukListe[_tempData] / widget.dailyPurpose;
+      } else {
+        _gunlukListeFinal[_tempData] = 0.00;
+      }
+    }
+    print(_gunlukListeFinal);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Su Geçmişi'),
+      ),
+      body: ListView.builder(
+        itemCount: _gunlukListeFinal.length,
+        itemBuilder: (BuildContext context, int index) {
+          String date = _gunlukListeFinal.keys.toList()[index];
+          double value = _gunlukListeFinal.values.toList()[index];
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.grey.shade300),
+              ),
+            ),
+            child: ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(date),
+                  Text(
+                    _gunlukListe[date] != null
+                        ? _gunlukListe[date].toString() +
+                            "/" +
+                            widget.dailyPurpose.toString() +
+                            " ml"
+                        : "0" + "/" + widget.dailyPurpose.toString() + " ml",
+                    style: TextStyle(fontSize: 12, color: Colors.black),
+                  )
+                ],
+              ),
+              subtitle: LinearProgressIndicator(
+                value: value,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
