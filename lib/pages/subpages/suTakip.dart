@@ -299,50 +299,67 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: _history
-                                .map(
-                                  (item) => Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Color.fromARGB(255, 76, 0, 255)
-                                              .withOpacity(0.1),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50))),
-                                      child: ListTile(
-                                        title: item['count'] > 1
-                                            ? Container(
-                                                child: Text(item['count']
-                                                        .toString() +
-                                                    "x " +
-                                                    item['type'] +
-                                                    " - " +
-                                                    item['amount'].toString() +
-                                                    item['unit']),
-                                              )
-                                            : Container(
-                                                child: Text(item['type'] +
-                                                    " - " +
-                                                    item['amount'].toString() +
-                                                    item['unit']),
+                      Divider(),
+                      _history.length > 0
+                          ? Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: _history
+                                      .map(
+                                        (item) => Padding(
+                                          padding: const EdgeInsets.all(3.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                        255, 76, 0, 255)
+                                                    .withOpacity(0.1),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(50))),
+                                            child: ListTile(
+                                              title: item['count'] > 1
+                                                  ? Container(
+                                                      child: Text(item['count']
+                                                              .toString() +
+                                                          "x " +
+                                                          item['type'] +
+                                                          " - " +
+                                                          item['amount']
+                                                              .toString() +
+                                                          item['unit']),
+                                                    )
+                                                  : Container(
+                                                      child: Text(item['type'] +
+                                                          " - " +
+                                                          item['amount']
+                                                              .toString() +
+                                                          item['unit']),
+                                                    ),
+                                              subtitle: Text(
+                                                "${item['date'].hour.toString()} : ${item['date'].minute.toString()} - ${item['date'].day.toString()}.${item['date'].month.toString()}.${item['date'].year.toString()}",
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    color: Colors.black),
                                               ),
-                                        subtitle: Text(
-                                          "${item['date'].hour.toString()} : ${item['date'].minute.toString()} - ${item['date'].day.toString()}.${item['date'].month.toString()}.${item['date'].year.toString()}",
-                                          style: TextStyle(
-                                              fontSize: 11,
-                                              color: Colors.black),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      ),
+                                      )
+                                      .toList(),
+                                ),
+                              ),
+                            )
+                          : Expanded(
+                              child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Bugün için hiç su girişiniz yok. Lütfen su iç.  🐳",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.black),
+                                ),
+                              ),
+                            )),
                       ElevatedButton(
                           onPressed: () {
                             // print(pastItems);
