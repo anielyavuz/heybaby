@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:heybaby/pages/adminPages/storyPaylas.dart';
 import 'package:intl/intl.dart';
 
 class HesapSayfasi extends StatefulWidget {
@@ -85,7 +86,6 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           ),
         ),
         SizedBox(height: 16),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -249,13 +249,50 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             }
           },
         ),
-        // ElevatedButton(
-        //   child: Text(
-        //     'Beğendiğim Storyler',
-        //   ),
-        //   onPressed: () {},
-        // ),
-        SizedBox(height: 44),
+        SizedBox(height: 26),
+        widget.userData!['userSubscription'] == "Admin"
+            ? ElevatedButton(
+                child: Text('Admin Features'),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Center(child: Text("Admin Features")),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) {
+                                  return StoryPaylasPage();
+                                }));
+
+                                // Yeni makale ilet butonuna basıldığında yapılacak işlemler
+                                // Popup'ı kapat
+                                // Yeni makale ilet işlemleri
+                              },
+                              child: Text("Story Paylaş"),
+                            ),
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     // Rapor çek butonuna basıldığında yapılacak işlemler
+                            //     Navigator.pop(context); // Popup'ı kapat
+                            //     // Rapor çek işlemleri
+                            //   },
+                            //   child: Text("Rapor Çek"),
+                            // ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              )
+            : SizedBox(),
+        SizedBox(height: 14),
         ElevatedButton(
           onPressed: widget.onSignOutPressed,
           child: Text('Çıkış Yap'),

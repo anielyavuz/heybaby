@@ -253,6 +253,8 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _AIStatus = data['AIBot']['Enable'];
         storyImages = data['Stories'];
+        storyImages.sort((a, b) => b['id'].compareTo(a['id']));
+
         // print(storyImages);
       });
     }

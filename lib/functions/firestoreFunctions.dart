@@ -480,6 +480,52 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<void> addNewStory(
+      _storyBaslikController,
+      _makaleBaslikController,
+      _makaleIcerikController,
+      _storyLinkController,
+      _selectedKategori,
+      _isPremium,
+      _tarih) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String userID = user.uid;
+
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection("System")
+          .doc('Configs')
+          .get();
+      var _storyler = userSnapshot['Stories'];
+      int maxID = 0;
+      for (var story in _storyler) {
+        if (story['id'] > maxID) {
+          maxID = story['id'];
+        }
+      }
+      // print(maxID + 1);
+      List _tempList = [];
+      Map _tempMap = {};
+      _tempMap['header'] = _storyBaslikController;
+      _tempMap['baslik'] = _makaleBaslikController;
+      _tempMap['icerik'] = _makaleIcerikController;
+      _tempMap['id'] = maxID + 1;
+      _tempMap['imageLink'] = _storyLinkController;
+      _tempMap['premium'] = _isPremium;
+      _tempMap['tarih'] = _tarih;
+
+      print(_tempMap);
+      _tempList.add(_tempMap);
+      await FirebaseFirestore.instance
+          .collection("System")
+          .doc('Configs')
+          .update({"Stories": FieldValue.arrayUnion(_tempList)});
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
   static Future<Map> makaleGeriBildirim(userName, durum, tarih) async {
     User? user = FirebaseAuth.instance.currentUser;
     Map returnCode = {};
