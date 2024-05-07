@@ -143,198 +143,203 @@ class _AnaSayfaState extends State<AnaSayfa> {
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Story Circles
-        Column(
-          children: [
-            Container(
-              height: 100.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.storyImages.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StoryScreen(
-                              storyies: widget.storyImages,
-                              storyImages: _storyImagesLink,
-                              startingPage: index,
-                              storyIDlist: _storyIDlist),
+        SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 100.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.storyImages.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StoryScreen(
+                                  storyies: widget.storyImages,
+                                  storyImages: _storyImagesLink,
+                                  startingPage: index,
+                                  storyIDlist: _storyIDlist),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: 60.0,
+                                height: 60.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color.fromARGB(255, 55, 105, 245),
+                                      // Color.fromARGB(255, 50, 200, 255),
+                                      Color.fromARGB(255, 168, 60, 187),
+                                    ],
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.transparent,
+                                    width: 3.0,
+                                  ), // Halkanın rengi ve genişliği
+                                ),
+                                child: CircleAvatar(
+                                  radius: 30.0,
+                                  backgroundImage:
+                                      NetworkImage(_storyImagesLink[index]),
+                                ),
+                              ),
+                              Text(
+                                widget.storyImages[index]['header'].toString(),
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 60.0,
-                            height: 60.0,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color.fromARGB(255, 55, 105, 245),
-                                  // Color.fromARGB(255, 50, 200, 255),
-                                  Color.fromARGB(255, 168, 60, 187),
-                                ],
-                              ),
-                              border: Border.all(
-                                color: Colors.transparent,
-                                width: 3.0,
-                              ), // Halkanın rengi ve genişliği
-                            ),
-                            child: CircleAvatar(
-                              radius: 30.0,
-                              backgroundImage:
-                                  NetworkImage(_storyImagesLink[index]),
-                            ),
-                          ),
-                          Text(
-                            widget.storyImages[index]['header'].toString(),
-                            style: TextStyle(
-                              fontSize: 12.0,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: 10),
-            // Resim
-            TrimesterProgressWidget(
-              userData: widget.userData,
-            ),
-            SizedBox(height: 10),
-            FunctionsWidget(
-              onFunction1Pressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return SpinningWheel(
-                    userData: widget.userData,
-                    pageType: 'waterDrinkData',
-                    pageItems: {
-                      'Bardak': "200",
-                      'Buyuk Bardak': "300",
-                      'Matara': "500",
-                      'Sise': "750",
-                      'Surahi': "1000",
-                    },
-                    selectedItem: 'Bardak',
-                    selectedValue: '200',
-                  );
-                })).then((value) {
-                  _fetchUserData();
-                });
-                ;
-
-                print("Test1");
-              },
-              onFunction2Pressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => KiloTakipPage(
-                            userData: widget.userData,
-                          )),
-                ).then((value) {
-                  _fetchUserData();
-                });
-                print("Test1");
-              },
-              onFunction3Pressed: () {
-                print("Test1");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => IlacTakip(
-                            userData: widget.userData,
-                          )),
-                ).then((value) {
-                  _fetchUserData();
-                });
-              },
-              onFunction4Pressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => YapilacaklarPage(
-                            userData: widget.userData,
-                          )),
-                ).then((value) {
-                  _fetchUserData();
-                });
-
-                print("Test1");
-              },
-              function1Description: 'Su',
-              function2Description: 'Kilo Takibi',
-              function3Description: 'İlaç/Vitamin',
-              function4Description: 'Yapılacaklar',
-            ),
-            SizedBox(height: 10),
-
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        HaftalikGuncellemeWidget(userData: widget.userData),
                   ),
-                );
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: MediaQuery.of(context).size.width *
-                    0.95 *
-                    (90 / MediaQuery.of(context).size.width),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/background.jpeg',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
+                SizedBox(height: 10),
+                // Resim
+                TrimesterProgressWidget(
+                  userData: widget.userData,
+                ),
+                SizedBox(height: 10),
+                FunctionsWidget(
+                  onFunction1Pressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return SpinningWheel(
+                        userData: widget.userData,
+                        pageType: 'waterDrinkData',
+                        pageItems: {
+                          'Bardak': "200",
+                          'Buyuk Bardak': "300",
+                          'Matara': "500",
+                          'Sise': "750",
+                          'Surahi': "1000",
+                        },
+                        selectedItem: 'Bardak',
+                        selectedValue: '200',
+                      );
+                    })).then((value) {
+                      _fetchUserData();
+                    });
+                    ;
+            
+                    print("Test1");
+                  },
+                  onFunction2Pressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => KiloTakipPage(
+                                userData: widget.userData,
+                              )),
+                    ).then((value) {
+                      _fetchUserData();
+                    });
+                    print("Test1");
+                  },
+                  onFunction3Pressed: () {
+                    print("Test1");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => IlacTakip(
+                                userData: widget.userData,
+                              )),
+                    ).then((value) {
+                      _fetchUserData();
+                    });
+                  },
+                  onFunction4Pressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => YapilacaklarPage(
+                                userData: widget.userData,
+                              )),
+                    ).then((value) {
+                      _fetchUserData();
+                    });
+            
+                    print("Test1");
+                  },
+                  function1Description: 'Su',
+                  function2Description: 'Kilo Takibi',
+                  function3Description: 'İlaç/Vitamin',
+                  function4Description: 'Yapılacaklar',
+                ),
+                SizedBox(height: 10),
+            
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            HaftalikGuncellemeWidget(userData: widget.userData),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    height: MediaQuery.of(context).size.width *
+                        0.95 *
+                        (90 / MediaQuery.of(context).size.width),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    Positioned(
-                      bottom: 1,
-                      child: Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 52, 19, 57).withOpacity(
-                              0.7), // Opaklık değerini ayarlayabilirsiniz
-
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10.0),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/background.jpeg',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
                         ),
-                        child: Text(
-                          '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors
-                                .white, // Metin rengini beyaz olarak ayarladık
+                        Positioned(
+                          bottom: 1,
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 52, 19, 57).withOpacity(
+                                  0.7), // Opaklık değerini ayarlayabilirsiniz
+            
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Text(
+                              '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors
+                                    .white, // Metin rengini beyaz olarak ayarladık
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              ],
+            ),
+          ),
         ),
 
         // SizedBox(height: 10),
