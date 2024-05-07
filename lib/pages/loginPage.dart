@@ -11,10 +11,200 @@ class IntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(),
+      home: OnboardingScreen(),
       routes: {
         '/register': (context) => RegisterScreen(),
+        '/login': (context) => LoginScreen(),
       },
+    );
+  }
+}
+
+class OnboardingScreen extends StatefulWidget {
+  @override
+  _OnboardingScreenState createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final PageController _pageController = PageController();
+  int _currentPageIndex = 0;
+  bool _skipButtonControl = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: onboardingPages.length,
+            onPageChanged: (index) {
+              setState(() {
+                _currentPageIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              return onboardingPages[index];
+            },
+          ),
+          Positioned(
+            bottom: 106.0,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                onboardingPages.length,
+                (index) => _buildDot(index),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 96.0,
+            left: 16.0,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                setState(() {
+                  _skipButtonControl = true;
+                });
+
+                _pageController.previousPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
+          ),
+          Positioned(
+            bottom: 96.0,
+            right: 16.0,
+            child: IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                print(_pageController.page);
+                setState(() {
+                  _skipButtonControl = true;
+                });
+                if (_pageController.page == onboardingPages.length - 2) {
+                  setState(() {
+                    _skipButtonControl = false;
+                  });
+                }
+                _pageController.nextPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
+          ),
+          _skipButtonControl
+              ? Positioned(
+                  bottom: 26.0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    width: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _skipButtonControl = false;
+                        });
+                        _pageController.jumpToPage(5);
+                      },
+                      child: Text("Skip"),
+                    ),
+                  ),
+                )
+              : SizedBox(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDot(int index) {
+    Color color = index == _currentPageIndex ? Colors.blue : Colors.grey;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Icon(Icons.fiber_manual_record, color: color),
+    );
+  }
+}
+
+final List onboardingPages = [
+  OnboardingPage(
+    title: 'Hoşgeldiniz',
+    description:
+        "HeyBaby, yapay zeka destekli bir bebek bakım uygulamasıdır. Hamilelik sürecinizden başlayarak çocuğunuzun gelişimi ve sizin sağlığınıza destek olacak birçok özellik sunmaktadır. Haydi, siz de bu benzersiz deneyimi keşfedin!",
+    imagePath: 'assets/Bardak.png',
+  ),
+  OnboardingPage(
+    title: 'Hamilelik Takibi',
+    description:
+        'Hamilelik takibi uygulamasıyla ilgili bilgiler burada yer alacak.',
+    imagePath: 'assets/images/onboarding2.png',
+  ),
+  OnboardingPage(
+    title: 'Su Takibi',
+    description:
+        'Su takibi yapabilme özelliği hakkında bilgiler burada yer alacak.',
+    imagePath: 'assets/images/onboarding3.png',
+  ),
+  OnboardingPage(
+    title: 'Makaleler',
+    description: 'Makalelerle ilgili bilgiler burada yer alacak.',
+    imagePath: 'assets/images/onboarding4.png',
+  ),
+  OnboardingPage(
+    title: 'Başlayalım',
+    description: 'Hazırsanız başlayalım',
+    imagePath: 'assets/images/onboarding4.png',
+  ),
+  LoginScreen()
+  // Ekleyeceğiniz diğer sayfalar buraya eklenebilir
+];
+
+class OnboardingPage extends StatelessWidget {
+  final String title;
+  final String description;
+  final String imagePath;
+
+  const OnboardingPage({
+    required this.title,
+    required this.description,
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16.0,
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Image.asset(
+            imagePath,
+            height: 200,
+            width: 200,
+          ),
+        ],
+      ),
     );
   }
 }
