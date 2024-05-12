@@ -16,6 +16,7 @@ import 'package:heybaby/pages/listelerPage.dart';
 import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/notlarPage.dart';
 import 'package:heybaby/pages/takvimPage.dart';
+import 'package:lottie/lottie.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -173,14 +174,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 56.0, // Yükseklik ayarı
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/aiChatBotIcon2.jpg?alt=media&token=9b56d1e4-bb29-431d-bdc3-d9a4b880562c',
-                      ),
-                      fit: BoxFit
-                          .fill, // Resmi butona tam olarak dolduracak şekilde ayarla
-                    ),
                   ),
+
+                  child: Lottie.asset(
+                      // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                      "assets/lottie/robotWelcome.json",
+                      fit: BoxFit.fill),
                 ),
               )
             : SizedBox());

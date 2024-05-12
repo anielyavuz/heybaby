@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/jsonFiles.dart';
+import 'package:lottie/lottie.dart';
 
 void main() {
   runApp(IntroPage());
@@ -28,7 +31,6 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPageIndex = 0;
-  bool _skipButtonControl = true;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           PageView.builder(
             controller: _pageController,
-            itemCount: onboardingPages.length,
+            itemCount: onboardingPages.length - 1,
             onPageChanged: (index) {
               setState(() {
                 _currentPageIndex = index;
@@ -49,70 +51,205 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           Positioned(
             bottom: 106.0,
-            left: 0,
+            left: 50,
             right: 0,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                onboardingPages.length,
-                (index) => _buildDot(index),
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _currentPageIndex != 0
+                    ? GestureDetector(
+                        onTap: () {
+                          _pageController.previousPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: Text(
+                          "Geri",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 56, 0, 140),
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  _currentPageIndex == 0
+                      ? Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 111, 0, 255),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50))),
+                          width: 50,
+                          height: 10,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 203, 176, 238),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50))),
+                            width: 15,
+                            height: 10,
+                          ),
+                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _currentPageIndex > 0 &&
+                            _currentPageIndex < onboardingPages.length - 2
+                        ? Container(
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 111, 0, 255),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50))),
+                            width: 50,
+                            height: 10,
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 203, 176, 238),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50))),
+                              width: 15,
+                              height: 10,
+                            ),
+                          ),
+                  ),
+                  _currentPageIndex >= onboardingPages.length - 2
+                      ? Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 111, 0, 255),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50))),
+                          width: 50,
+                          height: 10,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 203, 176, 238),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50))),
+                            width: 15,
+                            height: 10,
+                          ),
+                        ),
+                ]),
+                _currentPageIndex < onboardingPages.length - 2
+                    ? ElevatedButton(
+                        onPressed: () {
+                          print(_pageController.page);
+
+                          if (_pageController.page ==
+                              onboardingPages.length - 2) {}
+                          _pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: Text(
+                          "İleri",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 56, 0, 140),
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      )
+                    : SizedBox()
+              ],
+            ),
+          ),
+          // Positioned(
+          //   bottom: 106.0,
+          //   left: 16.0,
+          //   child:
+
+          //   GestureDetector(
+          //     onTap: () {
+          //       setState(() {
+          //         _skipButtonControl = true;
+          //       });
+
+          //       _pageController.previousPage(
+          //         duration: Duration(milliseconds: 300),
+          //         curve: Curves.easeInOut,
+          //       );
+          //     },
+          //     child: Text(
+          //       "Geri",
+          //       style: TextStyle(
+          //         color: Colors.black,
+          //         fontSize: 14.0,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+
+          // ),
+          // Positioned(
+          //   bottom: 96.0,
+          //   right: 16.0,
+          //   child:
+
+          //   ElevatedButton(
+          //     onPressed: () {
+          //       onPressed:
+          //       () {
+          //         print(_pageController.page);
+          //         setState(() {
+          //           _skipButtonControl = true;
+          //         });
+          //         if (_pageController.page == onboardingPages.length - 2) {
+          //           setState(() {
+          //             _skipButtonControl = false;
+          //           });
+          //         }
+          //         _pageController.nextPage(
+          //           duration: Duration(milliseconds: 300),
+          //           curve: Curves.easeInOut,
+          //         );
+          //       };
+          //     },
+          //     child: Text("İleri"),
+          //   ),
+          // ),
+          Positioned(
+            bottom: 46.0,
+            left: 60,
+            right: 0,
+            child: Center(
+              child: Container(
+                width: 200,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                  child: Text("Oturun Aç / Kayıt Ol",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 56, 0, 140),
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal,
+                      )),
+                ),
               ),
             ),
           ),
-          Positioned(
-            bottom: 96.0,
-            left: 16.0,
-            child: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                setState(() {
-                  _skipButtonControl = true;
-                });
-
-                _pageController.previousPage(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-            ),
-          ),
-          Positioned(
-            bottom: 96.0,
-            right: 16.0,
-            child: IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () {
-                print(_pageController.page);
-                setState(() {
-                  _skipButtonControl = true;
-                });
-                if (_pageController.page == onboardingPages.length - 2) {
-                  setState(() {
-                    _skipButtonControl = false;
-                  });
-                }
-                _pageController.nextPage(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-            ),
-          ),
-          _skipButtonControl
-              ? Positioned(
-                  bottom: 26.0,
-                  left: 0,
-                  right: 0,
+          _currentPageIndex == onboardingPages.length - 2
+              ? Center(
                   child: Container(
-                    width: 50,
+                    width: 100,
+                    height: 100,
                     child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _skipButtonControl = false;
-                        });
-                        _pageController.jumpToPage(5);
+                      onPressed: () async {
+                        _showGuestLoginPopup(context);
                       },
-                      child: Text("Skip"),
+                      child: Text('Giriş'),
                     ),
                   ),
                 )
@@ -121,45 +258,66 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
+}
 
-  Widget _buildDot(int index) {
-    Color color = index == _currentPageIndex ? Colors.blue : Colors.grey;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: Icon(Icons.fiber_manual_record, color: color),
-    );
-  }
+Widget _loginPages(String header, String body, String lottie) {
+  return Padding(
+    padding: const EdgeInsets.all(12.0),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(
+          textAlign: TextAlign.center,
+          header,
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          body,
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        Container(
+          width: 300,
+          height: 300,
+          child: Lottie.asset(
+              // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+              "assets/lottie/" + lottie + ".json"),
+        ),
+        // Container(
+        //   height: 30,
+        // )
+      ],
+    ),
+  );
 }
 
 final List onboardingPages = [
-  OnboardingPage(
-    title: 'Hoşgeldiniz',
-    description:
-        "HeyBaby, yapay zeka destekli bir bebek bakım uygulamasıdır. Hamilelik sürecinizden başlayarak çocuğunuzun gelişimi ve sizin sağlığınıza destek olacak birçok özellik sunmaktadır. Haydi, siz de bu benzersiz deneyimi keşfedin!",
-    imagePath: 'assets/Bardak.png',
-  ),
-  OnboardingPage(
-    title: 'Hamilelik Takibi',
-    description:
-        'Hamilelik takibi uygulamasıyla ilgili bilgiler burada yer alacak.',
-    imagePath: 'assets/images/onboarding2.png',
-  ),
-  OnboardingPage(
-    title: 'Su Takibi',
-    description:
-        'Su takibi yapabilme özelliği hakkında bilgiler burada yer alacak.',
-    imagePath: 'assets/images/onboarding3.png',
-  ),
-  OnboardingPage(
-    title: 'Makaleler',
-    description: 'Makalelerle ilgili bilgiler burada yer alacak.',
-    imagePath: 'assets/images/onboarding4.png',
-  ),
-  OnboardingPage(
-    title: 'Başlayalım',
-    description: 'Hazırsanız başlayalım',
-    imagePath: 'assets/images/onboarding4.png',
-  ),
+  _loginPages(
+      "Hoşgeldiniz",
+      "HeyBaby, yapay zeka destekli bir bebek bakım uygulamasıdır. Hamilelik sürecinizden başlayarak çocuğunuzun gelişimi ve sizin sağlığınıza destek olacak birçok özellik sunmaktadır. Haydi, siz de bu benzersiz deneyimi keşfetmeye başlayın!",
+      "welcomeMessage"),
+
+  _loginPages(
+      "Hamilelikten bebek gelişimine bilgi dolu bir yolculuk başlıyor!",
+      'Heyecan verici bir yolculuğa hazır mısınız? Hamilelik sürecinizden başlayarak, bebeğinizin gelişimini yakından takip edin ve kendiniz hakkında yeni şeyler keşfedin! Geniş bilgi havuzumuz sayesinde, her adımda güvende hissedeceksiniz. Haydi, keşfedin ve bilgi dolu bir deneyimin tadını çıkarın!',
+      'doctorWelcome'),
+
+  _loginPages(
+      'Sağlık yolculuğunuz başlasın! Kişisel sağlık asistanınız burada!',
+      "Sağlıklı yaşamınızı destekleyen bir yolculuğa hazır mısınız? Günlük su alımınızı takip edin, anne ve bebeğinizin gelişimini izleyin, ilaçlarınızı düzenleyin ve haftalık planlarınızı oluşturun. Size özel tasarlanmış bir uygulama ile sağlıklı yaşamınızı şekillendirmenize yardımcı oluyoruz!",
+      'robotWelcome'),
+
+  _loginPages(
+      "Her gün yeni içerikler ve bildirimlerle eğlencenin adresi!",
+      'Her gün sizi yeni bir maceraya davet eden bildirimler alın! Heyecan dolu anları kaçırmayın, uygulamamızın eğlenceli dünyasına adım atın!',
+      'welcomeNotification'),
+
+  _loginPages("O zaman yolculuğumuz başlasın. 😇", '', "letsGo"),
   LoginScreen()
   // Ekleyeceğiniz diğer sayfalar buraya eklenebilir
 ];
@@ -500,8 +658,8 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
             Column(
               children: [
                 isPregnant
-                    ? Text('Son regl tarihi giriniz:')
-                    : Text('Bebek doğum tarihini giriniz:'),
+                    ? Text('Son regl tarihinizi giriniz:')
+                    : Text('Bebeğiniz doğduğu tarihi giriniz:'),
                 SizedBox(height: 8),
                 InkWell(
                   onTap: () async {

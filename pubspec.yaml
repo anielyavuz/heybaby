@@ -51,6 +51,7 @@ dependencies:
   numberpicker: ^2.1.2
   image_picker: ^1.0.7
   smooth_page_indicator: ^1.1.0
+  lottie: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -144,6 +145,11 @@ flutter:
     - assets/kesfet/kaydettigimMakaleler.png
     - assets/kesfet/sizdenGelenler.png
     - assets/kesfet/sorular.jpeg
+    - assets/lottie/robotWelcome.json
+    - assets/lottie/doctorWelcome.json
+    - assets/lottie/welcomeMessage.json
+    - assets/lottie/welcomeNotification.json
+    - assets/lottie/letsGo.json
     # - images/a_dot_ham.jpeg -- D:\heybaby\assets\babyImageData.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
