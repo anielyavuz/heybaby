@@ -352,18 +352,19 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                                           item['unit']),
                                                     )
                                                   : Container(
-                                                      child: Text(item['type'] +
+                                                      child: Text("1 " +
+                                                          item['type'] +
                                                           " - " +
                                                           item['amount']
                                                               .toString() +
                                                           item['unit']),
                                                     ),
-                                              subtitle: Text(
-                                                "${item['date'].hour.toString()} : ${item['date'].minute.toString()} - ${item['date'].day.toString()}.${item['date'].month.toString()}.${item['date'].year.toString()}",
-                                                style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: Colors.black),
-                                              ),
+                                              // subtitle: Text(
+                                              //   "${item['date'].hour.toString()} : ${item['date'].minute.toString()} - ${item['date'].day.toString()}.${item['date'].month.toString()}.${item['date'].year.toString()}",
+                                              //   style: TextStyle(
+                                              //       fontSize: 11,
+                                              //       color: Colors.black),
+                                              // ),
                                             ),
                                           ),
                                         ),
