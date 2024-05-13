@@ -221,21 +221,43 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // ),
           Positioned(
             bottom: 46.0,
-            left: 60,
+            left: 0,
             right: 0,
             child: Center(
               child: Container(
-                width: 200,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  child: Text("Oturun Aç / Kayıt Ol",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 56, 0, 140),
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.normal,
-                      )),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 255, 255, 255),
+                      Color.fromARGB(255, 255, 255, 255)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                width: 160,
+                height: 40,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: Text("Oturum Aç / Kayıt Ol",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 92, 0, 197),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
                 ),
               ),
             ),
@@ -243,13 +265,42 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           _currentPageIndex == onboardingPages.length - 2
               ? Center(
                   child: Container(
-                    width: 100,
-                    height: 100,
+                    width: 150,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF00B4DB), Color(0xFF0083B0)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
                     child: ElevatedButton(
                       onPressed: () async {
                         _showGuestLoginPopup(context);
                       },
-                      child: Text('Giriş'),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      child: Text(
+                        'Giriş',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color.fromARGB(255, 92, 0, 197),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 )
@@ -317,7 +368,11 @@ final List onboardingPages = [
       'Her gün sizi yeni bir maceraya davet eden bildirimler alın! Heyecan dolu anları kaçırmayın, uygulamamızın eğlenceli dünyasına adım atın!',
       'welcomeNotification'),
 
-  _loginPages("O zaman yolculuğumuz başlasın. 😇", '', "letsGo"),
+  Stack(
+    children: [
+      _loginPages("O zaman yolculuğumuz başlasın. 😇", '', "letsGo"),
+    ],
+  ),
   LoginScreen()
   // Ekleyeceğiniz diğer sayfalar buraya eklenebilir
 ];
@@ -557,7 +612,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Kayıt ekranına yönlendirme işlemi
                 Navigator.pushNamed(context, '/register');
               },
-              child: Text('Hesabınız yok mu? Kayıt yapın'),
+              child: Text('Hesabınız yok mu? Kayıt olun.'),
             ),
           ],
         ),
@@ -655,7 +710,8 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                 }
               },
             ),
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 isPregnant
                     ? Text('Son regl tarihinizi giriniz:')
@@ -774,7 +830,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             SizedBox(height: 16.0),
             TextField(
               controller: registerUsernameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(labelText: 'Kullanıcı Adı'),
             ),
             SizedBox(height: 16.0),
             TextField(
@@ -785,7 +841,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
             SizedBox(height: 24.0),
             SizedBox(height: 24.0),
             SwitchListTile(
-              title: isPregnant ? Text('Hamileyim') : Text("Bebeğim var"),
+              title: isPregnant
+                  ? Text('Hamileyim',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 56, 0, 140),
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.normal,
+                      ))
+                  : Text("Bebeğim var",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 56, 0, 140),
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.normal,
+                      )),
               value: isPregnant,
               onChanged: (bool value) async {
                 setState(() {
@@ -806,10 +874,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 }
               },
             ),
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 isPregnant
-                    ? Text('Son regl tarihi giriniz:')
+                    ? Text('Son regl tarihi giriniz:',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 56, 0, 140),
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                        ))
                     : Text('Bebek doğum tarihini giriniz:'),
                 SizedBox(height: 8),
                 InkWell(
