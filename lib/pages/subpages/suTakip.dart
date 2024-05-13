@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/anasayfa.dart';
 import 'package:heybaby/pages/authentication.dart';
@@ -123,6 +124,12 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
         });
       }
     }
+  }
+
+  _bildirimiIptalEt(_id) async {
+    var _bildirimler = await AwesomeNotifications()
+        .cancel(_id)
+        .whenComplete(() => print("$_id bildirimi iptal edildi"));
   }
 
   Future<void> _refresh() async {
@@ -268,6 +275,23 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                       int.parse(widget.selectedValue) * _count;
                                 } else {
                                   _historyValue = _targetValue;
+                                  DateTime date = DateTime.now();
+
+                                  String _ay = "";
+                                  String _gun = "";
+                                  if (date.month < 10) {
+                                    _ay = "0${date.month}";
+                                  } else {
+                                    _ay = "${date.month}";
+                                  }
+                                  if (date.day < 10) {
+                                    _gun = "0${date.day}";
+                                  } else {
+                                    _gun = "${date.day}";
+                                  }
+                                  int _id =
+                                      int.parse("${date.year}${_ay}${_gun}");
+                                  _bildirimiIptalEt(_id);
                                 }
                               });
 

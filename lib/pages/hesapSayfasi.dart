@@ -55,6 +55,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
         GestureDetector(
           onTap: () async {
             var _bildirimler = await AwesomeNotifications().cancelAll();
+            // await BildirimTakip().bildirimKur();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Bütün bildirimler temizlendi !!!')),
             );
@@ -168,66 +169,69 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
         ElevatedButton(
           child: Text('Geri Bildirim Gönder'),
           onPressed: () async {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Geri bildirim başarılı olarak iletildi.',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-                backgroundColor: Color.fromARGB(
-                    255, 126, 52, 253), // Snackbar arka plan rengi
-                duration: Duration(seconds: 3), // Snackbar gösterim süresi
-                behavior: SnackBarBehavior.floating, // Snackbar davranışı
-                shape: RoundedRectangleBorder(
-                  // Snackbar şekli
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                elevation: 4, // Snackbar yükseltilmesi
-                margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
-              ),
-            );
-            var sonuc = await FirestoreFunctions.sendFeedBack(
-                {widget.userData?['userName'] ?? 'Guest'},
-                {_selectedStarIndex + 1},
-                noteController.text,
-                DateFormat('yyyy-MM-dd HH:mm:ss')
-                    .format(DateTime.now())
-                    .toString());
-            print(sonuc);
-            FocusScope.of(context).unfocus();
-            if (sonuc['status']) {
-              noteController.clear();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Geri bildirim başarılı olarak iletildi.',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.white,
+            if (noteController.text != "") {
+              var sonuc = await FirestoreFunctions.sendFeedBack(
+                  {widget.userData?['userName'] ?? 'Guest'},
+                  {_selectedStarIndex + 1},
+                  noteController.text,
+                  DateFormat('yyyy-MM-dd HH:mm:ss')
+                      .format(DateTime.now())
+                      .toString());
+              print(sonuc);
+              FocusScope.of(context).unfocus();
+              if (sonuc['status']) {
+                noteController.clear();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Geri bildirim başarılı olarak iletildi.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
                     ),
+                    backgroundColor: Color.fromARGB(
+                        255, 126, 52, 253), // Snackbar arka plan rengi
+                    duration: Duration(seconds: 3), // Snackbar gösterim süresi
+                    behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                    shape: RoundedRectangleBorder(
+                      // Snackbar şekli
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 4, // Snackbar yükseltilmesi
+                    margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
                   ),
-                  backgroundColor: Color.fromARGB(
-                      255, 126, 52, 253), // Snackbar arka plan rengi
-                  duration: Duration(seconds: 3), // Snackbar gösterim süresi
-                  behavior: SnackBarBehavior.floating, // Snackbar davranışı
-                  shape: RoundedRectangleBorder(
-                    // Snackbar şekli
-                    borderRadius: BorderRadius.circular(10),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      sonuc['value'].toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    backgroundColor: Color.fromARGB(
+                        255, 126, 52, 253), // Snackbar arka plan rengi
+                    duration: Duration(seconds: 3), // Snackbar gösterim süresi
+                    behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                    shape: RoundedRectangleBorder(
+                      // Snackbar şekli
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 4, // Snackbar yükseltilmesi
+                    margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
                   ),
-                  elevation: 4, // Snackbar yükseltilmesi
-                  margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
-                ),
-              );
+                );
+              }
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    sonuc['value'].toString(),
+                    'Lütfen geri bildirim göndermek için bir kaç kelime yazın.',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,

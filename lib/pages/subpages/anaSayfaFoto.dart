@@ -27,6 +27,83 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     // print(jsonList);
   }
 
+  suBildiriminiOlustur() async {
+    var _bildirimler =
+        await AwesomeNotifications().listScheduledNotifications();
+    List _bildirimIdleri = [];
+    for (var _bildirim in _bildirimler) {
+      _bildirimIdleri.add(_bildirim.content!.id);
+    }
+    bool _kontrol = true;
+    DateTime _simdi = DateTime.now();
+    DateTime _endDate = _simdi.add(Duration(days: 1 * 10));
+
+    String _ay = "";
+    String _gun = "";
+    if (_simdi.month < 10) {
+      _ay = "0${_simdi.month}";
+    } else {
+      _ay = "${_simdi.month}";
+    }
+    if (_simdi.day < 10) {
+      _gun = "0${_simdi.day}";
+    } else {
+      _gun = "${_simdi.day}";
+    }
+    int _startDate = int.parse("${_simdi.year}${_ay}${_gun}");
+
+    String _ay2 = "";
+    String _gun2 = "";
+    if (_endDate.month < 10) {
+      _ay2 = "0${_endDate.month}";
+    } else {
+      _ay2 = "${_endDate.month}";
+    }
+    if (_endDate.day < 10) {
+      _gun2 = "0${_endDate.day}";
+    } else {
+      _gun2 = "${_endDate.day}";
+    }
+    int _finishDate = int.parse("${_endDate.year}${_ay2}${_gun2}");
+
+    for (var _bildirimId in _bildirimIdleri) {
+      // print("$_startDate,$_finishDate,$_bildirimId");
+      if (_startDate <= _bildirimId && _bildirimId < _finishDate) {
+        _kontrol = false;
+      } else {}
+    }
+    // print(_kontrol);
+    if (_kontrol) {
+      DateTime now = DateTime.now();
+      DateTime endDate = now.add(
+          Duration(days: 1 * 10)); // Mevcut tarihten itibaren 1 yıl ekleyin
+      for (DateTime date = now;
+          date.isBefore(endDate);
+          date = date.add(Duration(days: 1))) {
+        String _ay = "";
+        String _gun = "";
+        if (date.month < 10) {
+          _ay = "0${date.month}";
+        } else {
+          _ay = "${date.month}";
+        }
+        if (date.day < 10) {
+          _gun = "0${date.day}";
+        } else {
+          _gun = "${date.day}";
+        }
+        int _id = int.parse("${date.year}${_ay}${_gun}");
+        // print('${date.year}${date.month}${date.day}');
+
+        await BildirimTakip.gunlukSuIc(
+            _id, 19, 00, date.day, date.month, date.year);
+        await Future.delayed(Duration(milliseconds: 350));
+      }
+    } else {
+      print("Günlük su içme bildirimleri kurulu durumda.");
+    }
+  }
+
   haftalikBoyutBildirimOlustur() async {
     var _bildirimler =
         await AwesomeNotifications().listScheduledNotifications();
@@ -58,7 +135,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
           _testImageLink = jsonList[36]['foto_link'];
           _testBenzerlik = jsonList[36]['benzerlik'];
         }
-        print("_testBenzerlik Test $_testBenzerlik");
+        // print("_testBenzerlik Test $_testBenzerlik");
 
         Future.delayed(const Duration(milliseconds: 50), () {
           imageandInfoJsonFileLoad();
@@ -80,12 +157,12 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
                 .add(Duration(days: (8 - _currentDay.weekday) + sayac))
                 .year);
 
-        print("Ana sayfa boyut bildirimleri yok, yazılıyor. -- " +
-            (i + 1000).toString());
+        // print("Ana sayfa boyut bildirimleri yok, yazılıyor. -- " +
+        //     (i + 1000).toString());
         sayac = sayac + 7;
       }
     } else {
-      // print("haftalık bildirimler kurulu durumda.");
+      print("haftalık bildirimler kurulu durumda.");
       // print(_bildirimIdleri);
     }
   }
@@ -99,6 +176,10 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     });
     Future.delayed(const Duration(milliseconds: 3000), () {
       haftalikBoyutBildirimOlustur();
+    });
+
+    Future.delayed(const Duration(milliseconds: 14000), () {
+      suBildiriminiOlustur();
     });
   }
 
