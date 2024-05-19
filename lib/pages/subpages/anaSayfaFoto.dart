@@ -34,9 +34,11 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     for (var _bildirim in _bildirimler) {
       _bildirimIdleri.add(_bildirim.content!.id);
     }
+    int _kacGunlukSuBildirimi =
+        20; //kac gunluk su bildiriminin kurulacağı ile ilgili konu. Bu değerin yarısından küçük değerde uygulamaya girildiğinde bildirimler yenilenir.
     bool _kontrol = true;
     DateTime _simdi = DateTime.now();
-    DateTime _endDate = _simdi.add(Duration(days: 1 * 10));
+    DateTime _endDate = _simdi.add(Duration(days: _kacGunlukSuBildirimi));
 
     String _ay = "";
     String _gun = "";
@@ -65,18 +67,27 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
       _gun2 = "${_endDate.day}";
     }
     int _finishDate = int.parse("${_endDate.year}${_ay2}${_gun2}");
-
+    int _totalSuBildirimSayisi = 0;
+    List _SuBildirimIDLeri = [];
     for (var _bildirimId in _bildirimIdleri) {
-      // print("$_startDate,$_finishDate,$_bildirimId");
       if (_startDate <= _bildirimId && _bildirimId < _finishDate) {
         _kontrol = false;
+        _totalSuBildirimSayisi += 1;
+        _SuBildirimIDLeri.add(_bildirimId);
+        // print("$_startDate,$_finishDate,$_bildirimId");
       } else {}
     }
-    // print(_kontrol);
-    if (_kontrol) {
+    // print(
+    //     "${_SuBildirimIDLeri.length} - ${_kacGunlukSuBildirimi / 2}  -Toplam su bildirimi sayisi ${_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2}");
+
+    if (_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2) {
+      for (var _SuBildirimID in _SuBildirimIDLeri) {
+        var _iptal = await AwesomeNotifications().cancel(_SuBildirimID);
+      }
       DateTime now = DateTime.now();
-      DateTime endDate = now.add(
-          Duration(days: 1 * 10)); // Mevcut tarihten itibaren 1 yıl ekleyin
+      DateTime endDate = now.add(Duration(
+          days:
+              _kacGunlukSuBildirimi)); // Mevcut tarihten itibaren 1 yıl ekleyin
       for (DateTime date = now;
           date.isBefore(endDate);
           date = date.add(Duration(days: 1))) {
@@ -96,11 +107,11 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
         // print('${date.year}${date.month}${date.day}');
 
         await BildirimTakip.gunlukSuIc(
-            _id, 19, 00, date.day, date.month, date.year);
+            _id, 13, 27, date.day, date.month, date.year);
         await Future.delayed(Duration(milliseconds: 350));
       }
     } else {
-      print("Günlük su içme bildirimleri kurulu durumda.");
+      print("Günlük su içme bildirimleri kurulu ve yeterli sayıdadır");
     }
   }
 

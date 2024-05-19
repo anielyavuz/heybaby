@@ -1,5 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/anasayfa.dart';
@@ -138,6 +140,105 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
     });
   }
 
+  List<TimeOfDay> notificationTimes = [
+    TimeOfDay(hour: 10, minute: 0),
+    TimeOfDay(hour: 13, minute: 0),
+    TimeOfDay(hour: 18, minute: 0),
+  ];
+
+  Future<void> _showNotificationTimesModal() async {
+    final result = await showModalBottomSheet<List<TimeOfDay>>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            void _addNotificationTime() async {
+              final TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+
+              if (pickedTime != null) {
+                setModalState(() {
+                  notificationTimes.add(pickedTime);
+                });
+              }
+            }
+
+            void _editNotificationTime(int index) async {
+              final TimeOfDay? pickedTime = await showTimePicker(
+                context: context,
+                initialTime: notificationTimes[index],
+              );
+
+              if (pickedTime != null) {
+                setModalState(() {
+                  notificationTimes[index] = pickedTime;
+                });
+              }
+            }
+
+            return Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Günlük Su Hatırlatma Bildirim Saatleri',
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: _addNotificationTime,
+                      ),
+                    ],
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: notificationTimes.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(notificationTimes[index].format(context)),
+                        trailing: IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            _editNotificationTime(index);
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        print(notificationTimes);
+                      },
+                      child: Text('Kaydet'),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        notificationTimes = result;
+      });
+      print(notificationTimes.map((time) => time.format(context)).toList());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -147,16 +248,33 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
           children: [
             Column(
               children: [
-                Container(
-                  height: MediaQuery.of(context).size.height / 10,
-                  child: Center(
-                    child: Text(
-                        "Su Hedefi " +
-                            _historyValue.toString() +
-                            "/" +
-                            _targetValue.toString(),
-                        style: TextStyle(fontSize: 22, color: Colors.black)),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      width: 20,
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height / 10,
+                      child: Center(
+                        child: Text(
+                            "Su Hedefi " +
+                                _historyValue.toString() +
+                                "/" +
+                                _targetValue.toString(),
+                            style:
+                                TextStyle(fontSize: 22, color: Colors.black)),
+                      ),
+                    ),
+                    Container(
+                      width: 20,
+                      child: IconButton(
+                        icon: Icon(Icons.notifications),
+                        onPressed: _showNotificationTimesModal,
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height / 10 * 4,

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/adminPages/storyPaylas.dart';
+import 'package:heybaby/pages/subpages/ayarlar.dart';
 import 'package:intl/intl.dart';
 
 class HesapSayfasi extends StatefulWidget {
@@ -296,6 +297,15 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                 },
               )
             : SizedBox(),
+        SizedBox(height: 14),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) {
+              return SettingsPage();
+            }));
+          },
+          child: Text('Ayarlar'),
+        ),
         SizedBox(height: 14),
         ElevatedButton(
           onPressed: widget.onSignOutPressed,
