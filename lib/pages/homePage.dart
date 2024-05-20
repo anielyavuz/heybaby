@@ -36,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
             NotificationController.onNotificationDisplayedMethod,
         onDismissActionReceivedMethod:
             NotificationController.onDismissActionReceivedMethod);
+
     // TODO: implement initState
     super.initState();
   }
