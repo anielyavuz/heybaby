@@ -589,6 +589,46 @@ class FirestoreFunctions {
     return returnCode;
   }
 
+  static Future<Map> suBildirimTakipSistemiOlustur(int suHedefi,
+      bool waterSummary, bool waterReminder, List waterReminderTimes) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      Map _tempMap = {};
+      _tempMap['suHedefi'] = suHedefi;
+      _tempMap['waterSummary'] = waterSummary;
+      _tempMap['waterReminder'] = waterReminder;
+
+      List<String> stringTimes = waterReminderTimes.map((time) {
+        final hour = time.hour.toString().padLeft(
+            2, '0'); // Saat değerini iki haneli olacak şekilde formatlar
+        final minute = time.minute.toString().padLeft(
+            2, '0'); // Dakika değerini iki haneli olacak şekilde formatlar
+        return '$hour:$minute';
+      }).toList();
+      _tempMap['waterReminderTimes'] = stringTimes;
+      print(_tempMap);
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"suBildirimTakipSistemi": _tempMap}).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
   // static Future<void> addIlacDataRecord(
   //   Map<String, dynamic> newData,
   // ) async {

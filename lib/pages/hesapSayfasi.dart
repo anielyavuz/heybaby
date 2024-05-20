@@ -6,6 +6,7 @@ import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/adminPages/storyPaylas.dart';
 import 'package:heybaby/pages/subpages/ayarlar.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class HesapSayfasi extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -23,6 +24,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
   final TextEditingController feedbackController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   String lastPeriodDate = "";
+  String _version = 'Unknown';
 
   String formatDate(String dateString) //yıl-ay-gün formatı gün-ay-yıl a çevirir
   {
@@ -36,10 +38,18 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
     return formattedDate;
   }
 
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _version = '${info.version}+${info.buildNumber}';
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     lastPeriodDate = widget.userData?['sonAdetTarihi'];
+    _initPackageInfo();
   }
 
   @override
@@ -88,6 +98,13 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           ),
         ),
         SizedBox(height: 16),
+        Text(
+          'App Version: $_version',
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.black,
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -281,14 +298,25 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                               },
                               child: Text("Story Paylaş"),
                             ),
-                            // ElevatedButton(
-                            //   onPressed: () {
-                            //     // Rapor çek butonuna basıldığında yapılacak işlemler
-                            //     Navigator.pop(context); // Popup'ı kapat
-                            //     // Rapor çek işlemleri
-                            //   },
-                            //   child: Text("Rapor Çek"),
-                            // ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                var _bildirimler = await AwesomeNotifications()
+                                    .listScheduledNotifications();
+                                List _bildirimIdleri = [];
+                                for (var _bildirim in _bildirimler) {
+                                  _bildirimIdleri.add(_bildirim.content!.id);
+                                }
+                                print(_bildirimIdleri);
+                                // Rapor çek butonuna basıldığında yapılacak işlemler
+                                // Navigator.pop(context); // Popup'ı kapat
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text(_bildirimIdleri.toString())),
+                                );
+                              },
+                              child: Text("Bildirim ID'lerini print et"),
+                            ),
                           ],
                         ),
                       );

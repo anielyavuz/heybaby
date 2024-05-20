@@ -122,9 +122,9 @@ class BildirimTakip {
       content: NotificationContent(
         id: _id,
         channelKey: "basic_channel",
-        title: "Su içme vakti. 🐳",
+        title: "Günlük Su Özetin Annecim 🐳",
         body:
-            "Bugünkü su hedefini doldurmamış görünüyorsun, hadi bir bardak su iç ve listene kaydet.😊",
+            "Bugünkü su hedefini doldurmamış görünüyorsun annecim. 🥲 Hadi biraz su iç ve listene kaydet.😊",
         wakeUpScreen: true,
       ),
       schedule: NotificationCalendar(
@@ -143,6 +143,56 @@ class BildirimTakip {
       // var t = await AwesomeNotifications().listScheduledNotifications();
       // print(t.length);
     });
+    // for (var _bildirim in t) {
+    //   print(_bildirim.content!.id);
+    //   print(_bildirim.content!.body);
+    // }
+  }
+
+  static Future<void> gunIciSuHatirlatici(
+    int _id,
+    int _hour,
+    int _minute,
+    int _day,
+    int _month,
+    int _year,
+  ) async {
+    String utcTimeZone =
+        await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    // print(
+    //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
+    try {
+      await AwesomeNotifications()
+          .createNotification(
+        content: NotificationContent(
+            id: _id,
+            channelKey: "basic_channel",
+            title: "Su İçme Vakti Annecim 🐳",
+            body:
+                "Ben biraz susadım da... 😇 Hadi bir bardak su iç ve listene kaydet. 🥤",
+            wakeUpScreen: true,
+            payload: {'page': 'suTakip'}),
+        schedule: NotificationCalendar(
+          timeZone: utcTimeZone,
+          day: _day,
+          month: _month,
+          year: _year,
+          hour: _hour,
+          minute: _minute,
+          second: 00,
+          repeats: true,
+        ),
+      )
+          .whenComplete(() async {
+        print(
+            "$_id için tanım yapıldı detaylar:  $_hour:$_minute $_day.$_month.$_year");
+        // var t = await AwesomeNotifications().listScheduledNotifications();
+        // print(t.length);
+      });
+    } catch (e) {
+      print("Bir hata oluştu: $e");
+    }
+
     // for (var _bildirim in t) {
     //   print(_bildirim.content!.id);
     //   print(_bildirim.content!.body);

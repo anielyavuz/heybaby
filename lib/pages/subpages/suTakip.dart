@@ -76,6 +76,172 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
   int _targetValue = 2000;
   int _count = 1;
   late List pastItems;
+
+//bildirim ve günlük su hedefi ekranı ayarları
+  List notificationTimes = [
+    TimeOfDay(hour: 10, minute: 0),
+    TimeOfDay(hour: 13, minute: 0),
+    TimeOfDay(hour: 18, minute: 0),
+  ];
+  int waterIntake = 2500;
+  bool waterReminder = true;
+  bool waterSummary = true;
+//bildirim ve günlük su hedefi ekranı ayarları
+
+  suBildirimleriniSil() async {
+    var _bildirimler =
+        await AwesomeNotifications().listScheduledNotifications();
+    List _bildirimIdleri = [];
+    for (var _bildirim in _bildirimler) {
+      _bildirimIdleri.add(_bildirim.content!.id);
+    }
+    int _kacGunlukSuBildirimi =
+        20; //kac gunluk su bildiriminin kurulacağı ile ilgili konu. Bu değerin yarısından küçük değerde uygulamaya girildiğinde bildirimler yenilenir.
+
+    DateTime _simdi = DateTime.now();
+    DateTime _endDate = _simdi.add(Duration(days: _kacGunlukSuBildirimi));
+
+    String _ay = "";
+    String _gun = "";
+    if (_simdi.month < 10) {
+      _ay = "0${_simdi.month}";
+    } else {
+      _ay = "${_simdi.month}";
+    }
+    if (_simdi.day < 10) {
+      _gun = "0${_simdi.day}";
+    } else {
+      _gun = "${_simdi.day}";
+    }
+    int _startDate = int.parse("${_simdi.year}${_ay}${_gun}");
+
+    String _ay2 = "";
+    String _gun2 = "";
+    if (_endDate.month < 10) {
+      _ay2 = "0${_endDate.month}";
+    } else {
+      _ay2 = "${_endDate.month}";
+    }
+    if (_endDate.day < 10) {
+      _gun2 = "0${_endDate.day}";
+    } else {
+      _gun2 = "${_endDate.day}";
+    }
+    int _finishDate = int.parse("${_endDate.year}${_ay2}${_gun2}");
+
+    List _SuBildirimIDLeri = [];
+    for (var _bildirimId in _bildirimIdleri) {
+      if (_startDate <= _bildirimId && _bildirimId < _finishDate) {
+        _SuBildirimIDLeri.add(_bildirimId);
+        // print("$_startDate,$_finishDate,$_bildirimId");
+      } else {}
+    }
+    for (var _SuBildirimID in _SuBildirimIDLeri) {
+      var _iptal = await AwesomeNotifications().cancel(_SuBildirimID);
+    }
+    print("Günlük su özet bildirimleri temizlendi...");
+  }
+
+  suBildiriminiOlustur() async {
+    bool _gunlukOzetBildirimAcikKapali = true;
+    if (widget.userData!.containsKey('suBildirimTakipSistemi')) {
+      setState(() {
+        _gunlukOzetBildirimAcikKapali =
+            widget.userData!['suBildirimTakipSistemi']['waterSummary'];
+      });
+    }
+    if (_gunlukOzetBildirimAcikKapali) {
+      var _bildirimler =
+          await AwesomeNotifications().listScheduledNotifications();
+      List _bildirimIdleri = [];
+      for (var _bildirim in _bildirimler) {
+        _bildirimIdleri.add(_bildirim.content!.id);
+      }
+      int _kacGunlukSuBildirimi =
+          20; //kac gunluk su bildiriminin kurulacağı ile ilgili konu. Bu değerin yarısından küçük değerde uygulamaya girildiğinde bildirimler yenilenir.
+      bool _kontrol = true;
+      DateTime _simdi = DateTime.now();
+      DateTime _endDate = _simdi.add(Duration(days: _kacGunlukSuBildirimi));
+
+      String _ay = "";
+      String _gun = "";
+      if (_simdi.month < 10) {
+        _ay = "0${_simdi.month}";
+      } else {
+        _ay = "${_simdi.month}";
+      }
+      if (_simdi.day < 10) {
+        _gun = "0${_simdi.day}";
+      } else {
+        _gun = "${_simdi.day}";
+      }
+      int _startDate = int.parse("${_simdi.year}${_ay}${_gun}");
+
+      String _ay2 = "";
+      String _gun2 = "";
+      if (_endDate.month < 10) {
+        _ay2 = "0${_endDate.month}";
+      } else {
+        _ay2 = "${_endDate.month}";
+      }
+      if (_endDate.day < 10) {
+        _gun2 = "0${_endDate.day}";
+      } else {
+        _gun2 = "${_endDate.day}";
+      }
+      int _finishDate = int.parse("${_endDate.year}${_ay2}${_gun2}");
+      int _totalSuBildirimSayisi = 0;
+      List _SuBildirimIDLeri = [];
+      for (var _bildirimId in _bildirimIdleri) {
+        if (_startDate <= _bildirimId && _bildirimId < _finishDate) {
+          _kontrol = false;
+          _totalSuBildirimSayisi += 1;
+          _SuBildirimIDLeri.add(_bildirimId);
+          // print("$_startDate,$_finishDate,$_bildirimId");
+        } else {}
+      }
+      // print(
+      //     "${_SuBildirimIDLeri.length} - ${_kacGunlukSuBildirimi / 2}  -Toplam su bildirimi sayisi ${_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2}");
+
+      if (_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2) {
+        for (var _SuBildirimID in _SuBildirimIDLeri) {
+          var _iptal = await AwesomeNotifications().cancel(_SuBildirimID);
+        }
+        DateTime now = DateTime.now();
+        DateTime endDate = now.add(Duration(
+            days:
+                _kacGunlukSuBildirimi)); // Mevcut tarihten itibaren 1 yıl ekleyin
+        for (DateTime date = now;
+            date.isBefore(endDate);
+            date = date.add(Duration(days: 1))) {
+          String _ay = "";
+          String _gun = "";
+          if (date.month < 10) {
+            _ay = "0${date.month}";
+          } else {
+            _ay = "${date.month}";
+          }
+          if (date.day < 10) {
+            _gun = "0${date.day}";
+          } else {
+            _gun = "${date.day}";
+          }
+          int _id = int.parse("${date.year}${_ay}${_gun}");
+          // print('${date.year}${date.month}${date.day}');
+
+          await BildirimTakip.gunlukSuIc(
+              _id, 19, 00, date.day, date.month, date.year);
+          await Future.delayed(Duration(milliseconds: 350));
+        }
+      } else {
+        print("Günlük su içme bildirimleri kurulu ve yeterli sayıdadır");
+      }
+    } else {
+      print("Bildirim ayarları kapalı silinecek..");
+      suBildirimleriniSil();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +250,29 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
         widget.userData!.containsKey('dataRecord') &&
         widget.userData!['dataRecord'] != null &&
         widget.userData!['dataRecord'].containsKey(widget.pageType)) {
+      if (widget.userData!.containsKey('suBildirimTakipSistemi')) {
+        setState(() {
+          waterIntake = widget.userData!['suBildirimTakipSistemi']['suHedefi'];
+          List stringTimes =
+              widget.userData!['suBildirimTakipSistemi']['waterReminderTimes'];
+
+          notificationTimes = stringTimes.map((time) {
+            final parts = time.split(':'); // String'i ':' karakterinden böler
+            final hour =
+                int.parse(parts[0]); // Saat kısmını alır ve integer'a çevirir
+            final minute =
+                int.parse(parts[1]); // Dakika kısmını alır ve integer'a çevirir
+            return TimeOfDay(hour: hour, minute: minute);
+          }).toList();
+
+          waterReminder =
+              widget.userData!['suBildirimTakipSistemi']['waterReminder'];
+          waterSummary =
+              widget.userData!['suBildirimTakipSistemi']['waterSummary'];
+          _targetValue = waterIntake;
+        });
+      }
+
       var historyData = widget.userData!['dataRecord'][widget.pageType];
 
       if (historyData is List) {
@@ -116,12 +305,12 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
 
           if (_historyValue +
                   ((item['count']).toInt() * (item['amount']).toInt()) <=
-              2000) {
+              _targetValue) {
             var _tempValue = _historyValue +
                 ((item['count']).toInt() * (item['amount']).toInt());
             _historyValue = _tempValue.toInt();
           } else {
-            _historyValue = 2000;
+            _historyValue = _targetValue;
           }
         });
       }
@@ -139,12 +328,6 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
       print("refresh");
     });
   }
-
-  List<TimeOfDay> notificationTimes = [
-    TimeOfDay(hour: 10, minute: 0),
-    TimeOfDay(hour: 13, minute: 0),
-    TimeOfDay(hour: 18, minute: 0),
-  ];
 
   Future<void> _showNotificationTimesModal() async {
     final result = await showModalBottomSheet<List<TimeOfDay>>(
@@ -183,42 +366,379 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text(
+                    'Su Takip Ayarlarınız',
+                    style: TextStyle(
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Günlük Su Hatırlatma Bildirim Saatleri',
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: _addNotificationTime,
+                      Text('Günlük Su Hedefi'),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.remove),
+                            onPressed: () {
+                              setModalState(() {
+                                if (waterIntake > 100) waterIntake -= 100;
+                              });
+                            },
+                          ),
+                          Text('$waterIntake ml'),
+                          IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              setModalState(() {
+                                waterIntake += 100;
+                              });
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: notificationTimes.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(notificationTimes[index].format(context)),
-                        trailing: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            _editNotificationTime(index);
-                          },
-                        ),
-                      );
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Günlük Özet Bildirimi'),
+                      Checkbox(
+                        value: waterSummary,
+                        onChanged: (bool? value) {
+                          setModalState(() {
+                            waterSummary = value ?? true;
+                          });
+
+                          setState(() {
+                            waterSummary = value ?? true;
+                          });
+                        },
+                      ),
+                    ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Gün İçi Hatırlatıcıları'),
+                      Checkbox(
+                        value: waterReminder,
+                        onChanged: (bool? value) {
+                          setModalState(() {
+                            waterReminder = value ?? true;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  waterReminder
+                      ? Container(
+                          decoration: BoxDecoration(
+                            // color: Colors.blue, // Arka plan rengi
+                            borderRadius:
+                                BorderRadius.circular(10), // Kenar yuvarlatma
+                            border: Border.all(
+                                color: Colors.black), // Kenar çizgisi
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 8),
+                                child: Text('Saat'),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      ).then((pickedTime) {
+                                        if (pickedTime != null) {
+                                          setModalState(() {
+                                            notificationTimes.add(pickedTime);
+                                            notificationTimes.sort((a, b) =>
+                                                a.hour.compareTo(b.hour));
+                                          });
+                                          // setState(() {
+                                          //   notificationTimes.add(pickedTime);
+                                          // });
+                                          print(notificationTimes);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  Row(
+                                    children: notificationTimes
+                                        .map(
+                                          (time) => Padding(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Color.fromARGB(
+                                                      255,
+                                                      153,
+                                                      51,
+                                                      255), // Çerçeve rengi
+                                                  width:
+                                                      1.0, // Çerçeve kalınlığı
+                                                ),
+                                                borderRadius: BorderRadius.circular(
+                                                    8.0), // Opsiyonel: Köşelerin yuvarlaklığı
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8),
+                                                    child: GestureDetector(
+                                                      child: Text(
+                                                        '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                      onTap: () {
+                                                        print(
+                                                            notificationTimes);
+                                                        showTimePicker(
+                                                          context: context,
+                                                          initialTime: time,
+                                                        ).then((pickedTime) {
+                                                          if (pickedTime !=
+                                                              null) {
+                                                            setModalState(() {
+                                                              notificationTimes
+                                                                  .remove(time);
+                                                              notificationTimes
+                                                                  .add(
+                                                                      pickedTime);
+                                                              notificationTimes
+                                                                  .sort((a, b) => a
+                                                                      .hour
+                                                                      .compareTo(
+                                                                          b.hour));
+                                                            });
+
+                                                            print(
+                                                                notificationTimes);
+                                                          }
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 38,
+                                                    width: 40,
+                                                    child: IconButton(
+                                                      iconSize: 20,
+                                                      icon: Icon(
+                                                        Icons.remove_circle,
+                                                        // size: 20,
+                                                      ),
+                                                      onPressed: () {
+                                                        setModalState(() {
+                                                          notificationTimes
+                                                              .remove(time);
+                                                        });
+                                                        notificationTimes.sort(
+                                                            (a, b) => a.hour
+                                                                .compareTo(
+                                                                    b.hour));
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+
+                      // ListView.builder(
+                      //     shrinkWrap: true,
+                      //     itemCount: notificationTimes.length,
+                      //     itemBuilder: (context, index) {
+                      //       return ListTile(
+                      //         title: Text(
+                      //             notificationTimes[index].format(context)),
+                      //         trailing: IconButton(
+                      //           icon: Icon(Icons.edit),
+                      //           onPressed: () {
+                      //             _editNotificationTime(index);
+                      //           },
+                      //         ),
+                      //       );
+                      //     },
+                      //   )
+
+                      : SizedBox(),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        //var olan saatlik bildirimleri önce temizle
+                        var _bildirimler = await AwesomeNotifications()
+                            .listScheduledNotifications();
+                        List _bildirimIdleri = [];
+                        // print("AAAAAAAA");
+                        for (var _bildirim in _bildirimler) {
+                          if (_bildirim.content!.id! > 1000000 &&
+                              _bildirim.content!.id! < 1002400) {
+                            _bildirimIdleri.add(_bildirim.content!.id);
+                          }
+                        }
+                        for (var _bildirimId in _bildirimIdleri) {
+                          var _iptal =
+                              await AwesomeNotifications().cancel(_bildirimId);
+                          print("$_bildirimId ID'li günlük su temizlendi.");
+                        }
+
+                        //var olan saatlik bildirimleri önce temizle
+
+                        if (!waterReminder) {
+                          setModalState(() {
+                            notificationTimes = [];
+                          });
+                        } else {
+                          var _bildirimler = await AwesomeNotifications()
+                              .listScheduledNotifications();
+                          List _bildirimIdleri = [];
+                          // print("AAAAAAAA");
+                          for (var _bildirim in _bildirimler) {
+                            // print(_bildirim.content!.id);
+                          }
+                          print(notificationTimes);
+
+                          for (var i = 0; i < notificationTimes.length; i++) {
+                            var time = notificationTimes[i];
+                            var simdi = DateTime.now();
+                            var hours = time.hour.toString().padLeft(2, '0');
+                            var minutes =
+                                time.minute.toString().padLeft(2, '0');
+                            var formattedTimeString = "100${hours}${minutes}";
+                            var formattedTime = int.parse(formattedTimeString);
+                            print(formattedTime);
+                            print(time);
+                            print(simdi);
+                            BildirimTakip.gunIciSuHatirlatici(
+                                formattedTime,
+                                time.hour,
+                                time.minute,
+                                simdi.day,
+                                simdi.month,
+                                simdi.year);
+                          }
+
+                          var _bildirimler2 = await AwesomeNotifications()
+                              .listScheduledNotifications();
+
+                          // print("AAAAAAAA");
+                          for (var _bildirim in _bildirimler2) {
+                            // print(_bildirim.content!.id);
+                          }
+                          print(notificationTimes);
+                        }
+                        if (waterSummary) {
+                          suBildiriminiOlustur();
+                        } else {
+                          suBildirimleriniSil();
+                        }
+                        var _result = await FirestoreFunctions
+                            .suBildirimTakipSistemiOlustur(waterIntake,
+                                waterSummary, waterReminder, notificationTimes);
                         Navigator.pop(context);
-                        print(notificationTimes);
+
+                        setState(() {
+                          _targetValue = waterIntake;
+                        });
+                        // if (_result['status']) {
+                        //   print(
+                        //       'Su bildirim ayarlarınız başarılı olarak kaydedildi.');
+
+                        //   // ScaffoldMessenger.of(context).showSnackBar(
+                        //   //   SnackBar(
+                        //   //     content: Text(
+                        //   //       'Su bildirim ayarlarınız başarılı olarak kaydedildi.',
+                        //   //       style: TextStyle(
+                        //   //         fontWeight: FontWeight.normal,
+                        //   //         fontSize: 16,
+                        //   //         color: Colors.black,
+                        //   //       ),
+                        //   //     ),
+                        //   //     // action: SnackBarAction(
+                        //   //     //   label: 'Aktiviteler',
+                        //   //     //   onPressed: () {
+                        //   //     //     print('');
+                        //   //     //   },
+                        //   //     // ),
+                        //   //     backgroundColor: Color.fromARGB(255, 215, 193,
+                        //   //         228), // Snackbar arka plan rengi
+                        //   //     duration: Duration(
+                        //   //         milliseconds:
+                        //   //             1500), // Snackbar gösterim süresi
+                        //   //     behavior: SnackBarBehavior
+                        //   //         .floating, // Snackbar davranışı
+                        //   //     shape: RoundedRectangleBorder(
+                        //   //       // Snackbar şekli
+                        //   //       borderRadius: BorderRadius.circular(10),
+                        //   //     ),
+                        //   //     elevation: 4, // Snackbar yükseltilmesi
+                        //   //     margin: EdgeInsets.all(
+                        //   //         10), // Snackbar kenar boşlukları
+                        //   //   ),
+                        //   // );
+                        // } else {
+                        //   print(
+                        //     'Ayarlarınız kaydedilirken bir sorun oluştu. ${_result['value']}',
+                        //   );
+
+                        //   // ScaffoldMessenger.of(context).showSnackBar(
+                        //   //   SnackBar(
+                        //   //     content: Text(
+                        //   //       'Ayarlarınız kaydedilirken bir sorun oluştu. ${_result['value']}',
+                        //   //       style: TextStyle(
+                        //   //         fontWeight: FontWeight.normal,
+                        //   //         fontSize: 16,
+                        //   //         color: Colors.black,
+                        //   //       ),
+                        //   //     ),
+                        //   //     // action: SnackBarAction(
+                        //   //     //   label: 'Aktiviteler',
+                        //   //     //   onPressed: () {
+                        //   //     //     print('');
+                        //   //     //   },
+                        //   //     // ),
+                        //   //     backgroundColor: Color.fromARGB(255, 215, 193,
+                        //   //         228), // Snackbar arka plan rengi
+                        //   //     duration: Duration(
+                        //   //         milliseconds:
+                        //   //             1500), // Snackbar gösterim süresi
+                        //   //     behavior: SnackBarBehavior
+                        //   //         .floating, // Snackbar davranışı
+                        //   //     shape: RoundedRectangleBorder(
+                        //   //       // Snackbar şekli
+                        //   //       borderRadius: BorderRadius.circular(10),
+                        //   //     ),
+                        //   //     elevation: 4, // Snackbar yükseltilmesi
+                        //   //     margin: EdgeInsets.all(
+                        //   //         10), // Snackbar kenar boşlukları
+                        //   //   ),
+                        //   // );
+                        // }
                       },
                       child: Text('Kaydet'),
                     ),
@@ -252,7 +772,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
-                      width: 20,
+                      width: 70,
+                      height: 60,
                       child: SizedBox(),
                     ),
                     Container(
@@ -268,9 +789,10 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                       ),
                     ),
                     Container(
-                      width: 20,
+                      width: 70,
+                      height: 60,
                       child: IconButton(
-                        icon: Icon(Icons.notifications),
+                        icon: Icon(Icons.settings),
                         onPressed: _showNotificationTimesModal,
                       ),
                     ),
@@ -510,7 +1032,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                 MaterialPageRoute(builder: (_) {
                               return WaterTrackingHistory(
                                 pastItems: pastItems,
-                                dailyPurpose: 2000,
+                                dailyPurpose: _targetValue,
                               );
                             }));
                           },

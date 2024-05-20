@@ -27,7 +27,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     // print(jsonList);
   }
 
-  suBildiriminiOlustur() async {
+  suBildirimleriniSil() async {
     var _bildirimler =
         await AwesomeNotifications().listScheduledNotifications();
     List _bildirimIdleri = [];
@@ -36,7 +36,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     }
     int _kacGunlukSuBildirimi =
         20; //kac gunluk su bildiriminin kurulacağı ile ilgili konu. Bu değerin yarısından küçük değerde uygulamaya girildiğinde bildirimler yenilenir.
-    bool _kontrol = true;
+
     DateTime _simdi = DateTime.now();
     DateTime _endDate = _simdi.add(Duration(days: _kacGunlukSuBildirimi));
 
@@ -67,51 +67,117 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
       _gun2 = "${_endDate.day}";
     }
     int _finishDate = int.parse("${_endDate.year}${_ay2}${_gun2}");
-    int _totalSuBildirimSayisi = 0;
+
     List _SuBildirimIDLeri = [];
     for (var _bildirimId in _bildirimIdleri) {
       if (_startDate <= _bildirimId && _bildirimId < _finishDate) {
-        _kontrol = false;
-        _totalSuBildirimSayisi += 1;
         _SuBildirimIDLeri.add(_bildirimId);
         // print("$_startDate,$_finishDate,$_bildirimId");
       } else {}
     }
-    // print(
-    //     "${_SuBildirimIDLeri.length} - ${_kacGunlukSuBildirimi / 2}  -Toplam su bildirimi sayisi ${_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2}");
+    for (var _SuBildirimID in _SuBildirimIDLeri) {
+      var _iptal = await AwesomeNotifications().cancel(_SuBildirimID);
+    }
+    print("Günlük su özet bildirimleri temizlendi...");
+  }
 
-    if (_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2) {
-      for (var _SuBildirimID in _SuBildirimIDLeri) {
-        var _iptal = await AwesomeNotifications().cancel(_SuBildirimID);
+  suBildiriminiOlustur() async {
+    bool _gunlukOzetBildirimAcikKapali = true;
+    if (widget.userData!.containsKey('suBildirimTakipSistemi')) {
+      setState(() {
+        _gunlukOzetBildirimAcikKapali =
+            widget.userData!['suBildirimTakipSistemi']['waterSummary'];
+      });
+    }
+    if (_gunlukOzetBildirimAcikKapali) {
+      var _bildirimler =
+          await AwesomeNotifications().listScheduledNotifications();
+      List _bildirimIdleri = [];
+      for (var _bildirim in _bildirimler) {
+        _bildirimIdleri.add(_bildirim.content!.id);
       }
-      DateTime now = DateTime.now();
-      DateTime endDate = now.add(Duration(
-          days:
-              _kacGunlukSuBildirimi)); // Mevcut tarihten itibaren 1 yıl ekleyin
-      for (DateTime date = now;
-          date.isBefore(endDate);
-          date = date.add(Duration(days: 1))) {
-        String _ay = "";
-        String _gun = "";
-        if (date.month < 10) {
-          _ay = "0${date.month}";
-        } else {
-          _ay = "${date.month}";
-        }
-        if (date.day < 10) {
-          _gun = "0${date.day}";
-        } else {
-          _gun = "${date.day}";
-        }
-        int _id = int.parse("${date.year}${_ay}${_gun}");
-        // print('${date.year}${date.month}${date.day}');
+      int _kacGunlukSuBildirimi =
+          20; //kac gunluk su bildiriminin kurulacağı ile ilgili konu. Bu değerin yarısından küçük değerde uygulamaya girildiğinde bildirimler yenilenir.
+      bool _kontrol = true;
+      DateTime _simdi = DateTime.now();
+      DateTime _endDate = _simdi.add(Duration(days: _kacGunlukSuBildirimi));
 
-        await BildirimTakip.gunlukSuIc(
-            _id, 13, 27, date.day, date.month, date.year);
-        await Future.delayed(Duration(milliseconds: 350));
+      String _ay = "";
+      String _gun = "";
+      if (_simdi.month < 10) {
+        _ay = "0${_simdi.month}";
+      } else {
+        _ay = "${_simdi.month}";
+      }
+      if (_simdi.day < 10) {
+        _gun = "0${_simdi.day}";
+      } else {
+        _gun = "${_simdi.day}";
+      }
+      int _startDate = int.parse("${_simdi.year}${_ay}${_gun}");
+
+      String _ay2 = "";
+      String _gun2 = "";
+      if (_endDate.month < 10) {
+        _ay2 = "0${_endDate.month}";
+      } else {
+        _ay2 = "${_endDate.month}";
+      }
+      if (_endDate.day < 10) {
+        _gun2 = "0${_endDate.day}";
+      } else {
+        _gun2 = "${_endDate.day}";
+      }
+      int _finishDate = int.parse("${_endDate.year}${_ay2}${_gun2}");
+      int _totalSuBildirimSayisi = 0;
+      List _SuBildirimIDLeri = [];
+      for (var _bildirimId in _bildirimIdleri) {
+        if (_startDate <= _bildirimId && _bildirimId < _finishDate) {
+          _kontrol = false;
+          _totalSuBildirimSayisi += 1;
+          _SuBildirimIDLeri.add(_bildirimId);
+          // print("$_startDate,$_finishDate,$_bildirimId");
+        } else {}
+      }
+      // print(
+      //     "${_SuBildirimIDLeri.length} - ${_kacGunlukSuBildirimi / 2}  -Toplam su bildirimi sayisi ${_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2}");
+
+      if (_SuBildirimIDLeri.length < _kacGunlukSuBildirimi / 2) {
+        for (var _SuBildirimID in _SuBildirimIDLeri) {
+          var _iptal = await AwesomeNotifications().cancel(_SuBildirimID);
+        }
+        DateTime now = DateTime.now();
+        DateTime endDate = now.add(Duration(
+            days:
+                _kacGunlukSuBildirimi)); // Mevcut tarihten itibaren 1 yıl ekleyin
+        for (DateTime date = now;
+            date.isBefore(endDate);
+            date = date.add(Duration(days: 1))) {
+          String _ay = "";
+          String _gun = "";
+          if (date.month < 10) {
+            _ay = "0${date.month}";
+          } else {
+            _ay = "${date.month}";
+          }
+          if (date.day < 10) {
+            _gun = "0${date.day}";
+          } else {
+            _gun = "${date.day}";
+          }
+          int _id = int.parse("${date.year}${_ay}${_gun}");
+          // print('${date.year}${date.month}${date.day}');
+
+          await BildirimTakip.gunlukSuIc(
+              _id, 19, 00, date.day, date.month, date.year);
+          await Future.delayed(Duration(milliseconds: 350));
+        }
+      } else {
+        print("Günlük su içme bildirimleri kurulu ve yeterli sayıdadır");
       }
     } else {
-      print("Günlük su içme bildirimleri kurulu ve yeterli sayıdadır");
+      print("Bildirim ayarları kapalı silinecek..");
+      suBildirimleriniSil();
     }
   }
 
