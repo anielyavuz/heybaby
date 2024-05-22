@@ -15,7 +15,6 @@ import 'package:heybaby/pages/kesfetPage.dart';
 import 'package:heybaby/pages/listelerPage.dart';
 import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/notlarPage.dart';
-import 'package:heybaby/pages/subpages/heybabyai.dart';
 import 'package:heybaby/pages/takvimPage.dart';
 import 'package:lottie/lottie.dart';
 
@@ -84,19 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (userData == null || _shouldFetchUserData) {
       _fetchUserData();
       _systemData();
-    }
-
-    void _aiQuestion(String question) async {
-      try {
-        final data = await HeyBabyAI().fetchResponse(question);
-        setState(() {
-          _response = data;
-        });
-      } catch (e) {
-        setState(() {
-          _response = "Error fetching data";
-        });
-      }
     }
 
     return Scaffold(
@@ -201,8 +187,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         child: FloatingActionButton(
                           onPressed: () {
-                            _aiQuestion("Hava nasıl?");
-                            // _showChatModalBottomSheet(context);
+                            // _aiQuestion("Hava nasıl?");
+                            _showChatModalBottomSheet(context);
                           },
                           child: Container(
                             width: 56.0, // Genişlik ayarı
