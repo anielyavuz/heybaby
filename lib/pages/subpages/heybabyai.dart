@@ -3,8 +3,7 @@ import 'dart:convert';
 
 class HeyBabyAI {
   final String apiUrl = "https://chatgpt.com/g/g-SKzOU1SsH-heybaby-ai";
-  final String apiKey =
-      "sk-proj-gCg363UQD8WAH9SkvbmVT3BlbkFJbjT6WG1YkYMQO213nfMZ";
+  final String apiKey = "KEY";
 
   Future<String> fetchResponse(String question) async {
     var client = http.Client();
