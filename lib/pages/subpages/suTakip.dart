@@ -442,130 +442,136 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                             border: Border.all(
                                 color: Colors.black), // Kenar çizgisi
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(left: 8),
-                                child: Text('Saat'),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.add),
-                                    onPressed: () {
-                                      showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      ).then((pickedTime) {
-                                        if (pickedTime != null) {
-                                          setModalState(() {
-                                            notificationTimes.add(pickedTime);
-                                            notificationTimes.sort((a, b) =>
-                                                a.hour.compareTo(b.hour));
-                                          });
-                                          // setState(() {
-                                          //   notificationTimes.add(pickedTime);
-                                          // });
-                                          print(notificationTimes);
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  Row(
-                                    children: notificationTimes
-                                        .map(
-                                          (time) => Padding(
-                                            padding: const EdgeInsets.all(5),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Color.fromARGB(
-                                                      255,
-                                                      153,
-                                                      51,
-                                                      255), // Çerçeve rengi
-                                                  width:
-                                                      1.0, // Çerçeve kalınlığı
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Text('Saat'),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.add),
+                                      onPressed: () {
+                                        showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.now(),
+                                        ).then((pickedTime) {
+                                          if (pickedTime != null) {
+                                            setModalState(() {
+                                              notificationTimes.add(pickedTime);
+                                              notificationTimes.sort((a, b) =>
+                                                  a.hour.compareTo(b.hour));
+                                            });
+                                            // setState(() {
+                                            //   notificationTimes.add(pickedTime);
+                                            // });
+                                            print(notificationTimes);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    Row(
+                                      children: notificationTimes
+                                          .map(
+                                            (time) => Padding(
+                                              padding: const EdgeInsets.all(5),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Color.fromARGB(
+                                                        255,
+                                                        153,
+                                                        51,
+                                                        255), // Çerçeve rengi
+                                                    width:
+                                                        1.0, // Çerçeve kalınlığı
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0), // Opsiyonel: Köşelerin yuvarlaklığı
                                                 ),
-                                                borderRadius: BorderRadius.circular(
-                                                    8.0), // Opsiyonel: Köşelerin yuvarlaklığı
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8),
-                                                    child: GestureDetector(
-                                                      child: Text(
-                                                        '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
-                                                        style: TextStyle(
-                                                            fontSize: 16),
-                                                      ),
-                                                      onTap: () {
-                                                        print(
-                                                            notificationTimes);
-                                                        showTimePicker(
-                                                          context: context,
-                                                          initialTime: time,
-                                                        ).then((pickedTime) {
-                                                          if (pickedTime !=
-                                                              null) {
-                                                            setModalState(() {
-                                                              notificationTimes
-                                                                  .remove(time);
-                                                              notificationTimes
-                                                                  .add(
-                                                                      pickedTime);
-                                                              notificationTimes
-                                                                  .sort((a, b) => a
-                                                                      .hour
-                                                                      .compareTo(
-                                                                          b.hour));
-                                                            });
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8),
+                                                      child: GestureDetector(
+                                                        child: Text(
+                                                          '${time.hour}:${time.minute.toString().padLeft(2, '0')}',
+                                                          style: TextStyle(
+                                                              fontSize: 16),
+                                                        ),
+                                                        onTap: () {
+                                                          print(
+                                                              notificationTimes);
+                                                          showTimePicker(
+                                                            context: context,
+                                                            initialTime: time,
+                                                          ).then((pickedTime) {
+                                                            if (pickedTime !=
+                                                                null) {
+                                                              setModalState(() {
+                                                                notificationTimes
+                                                                    .remove(
+                                                                        time);
+                                                                notificationTimes
+                                                                    .add(
+                                                                        pickedTime);
+                                                                notificationTimes
+                                                                    .sort((a, b) => a
+                                                                        .hour
+                                                                        .compareTo(
+                                                                            b.hour));
+                                                              });
 
-                                                            print(
-                                                                notificationTimes);
-                                                          }
-                                                        });
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    height: 38,
-                                                    width: 40,
-                                                    child: IconButton(
-                                                      iconSize: 20,
-                                                      icon: Icon(
-                                                        Icons.remove_circle,
-                                                        // size: 20,
+                                                              print(
+                                                                  notificationTimes);
+                                                            }
+                                                          });
+                                                        },
                                                       ),
-                                                      onPressed: () {
-                                                        setModalState(() {
-                                                          notificationTimes
-                                                              .remove(time);
-                                                        });
-                                                        notificationTimes.sort(
-                                                            (a, b) => a.hour
-                                                                .compareTo(
-                                                                    b.hour));
-                                                      },
                                                     ),
-                                                  ),
-                                                ],
+                                                    Container(
+                                                      height: 38,
+                                                      width: 40,
+                                                      child: IconButton(
+                                                        iconSize: 20,
+                                                        icon: Icon(
+                                                          Icons.remove_circle,
+                                                          // size: 20,
+                                                        ),
+                                                        onPressed: () {
+                                                          setModalState(() {
+                                                            notificationTimes
+                                                                .remove(time);
+                                                          });
+                                                          notificationTimes
+                                                              .sort((a, b) => a
+                                                                  .hour
+                                                                  .compareTo(
+                                                                      b.hour));
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                          )
+                                          .toList(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         )
 
@@ -590,6 +596,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
+                        Navigator.pop(context);
                         //var olan saatlik bildirimleri önce temizle
                         var _bildirimler = await AwesomeNotifications()
                             .listScheduledNotifications();
@@ -604,6 +611,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                         for (var _bildirimId in _bildirimIdleri) {
                           var _iptal =
                               await AwesomeNotifications().cancel(_bildirimId);
+                          await Future.delayed(Duration(milliseconds: 350));
                           print("$_bildirimId ID'li günlük su temizlendi.");
                         }
 
@@ -641,16 +649,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                 simdi.day,
                                 simdi.month,
                                 simdi.year);
-                          }
 
-                          var _bildirimler2 = await AwesomeNotifications()
-                              .listScheduledNotifications();
-
-                          // print("AAAAAAAA");
-                          for (var _bildirim in _bildirimler2) {
-                            // print(_bildirim.content!.id);
+                            await Future.delayed(Duration(milliseconds: 350));
                           }
-                          print(notificationTimes);
                         }
                         if (waterSummary) {
                           suBildiriminiOlustur();
@@ -660,7 +661,6 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                         var _result = await FirestoreFunctions
                             .suBildirimTakipSistemiOlustur(waterIntake,
                                 waterSummary, waterReminder, notificationTimes);
-                        Navigator.pop(context);
 
                         setState(() {
                           _targetValue = waterIntake;

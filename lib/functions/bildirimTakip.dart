@@ -138,8 +138,8 @@ class BildirimTakip {
       ),
     )
         .whenComplete(() async {
-      print(
-          "$_id için tanım yapıldı detaylar:  $_hour:$_minute $_day.$_month.$_year");
+      // print(
+      //     "$_id için tanım yapıldı detaylar:  $_hour:$_minute $_day.$_month.$_year");
       // var t = await AwesomeNotifications().listScheduledNotifications();
       // print(t.length);
     });

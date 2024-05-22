@@ -15,6 +15,7 @@ import 'package:heybaby/pages/kesfetPage.dart';
 import 'package:heybaby/pages/listelerPage.dart';
 import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/notlarPage.dart';
+import 'package:heybaby/pages/subpages/heybabyai.dart';
 import 'package:heybaby/pages/takvimPage.dart';
 import 'package:lottie/lottie.dart';
 
@@ -50,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
   int selectedWeek = 4;
+  String _response = "";
   List<String> drawerItems = [
     'Bildirim 1',
     'Bildirim 2',
@@ -70,13 +72,31 @@ class _MyHomePageState extends State<MyHomePage> {
     // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
     // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
     // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
+    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
+    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
   ];
+
+  Offset _floatingActionButtonOffset =
+      Offset(320.0, 600.0); // Default sağ alt köşe, 100 px yukarıda
 
   @override
   Widget build(BuildContext context) {
     if (userData == null || _shouldFetchUserData) {
       _fetchUserData();
       _systemData();
+    }
+
+    void _aiQuestion(String question) async {
+      try {
+        final data = await HeyBabyAI().fetchResponse(question);
+        setState(() {
+          _response = data;
+        });
+      } catch (e) {
+        setState(() {
+          _response = "Error fetching data";
+        });
+      }
     }
 
     return Scaffold(
@@ -126,7 +146,82 @@ class _MyHomePageState extends State<MyHomePage> {
         //   ),
         // ),
 
-        body: SafeArea(child: _buildBody()),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              _buildBody(),
+              Positioned(
+                left: _floatingActionButtonOffset.dx,
+                top: _floatingActionButtonOffset.dy,
+                child: _AIStatus
+                    ? Draggable(
+                        feedback: FloatingActionButton(
+                          onPressed: () {},
+                          child: Container(
+                            width: 66.0, // Genişlik ayarı
+                            height: 66.0, // Yükseklik ayarı
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Lottie.asset(
+                                // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                                "assets/lottie/robotWelcome.json",
+                                fit: BoxFit.fill),
+                          ),
+                        ),
+                        childWhenDragging: Container(),
+                        onDragEnd: (details) {
+                          setState(() {
+                            // Ekran boyutlarını al
+                            final RenderBox renderBox =
+                                context.findRenderObject() as RenderBox;
+                            final Size screenSize = renderBox.size;
+
+                            // FloatingActionButton boyutlarını al
+                            final double fabWidth = 56.0;
+                            final double fabHeight = 56.0;
+
+                            // Yeni konumun sınırlar içinde kalmasını sağla
+                            double newX = details.offset.dx;
+                            double newY = details.offset.dy;
+
+                            // Sağ-sol sınırları
+                            if (newX < 0) newX = 0;
+                            if (newX + fabWidth > screenSize.width)
+                              newX = screenSize.width - fabWidth;
+
+                            // Alt-üst sınırları (ekranın 1/4'ünden fazla gitmesin)
+                            double minY = screenSize.height * 0.05;
+                            double maxY = screenSize.height * 0.75 - fabHeight;
+                            if (newY < minY) newY = minY;
+                            if (newY > maxY) newY = maxY;
+
+                            _floatingActionButtonOffset = Offset(newX, newY);
+                          });
+                        },
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            _aiQuestion("Hava nasıl?");
+                            // _showChatModalBottomSheet(context);
+                          },
+                          child: Container(
+                            width: 56.0, // Genişlik ayarı
+                            height: 56.0, // Yükseklik ayarı
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Lottie.asset(
+                                // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                                "assets/lottie/robotWelcome.json",
+                                fit: BoxFit.fill),
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
+              ),
+            ],
+          ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: const Color.fromARGB(255, 0, 0, 0),
           selectedItemColor: Colors.deepPurple,
@@ -155,35 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Hesap',
             ),
           ],
-        ),
-        floatingActionButton: _AIStatus
-            ? FloatingActionButton(
-                onPressed: () async {
-                  // BildirimTakip().bildirimKur();
-                  // NotificationSetup.scheduleWeeklyNotification(1);
-                  // AwesomeNotifications().createNotification(
-                  //   content: NotificationContent(
-                  //       id: 1,
-                  //       channelKey: "basic_channel",
-                  //       title: "Title",
-                  //       body: "This is a body"),
-                  // );
-                  _showChatModalBottomSheet(context);
-                },
-                child: Container(
-                  width: 56.0, // Genişlik ayarı
-                  height: 56.0, // Yükseklik ayarı
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-
-                  child: Lottie.asset(
-                      // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
-                      "assets/lottie/robotWelcome.json",
-                      fit: BoxFit.fill),
-                ),
-              )
-            : SizedBox());
+        ));
   }
 
   void _onItemTapped(int index) {
