@@ -198,4 +198,46 @@ class BildirimTakip {
     //   print(_bildirim.content!.body);
     // }
   }
+
+  static Future<void> aktiviteAlarm(int _id, int _hour, int _minute, int _day,
+      int _month, int _year, String _aktivite) async {
+    String utcTimeZone =
+        await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    // print(
+    //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
+    try {
+      await AwesomeNotifications()
+          .createNotification(
+        content: NotificationContent(
+            id: _id,
+            channelKey: "basic_channel",
+            title: "Aktivite Vakti Annecim 🗓️",
+            body: "$_aktivite aktivitesi için planladığın zaman geldi. 😇",
+            wakeUpScreen: true,
+            payload: {'page': 'suTakip'}),
+        schedule: NotificationCalendar(
+          timeZone: utcTimeZone,
+          day: _day,
+          month: _month,
+          year: _year,
+          hour: _hour,
+          minute: _minute,
+          second: 00,
+        ),
+      )
+          .whenComplete(() async {
+        print(
+            "$_id için tanım yapıldı detaylar:  $_hour:$_minute $_day.$_month.$_year");
+        // var t = await AwesomeNotifications().listScheduledNotifications();
+        // print(t.length);
+      });
+    } catch (e) {
+      print("Bir hata oluştu: $e");
+    }
+
+    // for (var _bildirim in t) {
+    //   print(_bildirim.content!.id);
+    //   print(_bildirim.content!.body);
+    // }
+  }
 }

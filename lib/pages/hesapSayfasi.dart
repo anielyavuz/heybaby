@@ -105,56 +105,6 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             color: Colors.black,
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Son regl tarihi: ${formatDate(lastPeriodDate)}',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.black,
-              ),
-            ),
-            GestureDetector(
-              onTap: () async {
-                print("Test");
-                final DateTime? picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.parse(lastPeriodDate),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
-                );
-                if (picked != null &&
-                    DateFormat('yyyy-MM-dd').format(picked) != lastPeriodDate) {
-                  setState(() {
-                    print(lastPeriodDate);
-                    lastPeriodDate = DateFormat('yyyy-MM-dd').format(picked);
-                    print(lastPeriodDate);
-                  });
-                  var sonuc = await FirestoreFunctions.sonAdetTarihiGuncelle(
-                      lastPeriodDate);
-
-                  var _bildirimler =
-                      await AwesomeNotifications().listScheduledNotifications();
-                  List _bildirimIdleri = [];
-                  List _haftalikBildirimler = [];
-                  for (var _bildirim in _bildirimler) {
-                    if (_bildirim.content!.id! < 1999) {
-                      var a = await AwesomeNotifications()
-                          .cancel(_bildirim.content!.id!)
-                          .whenComplete(() => print(
-                              "${_bildirim.content!.id!}  id'li bildirim silindi"));
-                    }
-                  }
-                }
-              },
-              child: Icon(
-                Icons.settings,
-                color: const Color.fromARGB(255, 139, 87, 149),
-              ),
-            )
-          ],
-        ),
         SizedBox(
           height: 16,
         ),
@@ -178,8 +128,9 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
         TextField(
           maxLines: 2,
           controller: noteController,
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
-            hintText: 'Geri bildiriminizi buraya yazın',
+            hintText: 'Geri bildirim ve önerilerinizi bize yazın 😊',
             border: OutlineInputBorder(),
           ),
         ),
@@ -187,6 +138,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
         ElevatedButton(
           child: Text('Geri Bildirim Gönder'),
           onPressed: () async {
+            FocusScope.of(context).unfocus();
             if (noteController.text != "") {
               var sonuc = await FirestoreFunctions.sendFeedBack(
                   {widget.userData?['userName'] ?? 'Guest'},
@@ -196,7 +148,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                       .format(DateTime.now())
                       .toString());
               print(sonuc);
-              FocusScope.of(context).unfocus();
+
               if (sonuc['status']) {
                 noteController.clear();
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -272,6 +224,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
           },
         ),
         SizedBox(height: 26),
+        Spacer(),
         widget.userData!['userSubscription'] == "Admin"
             ? ElevatedButton(
                 child: Text('Admin Features'),

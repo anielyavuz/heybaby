@@ -1,6 +1,8 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -109,7 +111,21 @@ class _CalendarState extends State<Calendar> {
       String a, String b, String c, bool d, String _time, bool _alarm) {
     var _tempMap = {};
     var _tempList = [];
-    print(d);
+
+    if (_alarm) {
+      int _bildirimsNumarasi = (int.parse(_time.replaceAll(':', '') +
+              selectedDay.toString().split(" ")[0].replaceAll("-", ""))) %
+          2147483647;
+      // print("alarmmmmm  $_bildirimsNumarasi");
+      BildirimTakip.aktiviteAlarm(
+          _bildirimsNumarasi,
+          int.parse(_time.split(':')[0]),
+          int.parse(_time.split(':')[1]),
+          selectedDay.day,
+          selectedDay.month,
+          selectedDay.year,
+          a);
+    }
 
     var _tempIcon = "";
     if (b == 'Doktor Randevusu 👩‍⚕️') {
@@ -160,7 +176,7 @@ class _CalendarState extends State<Calendar> {
 
     FirestoreFunctions.updateCalendarDataRecord(_tempList, selectedDay);
 
-    print(calendarListEvents);
+    // print(calendarListEvents);
   }
 
   silActivity(editId) {
@@ -218,6 +234,22 @@ class _CalendarState extends State<Calendar> {
 
           print("AAA");
           print(calendarListEvents[selectedDay]!);
+          int _bildirimsNumarasi = (int.parse(_time.replaceAll(':', '') +
+                  selectedDay.toString().split(" ")[0].replaceAll("-", ""))) %
+              2147483647;
+          if (_alarm) {
+            // print("alarmmmmm  $_bildirimsNumarasi");
+            BildirimTakip.aktiviteAlarm(
+                _bildirimsNumarasi,
+                int.parse(_time.split(':')[0]),
+                int.parse(_time.split(':')[1]),
+                selectedDay.day,
+                selectedDay.month,
+                selectedDay.year,
+                editTitle);
+          } else {
+            AwesomeNotifications().cancel(_bildirimsNumarasi);
+          }
           setState(() {
             calendarListEvents[selectedDay]![i]['title'] = editTitle;
             calendarListEvents[selectedDay]![i]['note'] = editNote;
@@ -239,6 +271,13 @@ class _CalendarState extends State<Calendar> {
         }
       }
     }
+  }
+
+  String formatTimeOfDay(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final format = DateFormat.Hm(); // For 12-hour format with AM/PM
+    return format.format(dt);
   }
 
   @override
@@ -323,15 +362,12 @@ class _CalendarState extends State<Calendar> {
               ),
             ),
           ),
-          Row(
-            children: [
-              Text(
-                  selectedWeek < 44
-                      ? "Hamileliğin $selectedWeek. haftası.🤰"
-                      : "Doğum tahmini olarak gerçekleşmiş olacak.👩‍🍼",
-                  style: TextStyle(fontSize: 20)),
-            ],
-          ),
+          Divider(),
+          Text(
+              selectedWeek < 44
+                  ? "Hamileliğin $selectedWeek. haftası 🤰"
+                  : "Doğum tahmini olarak gerçekleşmiş olacak 👩‍🍼",
+              style: TextStyle(fontSize: 20)),
           ..._getEventsfromDay(selectedDay).map(
             (item) => Dismissible(
               key: Key(item['id'].toString()),
@@ -466,8 +502,8 @@ class _CalendarState extends State<Calendar> {
                                                 }
                                               });
                                             },
-                                            child:
-                                                Text(_secilenZaman.toString()),
+                                            child: Text(
+                                                formatTimeOfDay(_secilenZaman)),
                                           )
                                         : SizedBox()
                                   ],
@@ -523,46 +559,50 @@ class _CalendarState extends State<Calendar> {
                     },
                   );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    // color: Colors.blue, // Arka plan rengi
-                    borderRadius: BorderRadius.circular(10), // Kenar yuvarlatma
-                    border: Border.all(
-                        color:
-                            Color.fromARGB(255, 150, 69, 212)), // Kenar çizgisi
-                  ),
-                  child: ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          item['title'].toString(),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              item['time'].toString(),
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            item['alarm']
-                                ? Icon(Icons.alarm_on)
-                                : Icon(Icons.alarm_off),
-                          ],
-                        ),
-                      ],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.blue, // Arka plan rengi
+                      borderRadius:
+                          BorderRadius.circular(10), // Kenar yuvarlatma
+                      border: Border.all(
+                          color: Color.fromARGB(
+                              255, 150, 69, 212)), // Kenar çizgisi
                     ),
-                    leading: Text(
-                      // event.icon.toString()
-                      item['icon'].toString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
+                    child: ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            item['title'].toString(),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                item['time'].toString(),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              item['alarm']
+                                  ? Icon(Icons.alarm_on)
+                                  : Icon(Icons.alarm_off),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                    subtitle: Text(
-                      item['note'].toString(),
+                      leading: Text(
+                        // event.icon.toString()
+                        item['icon'].toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      subtitle: Text(
+                        item['note'].toString(),
+                      ),
                     ),
                   ),
                 ),
@@ -639,7 +679,7 @@ class _CalendarState extends State<Calendar> {
                           children: [
                             Row(
                               children: [
-                                Text('Zaman'),
+                                Text('Saat'),
                                 Switch(
                                   value: isSwitchedTime,
                                   onChanged: (value) {
@@ -667,7 +707,7 @@ class _CalendarState extends State<Calendar> {
                                         }
                                       });
                                     },
-                                    child: Text(_secilenZaman.toString()),
+                                    child: Text(formatTimeOfDay(_secilenZaman)),
                                   )
                                 : SizedBox()
                           ],
@@ -692,7 +732,7 @@ class _CalendarState extends State<Calendar> {
                           height: 20,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             TextButton(
                               child: Text("İptal"),

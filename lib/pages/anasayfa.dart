@@ -56,7 +56,11 @@ class _AnaSayfaState extends State<AnaSayfa> {
               "%%%" +
               _element['title'].toString() +
               "%%%" +
-              _element['time'].toString();
+              _element['time'].toString() +
+              "%%%" +
+              _element['icon'].toString() +
+              "%%%" +
+              _element['alarm'].toString();
           activities[_tempKey] = _tempValue;
         });
       }
@@ -593,7 +597,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   ),
                   // SizedBox(height: 10),
 
-                  Divider(height: 6,),
+                  Divider(
+                    height: 6,
+                  ),
                   SizedBox(height: 10),
                   // Resim
                   TrimesterProgressWidget(
@@ -883,50 +889,39 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       ],
                     ),
                     children: [
-                      if (activities.entries.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Calendar(
-                                    userData: widget.userData,
-                                    ekranYukseklikKontrol: 1,
+                      Padding(
+                          padding: const EdgeInsets.all(5), child: SizedBox()),
+                      ...activities.entries.map((entry) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                  entry.value.split('%%%')[3] +
+                                      " " +
+                                      entry.value.split('%%%')[1],
+                                  style: TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              subtitle: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    entry.value.split('%%%')[2] +
+                                        "   " +
+                                        formatDate(entry.value
+                                            .split('%%%')[0]
+                                            .split(' ')[0]),
                                   ),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              "Aktivite Ekle",
-                              style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.none,
-                                fontWeight: FontWeight.bold,
-                                background: Paint()
-                                  ..color = Colors.transparent
-                                  ..style = PaintingStyle.stroke
-                                  ..strokeWidth = 1.5
-                                  ..strokeJoin = StrokeJoin.round,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black,
-                                    offset: Offset(0, 0),
-                                    blurRadius: 0,
-                                  ),
+                                  entry.value.split('%%%')[4] == true
+                                      ? Icon(Icons.alarm_on)
+                                      : Icon(Icons.alarm_off)
                                 ],
                               ),
                             ),
-                          ),
-                        ),
-                      ...activities.entries.map((entry) {
-                        return ListTile(
-                          title: Text(entry.value.split('%%%')[1]),
-                          subtitle: Text(
-                            formatDate(
-                                entry.value.split('%%%')[0].split(' ')[0]),
-                          ),
+                            Divider()
+                          ],
                         );
                       }).toList(),
                       Padding(
