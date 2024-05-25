@@ -526,71 +526,74 @@ class _AnaSayfaState extends State<AnaSayfa> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    height: 80.0,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: widget.storyImages.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => StoryScreen(
-                                    storyies: widget.storyImages,
-                                    storyImages: _storyImagesLink,
-                                    startingPage: index,
-                                    storyIDlist: _storyIDlist),
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 60.0,
-                                  height: 60.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Color.fromARGB(255, 55, 105, 245),
-                                        // Color.fromARGB(255, 50, 200, 255),
-                                        Color.fromARGB(255, 168, 60, 187),
-                                      ],
-                                    ),
-                                    border: Border.all(
-                                      color: Colors.transparent,
-                                      width: 3.0,
-                                    ), // Halkanın rengi ve genişliği
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 30.0,
-                                    backgroundImage:
-                                        NetworkImage(_storyImagesLink[index]),
-                                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: Container(
+                      height: 80.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.storyImages.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => StoryScreen(
+                                      storyies: widget.storyImages,
+                                      storyImages: _storyImagesLink,
+                                      startingPage: index,
+                                      storyIDlist: _storyIDlist),
                                 ),
-                                Text(
-                                  widget.storyImages[index]['header']
-                                      .toString(),
-                                  style: TextStyle(
-                                    fontSize: 12.0,
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 60.0,
+                                    height: 60.0,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color.fromARGB(255, 55, 105, 245),
+                                          // Color.fromARGB(255, 50, 200, 255),
+                                          Color.fromARGB(255, 168, 60, 187),
+                                        ],
+                                      ),
+                                      border: Border.all(
+                                        color: Colors.transparent,
+                                        width: 3.0,
+                                      ), // Halkanın rengi ve genişliği
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 30.0,
+                                      backgroundImage:
+                                          NetworkImage(_storyImagesLink[index]),
+                                    ),
                                   ),
-                                )
-                              ],
+                                  Text(
+                                    widget.storyImages[index]['header']
+                                        .toString(),
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                   // SizedBox(height: 10),
 
-                  Divider(),
+                  Divider(height: 6,),
                   SizedBox(height: 10),
                   // Resim
                   TrimesterProgressWidget(
