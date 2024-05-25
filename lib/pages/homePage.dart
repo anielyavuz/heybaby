@@ -2,6 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/chatgptService.dart';
@@ -86,157 +87,194 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return Scaffold(
-        key: _scaffoldKey, // GlobalKey'i Scaffold'a ekleyin
+      key: _scaffoldKey, // GlobalKey'i Scaffold'a ekleyin
 
-        // appBar: AppBar(
-        //   // title: Text('Uygulama Başlığı'),
-        //   actions: [
-        //     IconButton(
-        //       icon:
-        //           Icon(Icons.notifications), // İstediğiniz ikonu buraya ekleyin
-        //       onPressed: () {
-        //         // EndDrawer'ı açmak için onPressed fonksiyonunu buraya ekleyin
-        //         _scaffoldKey.currentState!.openEndDrawer();
-        //       },
-        //     ),
-        //   ],
-        // ),
-        // endDrawer: Drawer(
-        //   // Drawer içeriğini buraya ekleyin
-        //   child: ListView(
-        //     padding: EdgeInsets.zero,
-        //     children: [
-        //       Container(
-        //         height: 150,
-        //         child: DrawerHeader(
-        //           child: Text('Bildirimler'), // Drawer başlığını buraya ekleyin
-        //           decoration: BoxDecoration(
-        //             color: Colors.blue,
-        //           ),
-        //         ),
-        //       ),
-        //       SingleChildScrollView(
-        //         child: Column(
-        //           children: drawerItems
-        //               .map((item) => ListTile(
-        //                     title: Text(item),
-        //                     onTap: () {
-        //                       // Drawer öğesine tıklandığında yapılacak işlemi buraya ekleyin
-        //                     },
-        //                   ))
-        //               .toList(),
-        //         ),
-        //       ),
-        //       // İhtiyacınıza göre diğer drawer öğelerini buraya ekleyin
-        //     ],
-        //   ),
-        // ),
+      // appBar: AppBar(
+      //   // title: Text('Uygulama Başlığı'),
+      //   actions: [
+      //     IconButton(
+      //       icon:
+      //           Icon(Icons.notifications), // İstediğiniz ikonu buraya ekleyin
+      //       onPressed: () {
+      //         // EndDrawer'ı açmak için onPressed fonksiyonunu buraya ekleyin
+      //         _scaffoldKey.currentState!.openEndDrawer();
+      //       },
+      //     ),
+      //   ],
+      // ),
+      // endDrawer: Drawer(
+      //   // Drawer içeriğini buraya ekleyin
+      //   child: ListView(
+      //     padding: EdgeInsets.zero,
+      //     children: [
+      //       Container(
+      //         height: 150,
+      //         child: DrawerHeader(
+      //           child: Text('Bildirimler'), // Drawer başlığını buraya ekleyin
+      //           decoration: BoxDecoration(
+      //             color: Colors.blue,
+      //           ),
+      //         ),
+      //       ),
+      //       SingleChildScrollView(
+      //         child: Column(
+      //           children: drawerItems
+      //               .map((item) => ListTile(
+      //                     title: Text(item),
+      //                     onTap: () {
+      //                       // Drawer öğesine tıklandığında yapılacak işlemi buraya ekleyin
+      //                     },
+      //                   ))
+      //               .toList(),
+      //         ),
+      //       ),
+      //       // İhtiyacınıza göre diğer drawer öğelerini buraya ekleyin
+      //     ],
+      //   ),
+      // ),
 
-        body: SafeArea(
-          child: Stack(
-            children: [
-              _buildBody(),
-              Positioned(
-                left: _floatingActionButtonOffset.dx,
-                top: _floatingActionButtonOffset.dy,
-                child: _AIStatus
-                    ? Draggable(
-                        feedback: FloatingActionButton(
-                          onPressed: () {},
-                          child: Container(
-                            width: 66.0, // Genişlik ayarı
-                            height: 66.0, // Yükseklik ayarı
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: Lottie.asset(
-                                // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
-                                "assets/lottie/robotWelcome.json",
-                                fit: BoxFit.fill),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            _buildBody(),
+            Positioned(
+              left: _floatingActionButtonOffset.dx,
+              top: _floatingActionButtonOffset.dy,
+              child: _AIStatus
+                  ? Draggable(
+                      feedback: FloatingActionButton(
+                        onPressed: () {},
+                        child: Container(
+                          width: 66.0, // Genişlik ayarı
+                          height: 66.0, // Yükseklik ayarı
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
                           ),
+                          child: Lottie.asset(
+                              // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                              "assets/lottie/robotWelcome.json",
+                              fit: BoxFit.fill),
                         ),
-                        childWhenDragging: Container(),
-                        onDragEnd: (details) {
-                          setState(() {
-                            // Ekran boyutlarını al
-                            final RenderBox renderBox =
-                                context.findRenderObject() as RenderBox;
-                            final Size screenSize = renderBox.size;
+                      ),
+                      childWhenDragging: Container(),
+                      onDragEnd: (details) {
+                        setState(() {
+                          // Ekran boyutlarını al
+                          final RenderBox renderBox =
+                              context.findRenderObject() as RenderBox;
+                          final Size screenSize = renderBox.size;
 
-                            // FloatingActionButton boyutlarını al
-                            final double fabWidth = 56.0;
-                            final double fabHeight = 56.0;
+                          // FloatingActionButton boyutlarını al
+                          final double fabWidth = 56.0;
+                          final double fabHeight = 56.0;
 
-                            // Yeni konumun sınırlar içinde kalmasını sağla
-                            double newX = details.offset.dx;
-                            double newY = details.offset.dy;
+                          // Yeni konumun sınırlar içinde kalmasını sağla
+                          double newX = details.offset.dx;
+                          double newY = details.offset.dy;
 
-                            // Sağ-sol sınırları
-                            if (newX < 0) newX = 0;
-                            if (newX + fabWidth > screenSize.width)
-                              newX = screenSize.width - fabWidth;
+                          // Sağ-sol sınırları
+                          if (newX < 0) newX = 0;
+                          if (newX + fabWidth > screenSize.width)
+                            newX = screenSize.width - fabWidth;
 
-                            // Alt-üst sınırları (ekranın 1/4'ünden fazla gitmesin)
-                            double minY = screenSize.height * 0.05;
-                            double maxY = screenSize.height * 0.75 - fabHeight;
-                            if (newY < minY) newY = minY;
-                            if (newY > maxY) newY = maxY;
+                          // Alt-üst sınırları (ekranın 1/4'ünden fazla gitmesin)
+                          double minY = screenSize.height * 0.05;
+                          double maxY = screenSize.height * 0.75 - fabHeight;
+                          if (newY < minY) newY = minY;
+                          if (newY > maxY) newY = maxY;
 
-                            _floatingActionButtonOffset = Offset(newX, newY);
-                          });
+                          _floatingActionButtonOffset = Offset(newX, newY);
+                        });
+                      },
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          // _aiQuestion("Hava nasıl?");
+                          _showChatModalBottomSheet(context);
                         },
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            // _aiQuestion("Hava nasıl?");
-                            _showChatModalBottomSheet(context);
-                          },
-                          child: Container(
-                            width: 56.0, // Genişlik ayarı
-                            height: 56.0, // Yükseklik ayarı
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                            ),
-                            child: Lottie.asset(
-                                // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
-                                "assets/lottie/robotWelcome.json",
-                                fit: BoxFit.fill),
+                        child: Container(
+                          width: 56.0, // Genişlik ayarı
+                          height: 56.0, // Yükseklik ayarı
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
                           ),
+                          child: Lottie.asset(
+                              // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                              "assets/lottie/robotWelcome.json",
+                              fit: BoxFit.fill),
                         ),
-                      )
-                    : SizedBox(),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          selectedItemColor: Colors.deepPurple,
-          unselectedItemColor: Colors.grey,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Ana Sayfa',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today),
-              label: 'Aktiviteler',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.explore),
-              label: 'Keşfet',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.note),
-              label: 'Günlük',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Hesap',
+                      ),
+                    )
+                  : SizedBox(),
             ),
           ],
-        ));
+        ),
+      ),
+      bottomNavigationBar: GNav(
+        // rippleColor: Colors.grey[300]!,
+        // hoverColor: Colors.grey[100]!,
+        gap: 8,
+        activeColor: Color.fromARGB(255, 150, 65, 255),
+        iconSize: 24,
+        padding: EdgeInsets.fromLTRB(15, 20, 15, 30),
+        duration: Duration(milliseconds: 400),
+        // tabBackgroundColor: Colors.grey[100]!,
+        color: const Color.fromARGB(255, 64, 64, 64),
+        tabs: [
+          GButton(
+            icon: (Icons.home),
+            text: 'Ana Sayfa',
+          ),
+          GButton(
+            icon: Icons.calendar_today,
+            text: 'Aktiviteler',
+          ),
+          GButton(
+            icon: Icons.explore,
+            text: 'Keşfet',
+          ),
+          GButton(
+            icon: Icons.note,
+            text: 'Günlük',
+          ),
+          GButton(
+            icon: Icons.account_circle,
+            text: 'Hesap',
+          ),
+        ],
+        selectedIndex: _selectedIndex,
+        onTabChange: _onItemTapped,
+      ),
+    );
+
+    // BottomNavigationBar(
+    //   backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+    //   selectedItemColor: Colors.deepPurple,
+    //   unselectedItemColor: Colors.grey,
+    //   currentIndex: _selectedIndex,
+    //   onTap: _onItemTapped,
+    //   items: [
+    //     BottomNavigationBarItem(
+    //       icon: Icon(Icons.home),
+    //       label: 'Ana Sayfa',
+    //     ),
+    //     BottomNavigationBarItem(
+    //       icon: Icon(Icons.calendar_today),
+    //       label: 'Aktiviteler',
+    //     ),
+    //     BottomNavigationBarItem(
+    //       icon: Icon(Icons.explore),
+    //       label: 'Keşfet',
+    //     ),
+    //     BottomNavigationBarItem(
+    //       icon: Icon(Icons.note),
+    //       label: 'Günlük',
+    //     ),
+    //     BottomNavigationBarItem(
+    //       icon: Icon(Icons.account_circle),
+    //       label: 'Hesap',
+    //     ),
+    //   ],
+    // ));
   }
 
   void _onItemTapped(int index) {

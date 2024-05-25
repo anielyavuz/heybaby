@@ -329,7 +329,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
         ElevatedButton(
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return SettingsPage();
+              return SettingsPage(userData: widget.userData);
             }));
           },
           child: Text('Ayarlar'),

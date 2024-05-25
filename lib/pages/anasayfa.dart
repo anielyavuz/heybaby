@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
@@ -8,10 +13,12 @@ import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
 import 'package:heybaby/pages/subpages/haftalikGuncelleme.dart';
 import 'package:heybaby/pages/subpages/ilacTakip.dart';
+import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
 import 'package:heybaby/pages/subpages/suTakip.dart';
 import 'package:heybaby/pages/subpages/yapilacaklarPage.dart';
+import 'package:heybaby/pages/takvimPage.dart';
 import 'package:intl/intl.dart';
 
 class AnaSayfa extends StatefulWidget {
@@ -35,7 +42,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
   Map<String, String> activities = {};
   int selectedWeek = 4;
-
+  bool _aktivitelerAcik = false;
+  final GlobalKey expansionTileKey = GlobalKey();
+  bool _isVisibleYaklasanAktiviteler = true;
   orderSoonEvents(calendarListEventsSoon) {
     String _tempKey = "";
     String _tempValue = "";
@@ -454,6 +463,16 @@ class _AnaSayfaState extends State<AnaSayfa> {
     }
   }
 
+  void _sortStoryImagesByDate() {
+    setState(() {
+      widget.storyImages.sort((a, b) {
+        DateTime dateA = DateTime.parse(a['tarih']);
+        DateTime dateB = DateTime.parse(b['tarih']);
+        return dateB.compareTo(dateA); // Yakından uzağa doğru sıralama
+      });
+    });
+  }
+
   @override
   void initState() {
     setState(() {
@@ -464,10 +483,11 @@ class _AnaSayfaState extends State<AnaSayfa> {
     });
 
     super.initState();
-
+    _sortStoryImagesByDate();
     _fetchUserData();
   }
 
+  bool _visibleControlTemp = true;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -478,282 +498,474 @@ class _AnaSayfaState extends State<AnaSayfa> {
         // Story Circles
         SizedBox(
           height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  height: 100.0,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.storyImages.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StoryScreen(
-                                  storyies: widget.storyImages,
-                                  storyImages: _storyImagesLink,
-                                  startingPage: index,
-                                  storyIDlist: _storyIDlist),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 60.0,
-                                height: 60.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      Color.fromARGB(255, 55, 105, 245),
-                                      // Color.fromARGB(255, 50, 200, 255),
-                                      Color.fromARGB(255, 168, 60, 187),
-                                    ],
-                                  ),
-                                  border: Border.all(
-                                    color: Colors.transparent,
-                                    width: 3.0,
-                                  ), // Halkanın rengi ve genişliği
-                                ),
-                                child: CircleAvatar(
-                                  radius: 30.0,
-                                  backgroundImage:
-                                      NetworkImage(_storyImagesLink[index]),
-                                ),
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (scrollNotification) {
+              if (scrollNotification is ScrollUpdateNotification) {
+                // Scroll aşağıya mı gidiyor kontrol et
+                if (scrollNotification.metrics.pixels >
+                    scrollNotification.metrics.minScrollExtent) {
+                  if (_visibleControlTemp) {
+                    setState(() {
+                      _isVisibleYaklasanAktiviteler = false;
+                      _visibleControlTemp = false;
+                    });
+                  }
+                }
+                // Scroll en üste mi geri geldi kontrol et
+                if (scrollNotification.metrics.pixels <=
+                    scrollNotification.metrics.minScrollExtent) {
+                  setState(() {
+                    _isVisibleYaklasanAktiviteler = true;
+                    _visibleControlTemp = true;
+                  });
+                }
+              }
+
+              return true;
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: 80.0,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: widget.storyImages.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StoryScreen(
+                                    storyies: widget.storyImages,
+                                    storyImages: _storyImagesLink,
+                                    startingPage: index,
+                                    storyIDlist: _storyIDlist),
                               ),
-                              Text(
-                                widget.storyImages[index]['header'].toString(),
-                                style: TextStyle(
-                                  fontSize: 12.0,
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 60.0,
+                                  height: 60.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Color.fromARGB(255, 55, 105, 245),
+                                        // Color.fromARGB(255, 50, 200, 255),
+                                        Color.fromARGB(255, 168, 60, 187),
+                                      ],
+                                    ),
+                                    border: Border.all(
+                                      color: Colors.transparent,
+                                      width: 3.0,
+                                    ), // Halkanın rengi ve genişliği
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 30.0,
+                                    backgroundImage:
+                                        NetworkImage(_storyImagesLink[index]),
+                                  ),
                                 ),
-                              )
-                            ],
+                                Text(
+                                  widget.storyImages[index]['header']
+                                      .toString(),
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
+                        );
+                      },
+                    ),
+                  ),
+                  // SizedBox(height: 10),
+
+                  Divider(),
+                  SizedBox(height: 10),
+                  // Resim
+                  TrimesterProgressWidget(
+                    userData: widget.userData,
+                  ),
+                  SizedBox(height: 10),
+                  FunctionsWidget(
+                    onFunction1Pressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return SpinningWheel(
+                          userData: widget.userData,
+                          pageType: 'waterDrinkData',
+                          pageItems: {
+                            'Bardak': "200",
+                            'Buyuk Bardak': "300",
+                            'Matara': "500",
+                            'Sise': "750",
+                            'Surahi': "1000",
+                          },
+                          selectedItem: 'Bardak',
+                          selectedValue: '200',
+                        );
+                      })).then((value) {
+                        _fetchUserData();
+                      });
+                      ;
+
+                      print("Test1");
+                    },
+                    onFunction2Pressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => KiloTakipPage(
+                                  userData: widget.userData,
+                                )),
+                      ).then((value) {
+                        _fetchUserData();
+                      });
+                      print("Test1");
+                    },
+                    onFunction3Pressed: () {
+                      print("Test1");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => IlacTakip(
+                                  userData: widget.userData,
+                                )),
+                      ).then((value) {
+                        _fetchUserData();
+                      });
+                    },
+                    onFunction4Pressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => YapilacaklarPage(
+                                  userData: widget.userData,
+                                )),
+                      ).then((value) {
+                        _fetchUserData();
+                      });
+
+                      print("Test1");
+                    },
+                    function1Description: 'Su',
+                    function2Description: 'Kilo Takibi',
+                    function3Description: 'İlaç/Vitamin',
+                    function4Description: 'Yapılacaklar',
+                  ),
+                  SizedBox(height: 10),
+
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HaftalikGuncellemeWidget(
+                              userData: widget.userData),
                         ),
                       );
                     },
-                  ),
-                ),
-                SizedBox(height: 10),
-                // Resim
-                TrimesterProgressWidget(
-                  userData: widget.userData,
-                ),
-                SizedBox(height: 10),
-                FunctionsWidget(
-                  onFunction1Pressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return SpinningWheel(
-                        userData: widget.userData,
-                        pageType: 'waterDrinkData',
-                        pageItems: {
-                          'Bardak': "200",
-                          'Buyuk Bardak': "300",
-                          'Matara': "500",
-                          'Sise': "750",
-                          'Surahi': "1000",
-                        },
-                        selectedItem: 'Bardak',
-                        selectedValue: '200',
-                      );
-                    })).then((value) {
-                      _fetchUserData();
-                    });
-                    ;
-
-                    print("Test1");
-                  },
-                  onFunction2Pressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => KiloTakipPage(
-                                userData: widget.userData,
-                              )),
-                    ).then((value) {
-                      _fetchUserData();
-                    });
-                    print("Test1");
-                  },
-                  onFunction3Pressed: () {
-                    print("Test1");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => IlacTakip(
-                                userData: widget.userData,
-                              )),
-                    ).then((value) {
-                      _fetchUserData();
-                    });
-                  },
-                  onFunction4Pressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => YapilacaklarPage(
-                                userData: widget.userData,
-                              )),
-                    ).then((value) {
-                      _fetchUserData();
-                    });
-
-                    print("Test1");
-                  },
-                  function1Description: 'Su',
-                  function2Description: 'Kilo Takibi',
-                  function3Description: 'İlaç/Vitamin',
-                  function4Description: 'Yapılacaklar',
-                ),
-                SizedBox(height: 10),
-
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            HaftalikGuncellemeWidget(userData: widget.userData),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      height: MediaQuery.of(context).size.width *
+                          0.95 *
+                          (90 / MediaQuery.of(context).size.width),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    );
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    height: MediaQuery.of(context).size.width *
-                        0.95 *
-                        (90 / MediaQuery.of(context).size.width),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/background.jpeg',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        ),
-                        Positioned(
-                          bottom: 1,
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 52, 19, 57).withOpacity(
-                                  0.7), // Opaklık değerini ayarlayabilirsiniz
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/background.jpeg',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                          Positioned(
+                            bottom: 1,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 52, 19, 57).withOpacity(
+                                    0.7), // Opaklık değerini ayarlayabilirsiniz
 
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Text(
+                                '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors
+                                      .white, // Metin rengini beyaz olarak ayarladık
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Renkli kutular
+                  Column(
+                    children: List.generate(widget.storyImages.length, (index) {
+                      return Column(
+                        children: [
+                          Divider(),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.95,
+                            height: MediaQuery.of(context).size.height * 0.20,
+                            decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
+                            child: widget.storyImages[index]['imageLink'] != ""
+                                ? Image.network(
+                                    widget.storyImages[index]['imageLink'],
+                                    fit: BoxFit.cover,
+                                  )
+                                : CircularProgressIndicator(),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 5.0),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: 20.0,
+                            decoration: BoxDecoration(
+                              // color: Colors.primaries[index %
+                              //     Colors.primaries.length], // Renkli kutular
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                             child: Text(
-                              '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
-                              textAlign: TextAlign.center,
+                              "${widget.storyImages[index]['baslik']}",
                               style: TextStyle(
-                                fontSize: 17,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                color: Colors
-                                    .white, // Metin rengini beyaz olarak ayarladık
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 5.0),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: 20.0,
+                            decoration: BoxDecoration(
+                              // color: Colors.primaries[index %
+                              //     Colors.primaries.length], // Renkli kutular
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${widget.storyImages[index]['icerik'].substring(0, 30)} ... ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 14),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MakaleDetay(
+                                              baslik: widget.storyImages[index]
+                                                  ['baslik'],
+                                              icerik: widget.storyImages[index]
+                                                  ['icerik'],
+                                              resimURL:
+                                                  widget.storyImages[index]
+                                                      ['imageLink'])),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Devam et",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      decoration: TextDecoration.none,
+                                      fontWeight: FontWeight.bold,
+                                      background: Paint()
+                                        ..color = Colors.transparent
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 1.5
+                                        ..strokeJoin = StrokeJoin.round,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black,
+                                          offset: Offset(0, 0),
+                                          blurRadius: 0,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          index < widget.storyImages.length - 1
+                              ? SizedBox(
+                                  height: 10,
+                                )
+                              : SizedBox()
+                        ],
+                      );
+                    }),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        _aktivitelerAcik
+            ? GestureDetector(
+                onTap: () {},
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
+                  child: Container(
+                    color: Colors.white.withOpacity(0.2),
+                  ),
+                ),
+              )
+            : SizedBox(),
+        // SizedBox(height: 10),
+
+        AnimatedOpacity(
+          opacity: _isVisibleYaklasanAktiviteler ? 1.0 : 0.0,
+          duration: Duration(milliseconds: 300),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.95,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 255, 255, 255),
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ExpansionTile(
+                    onExpansionChanged: (bool expanded) {
+                      setState(() {
+                        _aktivitelerAcik = expanded;
+                      });
+                    },
+                    title: Row(
+                      children: [
+                        Icon(Icons.info_rounded),
+                        Text(
+                          'Yaklaşan Aktiviteler' +
+                              (activities.keys.toList().length != 0
+                                  ? " (${activities.keys.toList().length.toString()})"
+                                  : ""),
+                          style: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),
+                    children: [
+                      if (activities.entries.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Calendar(
+                                    userData: widget.userData,
+                                    ekranYukseklikKontrol: 1,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "Aktivite Ekle",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.bold,
+                                background: Paint()
+                                  ..color = Colors.transparent
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 1.5
+                                  ..strokeJoin = StrokeJoin.round,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black,
+                                    offset: Offset(0, 0),
+                                    blurRadius: 0,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // SizedBox(height: 10),
-        Positioned(
-          bottom: 10,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.95,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 214, 172, 238),
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ExpansionTile(
-                  onExpansionChanged: (value) {
-                    if (activities.keys.toList().length == 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Hiç aktiviteniz yok. Lütfen Aktiviteler ekranından aktivite ekleyin.',
+                      ...activities.entries.map((entry) {
+                        return ListTile(
+                          title: Text(entry.value.split('%%%')[1]),
+                          subtitle: Text(
+                            formatDate(
+                                entry.value.split('%%%')[0].split(' ')[0]),
+                          ),
+                        );
+                      }).toList(),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Calendar(
+                                  userData: widget.userData,
+                                  ekranYukseklikKontrol: 1,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Aktivite Ekle",
                             style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16,
-                              color: Colors.black,
+                              color: Colors.blue,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.bold,
+                              background: Paint()
+                                ..color = Colors.transparent
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 1.5
+                                ..strokeJoin = StrokeJoin.round,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  offset: Offset(0, 0),
+                                  blurRadius: 0,
+                                ),
+                              ],
                             ),
                           ),
-                          // action: SnackBarAction(
-                          //   label: 'Aktiviteler',
-                          //   onPressed: () {
-                          //     print('');
-                          //   },
-                          // ),
-                          backgroundColor: Color.fromARGB(
-                              255, 215, 193, 228), // Snackbar arka plan rengi
-                          duration: Duration(
-                              milliseconds: 1500), // Snackbar gösterim süresi
-                          behavior:
-                              SnackBarBehavior.floating, // Snackbar davranışı
-                          shape: RoundedRectangleBorder(
-                            // Snackbar şekli
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 4, // Snackbar yükseltilmesi
-                          margin:
-                              EdgeInsets.all(10), // Snackbar kenar boşlukları
                         ),
-                      );
-
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(
-                      //     content: Text(
-                      //         'Hiç aktiviteniz yok. Lütfen Aktiviteler ekranından aktivite ekleyin.'),
-                      //     // action: SnackBarAction(
-                      //     //   label: 'Aktiviteler',
-                      //     //   onPressed: () {
-                      //     //     print('');
-                      //     //   },
-                      //     // ),
-                      //   ),
-                      // );
-                    }
-                  },
-                  title: Text(
-                    'Yaklaşan Aktiviteler' +
-                        (activities.keys.toList().length != 0
-                            ? " (${activities.keys.toList().length.toString()})"
-                            : ""),
-                    style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
-                  children: activities.entries.map((entry) {
-                    return ListTile(
-                      title: Text(entry.value.split('%%%')[1]),
-                      subtitle: Text(formatDate(
-                          entry.value.split('%%%')[0].split(' ')[0])),
-                    );
-                  }).toList(),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -763,11 +975,34 @@ class _AnaSayfaState extends State<AnaSayfa> {
 }
 
 void main() {
-  runApp(MaterialApp(
-    home: AnaSayfa(
-      storyImages: [
-        // Story Images'larınızı ekleyin
-      ],
+  // Flutter framework içinde oluşan hataları yakala
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    // Hata mesajını göster
+    _showError(details.exceptionAsString());
+  };
+
+  // Dart Zone içinde oluşan hataları yakala
+  runZonedGuarded(() {
+    runApp(MaterialApp(
+      home: AnaSayfa(
+        storyImages: [
+          // Story Images'larınızı ekleyin
+        ],
+      ),
+    ));
+  }, (error, stackTrace) {
+    // Hata mesajını göster
+    _showError(error.toString());
+  });
+}
+
+void _showError(String error) {
+  // Global key aracılığıyla ScaffoldMessenger'a erişim
+  final globalKey = GlobalKey<ScaffoldMessengerState>();
+  globalKey.currentState?.showSnackBar(
+    SnackBar(
+      content: Text('Error: $error'),
     ),
-  ));
+  );
 }

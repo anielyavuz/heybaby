@@ -28,9 +28,11 @@ class Event {
 }
 
 class Calendar extends StatefulWidget {
+  final int? ekranYukseklikKontrol;
   final Map<String, dynamic>? userData;
 
-  const Calendar({Key? key, this.userData}) : super(key: key);
+  const Calendar({Key? key, this.userData, this.ekranYukseklikKontrol})
+      : super(key: key);
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -242,10 +244,12 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Aktiviteler"),
-      //   centerTitle: true,
-      // ),
+      appBar: widget.ekranYukseklikKontrol == 1
+          ? AppBar(
+              title: Text("Aktiviteler"),
+              centerTitle: true,
+            )
+          : null,
       body: Column(
         children: [
           TableCalendar(
