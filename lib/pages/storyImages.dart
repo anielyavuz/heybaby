@@ -186,7 +186,7 @@ class _StoryScreenState extends State<StoryScreen>
                       left: 0,
                       right: 0,
                       bottom:
-                          40, // İstenilen boşluk miktarını ayarlayabilirsiniz
+                          25, // İstenilen boşluk miktarını ayarlayabilirsiniz
                       child: GestureDetector(
                         onTap: () {
                           print(widget.storyIDlist[index]);
@@ -206,7 +206,7 @@ class _StoryScreenState extends State<StoryScreen>
 
                           width: MediaQuery.of(context).size.width /
                               3, // Yarısı kadar genişlik
-                          height: 70, // Butonun yüksekliği
+                          height: 60, // Butonun yüksekliği
                           margin: EdgeInsets.symmetric(
                               horizontal: 90), // Butonun kenarlardan boşluğu
                           decoration: BoxDecoration(
@@ -260,7 +260,7 @@ class _StoryScreenState extends State<StoryScreen>
             child: IconButton(
               icon: Icon(Icons.close),
               iconSize: 30,
-              color: Colors.black,
+              color: Colors.white,
               onPressed: () {
                 Navigator.pop(context);
               },
