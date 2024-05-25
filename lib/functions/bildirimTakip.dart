@@ -174,9 +174,9 @@ class BildirimTakip {
             payload: {'page': 'suTakip'}),
         schedule: NotificationCalendar(
           timeZone: utcTimeZone,
-          day: _day,
-          month: _month,
-          year: _year,
+          // day: _day,
+          // month: _month,
+          // year: _year,
           hour: _hour,
           minute: _minute,
           second: 00,

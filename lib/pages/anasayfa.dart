@@ -936,7 +936,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                   ekranYukseklikKontrol: 1,
                                 ),
                               ),
-                            );
+                            ).then((_) {
+                              // Navigator.pop ile geri dönüldüğünde burası çalışacak
+                              _fetchUserData(); // Çağırmak istediğiniz fonksiyon
+                            });
                           },
                           child: Text(
                             "Aktivite Ekle",
