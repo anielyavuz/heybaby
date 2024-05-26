@@ -1,7 +1,47 @@
+import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart' as http;
 
 class BildirimTakip {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  Future<void> fcmBildirimGonder(String title, String body) async {
+    await _firebaseMessaging.requestPermission();
+    String? token = await _firebaseMessaging.getToken();
+    if (token != null) {
+      // Burada kendi backend sunucunuzdan veya Firebase Cloud Functions kullanarak FCM mesajını gönderin
+      // Örnek POST isteği:
+      final response = await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=YOUR_SERVER_KEY',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'notification': <String, dynamic>{
+              'title': title,
+              'body': body,
+            },
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            },
+            'to': token,
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        print('FCM bildirimi başarıyla gönderildi.');
+      } else {
+        print('FCM bildirimi gönderilemedi: ${response.body}');
+      }
+    }
+  }
+
   bildirimKur() async {
     String utcTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
