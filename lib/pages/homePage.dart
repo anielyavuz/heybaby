@@ -7,6 +7,7 @@ import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/chatgptService.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:heybaby/functions/heybabyai.dart';
 import 'package:heybaby/functions/notificationController.dart';
 import 'package:heybaby/functions/notificationSender.dart';
 import 'package:heybaby/pages/anasayfa.dart';
@@ -28,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  FocusNode _focusNode = FocusNode();
   void initState() {
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
@@ -38,8 +40,29 @@ class _MyHomePageState extends State<MyHomePage> {
         onDismissActionReceivedMethod:
             NotificationController.onDismissActionReceivedMethod);
 
+    // FocusNode'a bir listener ekleyin
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          modalHeight = 0.85;
+        });
+        print("Klavye açıldı ve TextFormField'a odaklanıldı. $modalHeight");
+      } else {
+        setState(() {
+          modalHeight = 0.55;
+        });
+      }
+    });
+
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Kaynakları serbest bırakın
+    _focusNode.dispose();
+    super.dispose();
   }
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -79,6 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Offset _floatingActionButtonOffset =
       Offset(320.0, 600.0); // Default sağ alt köşe, 100 px yukarıda
 
+  String _apiKey = "";
+  String _model = "";
+
+  String _systemInstruction = "";
+  double modalHeight = 0.55;
   @override
   Widget build(BuildContext context) {
     if (userData == null || _shouldFetchUserData) {
@@ -346,80 +374,191 @@ class _MyHomePageState extends State<MyHomePage> {
         storyImages = data['Stories'];
         storyImages.sort((a, b) => b['id'].compareTo(a['id']));
 
+        _apiKey = data['AIBot']['apiKey'];
+        _model = data['AIBot']['model'];
+
+        _systemInstruction = data['AIBot']['systemInstruction'];
         // print(storyImages);
       });
     }
   }
 
+  ScrollController _scrollController = ScrollController();
+
   void _showChatModalBottomSheet(BuildContext context) {
     TextEditingController _chatController = TextEditingController();
-    List<String> chatHistory = [];
+    List<String> chatHistory = [
+      // 'Siz: hamilelik kaç hafta sürer?',
+      // 'HeyBaby AI: Hamilelik ortalama 40 hafta sürer, ancak 38 ile 42 hafta arasında doğan bebekler de sağlıklı kabul edilir.'
+    ];
+    bool isHeyBabyTyping = false;
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled:
+          true, // Modalın klavye ile birlikte hareket etmesini sağlar
       builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Chat with ChatGPT',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: chatHistory.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(chatHistory[index]),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
+        final bottomInset =
+            MediaQuery.of(context).viewInsets.bottom; // Klavyenin boyutunu alır
+        return FractionallySizedBox(
+          heightFactor: modalHeight, // Ekranın %75'ini kaplar
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Padding(
+                padding: EdgeInsets.only(
+                    bottom:
+                        bottomInset), // Klavye boyutu kadar alttan boşluk bırakır
+                child: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Chat with HeyBaby AI Bot',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
                       Expanded(
-                        child: TextField(
-                          controller: _chatController,
-                          decoration: InputDecoration(
-                            hintText: 'Soru sor...',
-                          ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ListView.builder(
+                                controller: _scrollController,
+                                itemCount: chatHistory.length,
+                                itemBuilder: (context, index) {
+                                  bool isHeyBabyAI = chatHistory[index]
+                                      .startsWith('HeyBaby AI:');
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 16.0),
+                                    child: Align(
+                                      alignment: isHeyBabyAI
+                                          ? Alignment.centerLeft
+                                          : Alignment.centerRight,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: isHeyBabyAI
+                                              ? Color.fromARGB(255, 52, 49, 55)
+                                              : Color.fromARGB(
+                                                  255, 170, 72, 231),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        padding: const EdgeInsets.all(12.0),
+                                        constraints: BoxConstraints(
+                                            maxWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.75),
+                                        child: Text(
+                                          chatHistory[index],
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            if (isHeyBabyTyping)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 16.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 77, 77, 77),
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    padding: const EdgeInsets.all(12.0),
+                                    constraints: BoxConstraints(
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.75),
+                                    child: Text(
+                                      "HeyBaby AI...",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontStyle: FontStyle.italic,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () async {
-                          String userQuestion = _chatController.text;
-                          setState(() {
-                            chatHistory.add('Siz: $userQuestion');
-                          });
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _chatController,
+                              focusNode: _focusNode,
+                              maxLines: null,
+                              textInputAction: TextInputAction
+                                  .done, // Klavyede 'Done' (Tamam) butonunu ayarlar
+                              onFieldSubmitted: (value) {
+                                // 'Done' butonuna basıldığında burası çalışır
+                                print("Klavye kapatıldı ve form gönderildi.");
+                                FocusScope.of(context)
+                                    .unfocus(); // Klavyeyi kapat
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Soru sor...',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: () async {
+                              String userQuestion = _chatController.text;
+                              setState(() {
+                                chatHistory.add('Siz: $userQuestion');
+                                isHeyBabyTyping = true;
+                                _scrollToBottom();
+                              });
 
-                          // ChatGPTService'i kullanarak soruyu gönderip cevabı al
-                          String chatGPTResponse =
-                              await ChatGPTService.sendQuestion(userQuestion);
+                              _chatController.clear();
+                              // ChatGPTService'i kullanarak soruyu gönderip cevabı al
+                              String? _response = await heyBabyAI().istekYap(
+                                  userQuestion,
+                                  _apiKey,
+                                  _model,
+                                  _systemInstruction);
 
-                          setState(() {
-                            chatHistory.add(chatGPTResponse);
-                          });
-
-                          _chatController.clear();
-                        },
-                        child: Text('Gönder'),
+                              setState(() {
+                                isHeyBabyTyping = false;
+                                chatHistory
+                                    .add('HeyBaby AI: ${_response.toString()}');
+                                _scrollToBottom();
+                              });
+                            },
+                            child: Text('Gönder'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            );
-          },
+                ),
+              );
+            },
+          ),
         );
       },
+    );
+  }
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
     );
   }
 }
