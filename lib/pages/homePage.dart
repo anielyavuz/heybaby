@@ -82,6 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
     'Bildirim 4',
     // İhtiyacınıza göre diğer öğeleri ekleyin
   ];
+  List<String> chatHistory = [
+    // 'Siz: hamilelik kaç hafta sürer?',
+    // 'HeyBaby AI: Hamilelik ortalama 40 hafta sürer, ancak 38 ile 42 hafta arasında doğan bebekler de sağlıklı kabul edilir.'
+  ];
+  List _aiChatHistory = [];
 
   List storyImages = [
     // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
@@ -193,8 +198,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           final Size screenSize = renderBox.size;
 
                           // FloatingActionButton boyutlarını al
-                          final double fabWidth = 90.0;
-                          final double fabHeight = 90.0;
+                          final double fabWidth = 70.0;
+                          final double fabHeight = 70.0;
 
                           // Yeni konumun sınırlar içinde kalmasını sağla
                           double newX = details.offset.dx;
@@ -215,16 +220,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         });
                       },
                       child: Container(
-                        width: 90,
-                        height: 90,
+                        width: 70,
+                        height: 70,
                         child: FloatingActionButton(
                           onPressed: () {
                             // _aiQuestion("Hava nasıl?");
                             _showChatModalBottomSheet(context);
                           },
                           child: Container(
-                            width: 90.0, // Genişlik ayarı
-                            height: 90.0, // Yükseklik ayarı
+                            width: 70.0, // Genişlik ayarı
+                            height: 70.0, // Yükseklik ayarı
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
@@ -365,6 +370,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     .difference(DateTime.parse(userData?['sonAdetTarihi'])))
                 .inDays) ~/
             7);
+
+        if (userData!.containsKey('aiBotLog')) {
+          setState(() {
+            _aiChatHistory = userData?['aiBotLog'];
+
+            for (var element in _aiChatHistory) {
+              chatHistory.add('${element['user']}');
+              chatHistory.add('HeyBaby AI: ${element['ai']}');
+            }
+          });
+        }
       });
     }
   }
@@ -391,10 +407,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _showChatModalBottomSheet(BuildContext context) {
     TextEditingController _chatController = TextEditingController();
-    List<String> chatHistory = [
-      // 'Siz: hamilelik kaç hafta sürer?',
-      // 'HeyBaby AI: Hamilelik ortalama 40 hafta sürer, ancak 38 ile 42 hafta arasında doğan bebekler de sağlıklı kabul edilir.'
-    ];
+
     bool isHeyBabyTyping = false;
 
     showModalBottomSheet(
@@ -417,11 +430,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Chat with HeyBaby AI Bot',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Chat with HeyBaby AI Bot',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            Container(
+                              width: 46.0, // Genişlik ayarı
+                              height: 46.0, // Yükseklik ayarı
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Lottie.asset(
+                                  // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                                  "assets/lottie/robotWelcome.json",
+                                  fit: BoxFit.fitWidth),
+                            ),
+                          ],
+                        ),
                       ),
+                      Divider(),
                       SizedBox(height: 10),
                       Expanded(
                         child: Column(
@@ -435,7 +467,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       .startsWith('HeyBaby AI:');
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 16.0),
+                                        vertical: 8.0, horizontal: 6.0),
                                     child: Align(
                                       alignment: isHeyBabyAI
                                           ? Alignment.centerLeft
@@ -523,7 +555,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () async {
                               String userQuestion = _chatController.text;
                               setState(() {
-                                chatHistory.add('Siz: $userQuestion');
+                                chatHistory.add('$userQuestion');
                                 isHeyBabyTyping = true;
                                 _scrollToBottom();
                               });
@@ -534,7 +566,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   userQuestion,
                                   _apiKey,
                                   _model,
-                                  _systemInstruction);
+                                  _systemInstruction,
+                                  _aiChatHistory);
 
                               setState(() {
                                 isHeyBabyTyping = false;
@@ -542,6 +575,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                     .add('HeyBaby AI: ${_response.toString()}');
                                 _scrollToBottom();
                               });
+
+                              var _aiLogInsert =
+                                  await FirestoreFunctions.aiBotContent(
+                                      userQuestion, _response!);
+
+                              Map _tempMap = {};
+                              _tempMap['user'] = userQuestion;
+                              _tempMap['ai'] = _response;
+                              _aiChatHistory.add(_tempMap);
                             },
                             child: Text('Gönder'),
                           ),

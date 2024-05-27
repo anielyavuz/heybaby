@@ -666,7 +666,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
                       print("Test1");
                     },
-                    function1Description: 'Su',
+                    function1Description: 'Su Takibi',
                     function2Description: 'Kilo Takibi',
                     function3Description: 'İlaç/Vitamin',
                     function4Description: 'Yapılacaklar',

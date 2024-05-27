@@ -135,21 +135,7 @@ class FirestoreFunctions {
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(userID)
-            .update({
-          "notlar": _tempList
-
-          //       {
-
-          //   "dataRecord": {
-          //     "waterDrinkData": {
-          //       "type": "Bardak",
-          //       "amount": 200,
-          //       "count": 1,
-          //       "date": DateTime.now()
-          //     }
-          //   }
-          // }
-        });
+            .update({"notlar": _tempList});
 
         print('Veri başarıyla güncellendi.');
       } catch (e) {
@@ -627,6 +613,36 @@ class FirestoreFunctions {
       print('Kullanıcı giriş yapmamış.');
     }
     return returnCode;
+  }
+
+  static Future<void> aiBotContent(String content1, String content2) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+        List _tempList = [];
+        Map _tempMap = {};
+        _tempMap['user'] = content1;
+        _tempMap['ai'] = content2;
+        _tempMap['date'] = DateTime.now();
+
+        _tempList.add(_tempMap);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"aiBotLog": FieldValue.arrayUnion(_tempList)});
+
+        print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
   }
 
   // static Future<void> addIlacDataRecord(
