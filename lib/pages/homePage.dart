@@ -181,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Lottie.asset(
                               // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
                               "assets/lottie/robotWelcome.json",
-                              fit: BoxFit.fill),
+                              fit: BoxFit.fitHeight),
                         ),
                       ),
                       childWhenDragging: Container(),
@@ -193,8 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           final Size screenSize = renderBox.size;
 
                           // FloatingActionButton boyutlarını al
-                          final double fabWidth = 56.0;
-                          final double fabHeight = 56.0;
+                          final double fabWidth = 90.0;
+                          final double fabHeight = 90.0;
 
                           // Yeni konumun sınırlar içinde kalmasını sağla
                           double newX = details.offset.dx;
@@ -214,21 +214,25 @@ class _MyHomePageState extends State<MyHomePage> {
                           _floatingActionButtonOffset = Offset(newX, newY);
                         });
                       },
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          // _aiQuestion("Hava nasıl?");
-                          _showChatModalBottomSheet(context);
-                        },
-                        child: Container(
-                          width: 56.0, // Genişlik ayarı
-                          height: 56.0, // Yükseklik ayarı
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
+                      child: Container(
+                        width: 90,
+                        height: 90,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            // _aiQuestion("Hava nasıl?");
+                            _showChatModalBottomSheet(context);
+                          },
+                          child: Container(
+                            width: 90.0, // Genişlik ayarı
+                            height: 90.0, // Yükseklik ayarı
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Lottie.asset(
+                                // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                                "assets/lottie/robotWelcome.json",
+                                fit: BoxFit.fill),
                           ),
-                          child: Lottie.asset(
-                              // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
-                              "assets/lottie/robotWelcome.json",
-                              fit: BoxFit.fill),
                         ),
                       ),
                     )
@@ -241,7 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // rippleColor: Colors.grey[300]!,
         // hoverColor: Colors.grey[100]!,
         gap: 8,
-        activeColor: Color.fromARGB(255, 150, 65, 255),
+        activeColor: Color.fromARGB(255, 93, 46, 141),
         iconSize: 24,
         padding: EdgeInsets.fromLTRB(15, 20, 15, 30),
         duration: Duration(milliseconds: 400),
