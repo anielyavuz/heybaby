@@ -373,6 +373,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
         if (userData!.containsKey('aiBotLog')) {
           setState(() {
+            chatHistory = [];
+            _aiChatHistory = [];
             _aiChatHistory = userData?['aiBotLog'];
 
             for (var element in _aiChatHistory) {
@@ -415,6 +417,9 @@ class _MyHomePageState extends State<MyHomePage> {
       isScrollControlled:
           true, // Modalın klavye ile birlikte hareket etmesini sağlar
       builder: (BuildContext context) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        });
         final bottomInset =
             MediaQuery.of(context).viewInsets.bottom; // Klavyenin boyutunu alır
         return FractionallySizedBox(
@@ -487,12 +492,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     .size
                                                     .width *
                                                 0.75),
-                                        child: Text(
-                                          chatHistory[index],
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              color: Colors.white),
-                                        ),
+                                        child: isHeyBabyAI
+                                            ? Text(
+                                                chatHistory[index]
+                                                    .substring(12),
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    color: Colors.white),
+                                              )
+                                            : Text(
+                                                chatHistory[index],
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    color: Colors.white),
+                                              ),
                                       ),
                                     ),
                                   );
@@ -535,6 +548,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: TextFormField(
                               controller: _chatController,
                               focusNode: _focusNode,
+                              autofocus: true,
                               maxLines: null,
                               textInputAction: TextInputAction
                                   .done, // Klavyede 'Done' (Tamam) butonunu ayarlar
@@ -551,41 +565,50 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: () async {
-                              String userQuestion = _chatController.text;
-                              setState(() {
-                                chatHistory.add('$userQuestion');
-                                isHeyBabyTyping = true;
-                                _scrollToBottom();
-                              });
+                          Container(
+                            height: 60,
+                            width: 60,
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_chatController.text != "") {
+                                    String userQuestion = _chatController.text;
+                                    setState(() {
+                                      chatHistory.add('$userQuestion');
+                                      isHeyBabyTyping = true;
+                                      _scrollToBottom();
+                                    });
 
-                              _chatController.clear();
-                              // ChatGPTService'i kullanarak soruyu gönderip cevabı al
-                              String? _response = await heyBabyAI().istekYap(
-                                  userQuestion,
-                                  _apiKey,
-                                  _model,
-                                  _systemInstruction,
-                                  _aiChatHistory);
+                                    _chatController.clear();
+                                    // ChatGPTService'i kullanarak soruyu gönderip cevabı al
+                                    String? _response = await heyBabyAI()
+                                        .istekYap(userQuestion, _apiKey, _model,
+                                            _systemInstruction, _aiChatHistory);
 
-                              setState(() {
-                                isHeyBabyTyping = false;
-                                chatHistory
-                                    .add('HeyBaby AI: ${_response.toString()}');
-                                _scrollToBottom();
-                              });
+                                    setState(() {
+                                      isHeyBabyTyping = false;
+                                      chatHistory.add(
+                                          'HeyBaby AI: ${_response.toString()}');
+                                      _scrollToBottom();
+                                    });
 
-                              var _aiLogInsert =
-                                  await FirestoreFunctions.aiBotContent(
-                                      userQuestion, _response!);
+                                    var _aiLogInsert =
+                                        await FirestoreFunctions.aiBotContent(
+                                            userQuestion, _response!);
 
-                              Map _tempMap = {};
-                              _tempMap['user'] = userQuestion;
-                              _tempMap['ai'] = _response;
-                              _aiChatHistory.add(_tempMap);
-                            },
-                            child: Text('Gönder'),
+                                    Map _tempMap = {};
+                                    _tempMap['user'] = userQuestion;
+                                    _tempMap['ai'] = _response;
+                                    _aiChatHistory.add(_tempMap);
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.fromLTRB(3,0,0,0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        30.0), // Yuvarlak köşeler için büyük bir değer
+                                  ),
+                                ),
+                                child: Icon(Icons.send,size: 30)),
                           ),
                         ],
                       ),
@@ -601,10 +624,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
+    // _scrollController.animateTo(
+    //   _scrollController.position.maxScrollExtent,
+    //   duration: Duration(milliseconds: 300),
+    //   curve: Curves.easeOut,
+    // );
   }
 }
