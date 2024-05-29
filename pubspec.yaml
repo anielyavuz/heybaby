@@ -145,6 +145,10 @@ flutter:
     - assets/ultrason/38.png
     - assets/ultrason/39.png
     - assets/ultrason/40.png
+    - assets/icon/hapIcon.png
+    - assets/icon/suIcon.png
+    - assets/icon/tartiIcon.png
+    - assets/icon/yapilacakIcon.png
     - assets/kesfet/kaydettigimMakaleler.png
     - assets/kesfet/sizdenGelenler.png
     - assets/kesfet/sorular.jpeg

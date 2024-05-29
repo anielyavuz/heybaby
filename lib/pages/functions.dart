@@ -30,22 +30,22 @@ class FunctionsWidget extends StatelessWidget {
       children: [
         _buildFunctionButton(
           onPressed: onFunction1Pressed,
-          icon: Icons.water_drop,
+          icon: 'suIcon',
           description: function1Description,
         ),
         _buildFunctionButton(
           onPressed: onFunction2Pressed,
-          icon: Icons.scale,
+          icon: 'tartiIcon',
           description: function2Description,
         ),
         _buildFunctionButton(
           onPressed: onFunction3Pressed,
-          icon: Icons.monitor_heart,
+          icon: 'hapIcon',
           description: function3Description,
         ),
         _buildFunctionButton(
           onPressed: onFunction4Pressed,
-          icon: Icons.pending_actions,
+          icon: 'yapilacakIcon',
           description: function4Description,
         ),
       ],
@@ -54,14 +54,27 @@ class FunctionsWidget extends StatelessWidget {
 
   Widget _buildFunctionButton({
     required VoidCallback onPressed,
-    required IconData icon,
+    required String icon,
     required String description,
   }) {
     return Column(
       children: [
         FloatingActionButton(
           onPressed: onPressed,
-          child: Icon(icon),
+          child: Container(
+            width: 96.0, // Genişlik ayarı
+            height: 96.0, // Yükseklik ayarı
+            decoration: BoxDecoration(
+              // color: Colors.white.withOpacity(0.1),
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: AssetImage(
+                    'assets/icon/$icon.png'), // Buradaki yol assets klasörünüzün kökünden itibaren belirtilmelidir
+                fit: BoxFit
+                    .cover, // Resmi butona tam olarak dolduracak şekilde ayarla
+              ),
+            ),
+          ),
         ),
         SizedBox(height: 8),
         Text(
