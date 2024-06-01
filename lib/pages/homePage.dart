@@ -75,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _AIStatus = false;
   int selectedWeek = 4;
   String _response = "";
+  String dropdownValue = "One";
   List<String> drawerItems = [
     'Bildirim 1',
     'Bildirim 2',
@@ -436,25 +437,49 @@ class _MyHomePageState extends State<MyHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Stack(
+                          alignment: Alignment.centerRight,
                           children: [
-                            Text(
-                              'Chat with HeyBaby AI Bot',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            Container(
-                              width: 46.0, // Genişlik ayarı
-                              height: 46.0, // Yükseklik ayarı
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Chat with HeyBaby AI',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Container(
+                                      width: 46.0, // Genişlik ayarı
+                                      height: 46.0, // Yükseklik ayarı
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Lottie.asset(
+                                          // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
+                                          "assets/lottie/robotWelcome.json",
+                                          fit: BoxFit.fitWidth),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Lottie.asset(
-                                  // "https://assets5.lottiefiles.com/private_files/lf30_ijwulw45.json"
-                                  "assets/lottie/robotWelcome.json",
-                                  fit: BoxFit.fitWidth),
                             ),
+                            DropdownButton(
+                              icon: const Icon(Icons.more_vert),
+                              style: const TextStyle(color: Colors.black),
+                              onChanged: (value) => setState(() {
+                                dropdownValue = value!;
+                              }),
+                              items: const [
+                                DropdownMenuItem(
+                                    value: "One",
+                                    child: Text("Geçmişi Sil"),
+                                    alignment: AlignmentDirectional.center),
+                              ],
+                            )
                           ],
                         ),
                       ),
