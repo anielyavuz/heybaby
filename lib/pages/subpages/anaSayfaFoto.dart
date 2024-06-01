@@ -255,9 +255,9 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
       haftalikBoyutBildirimOlustur();
     });
 
-    Future.delayed(const Duration(milliseconds: 14000), () {
-      suBildiriminiOlustur();
-    });
+    // Future.delayed(const Duration(milliseconds: 14000), () {
+    //   suBildiriminiOlustur();
+    // });
   }
 
   @override

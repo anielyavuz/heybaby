@@ -602,13 +602,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.fromLTRB(3,0,0,0),
+                                  padding: EdgeInsets.fromLTRB(3, 0, 0, 0),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
                                         30.0), // Yuvarlak köşeler için büyük bir değer
                                   ),
                                 ),
-                                child: Icon(Icons.send,size: 30)),
+                                child: Icon(Icons.send, size: 30)),
                           ),
                         ],
                       ),

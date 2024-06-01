@@ -239,6 +239,54 @@ class BildirimTakip {
     // }
   }
 
+  static Future<void> gunlukSuIcYeni(
+    int _hour,
+    int _minute,
+    int _day,
+    int _month,
+    int _year,
+  ) async {
+    String utcTimeZone =
+        await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    // print(
+    //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
+    try {
+      await AwesomeNotifications()
+          .createNotification(
+        content: NotificationContent(
+            id: 3,
+            channelKey: "basic_channel",
+            title: "Günlük Su Özetin🐳",
+            body:
+                "Bugünkü su hedefini doldurmamış görünüyorsun annecim. 🥲 Hadi biraz su iç ve listene kaydet.😊",
+            wakeUpScreen: true,
+            payload: {'page': 'suTakip'}),
+        schedule: NotificationCalendar(
+          timeZone: utcTimeZone,
+          day: _day,
+          month: _month,
+          year: _year,
+          hour: _hour,
+          minute: _minute,
+          second: 00,
+          repeats: true,
+        ),
+      )
+          .whenComplete(() async {
+        print("yeni su için tanım yapıldı detaylar:  ");
+        // var t = await AwesomeNotifications().listScheduledNotifications();
+        // print(t.length);
+      });
+    } catch (e) {
+      print("Bir hata oluştu: $e");
+    }
+
+    // for (var _bildirim in t) {
+    //   print(_bildirim.content!.id);
+    //   print(_bildirim.content!.body);
+    // }
+  }
+
   static Future<void> aktiviteAlarm(int _id, int _hour, int _minute, int _day,
       int _month, int _year, String _aktivite) async {
     String utcTimeZone =
