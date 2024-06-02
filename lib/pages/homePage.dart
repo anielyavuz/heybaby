@@ -303,10 +303,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // ));
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
     if (index == 0) {
       _systemData();
     }
+
     // print(index);
     _fetchUserData();
     setState(() {
@@ -380,6 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _systemData() async {
+    await Future.delayed(Duration(milliseconds: 100));
     Map<String, dynamic>? data = await FirestoreFunctions.getSystemData();
     if (data != null) {
       // print(data);
@@ -388,7 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
         storyImages = data['Stories'];
 
         var _tempStoryImages = data['weeklyStories'];
-
+        print("selectedWeek değeri şuanda $selectedWeek");
         for (var _tempStoryImage in _tempStoryImages) {
           if (_tempStoryImage['hafta'] == selectedWeek) {
             storyImages2.add(_tempStoryImage);

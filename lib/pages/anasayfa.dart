@@ -485,6 +485,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
   @override
   void initState() {
     setState(() {
+      print("widget.newstoryImage  ");
+      print(widget.newstoryImages);
       for (var storyElement in widget.newstoryImages) {
         _storyImagesLink.add(storyElement['imageLink']);
       }
@@ -537,10 +539,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   Padding(
                     padding: const EdgeInsets.only(top: 3),
                     child: Container(
-                      height: 105.0,
+                      height: widget.newstoryImages.length > 0 ? 105.0 : 0,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.storyImages.length,
+                        itemCount: widget.newstoryImages.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
