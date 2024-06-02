@@ -645,6 +645,29 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<void> aiBotContentClear() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"aiBotLog": []});
+
+        print('AI Bot verileri başarıyla silindi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
   // static Future<void> addIlacDataRecord(
   //   Map<String, dynamic> newData,
   // ) async {
