@@ -537,7 +537,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   Padding(
                     padding: const EdgeInsets.only(top: 3),
                     child: Container(
-                      height: 95.0,
+                      height: 105.0,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: widget.storyImages.length,
@@ -560,8 +560,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                               child: Column(
                                 children: [
                                   Container(
-                                    width: 60.0,
-                                    height: 60.0,
+                                    width: 65.0,
+                                    height: 65.0,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       gradient: LinearGradient(
