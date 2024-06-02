@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         print("Klavye açıldı ve TextFormField'a odaklanıldı. $modalHeight");
       } else {
         setState(() {
-          modalHeight = 0.55;
+          modalHeight = 0.85;
         });
       }
     });
@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _model = "";
 
   String _systemInstruction = "";
-  double modalHeight = 0.55;
+  double modalHeight = 0.85;
   @override
   Widget build(BuildContext context) {
     if (userData == null || _shouldFetchUserData) {

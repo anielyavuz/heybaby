@@ -537,7 +537,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   Padding(
                     padding: const EdgeInsets.only(top: 3),
                     child: Container(
-                      height: 80.0,
+                      height: 95.0,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: widget.storyImages.length,
@@ -584,11 +584,20 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                           NetworkImage(_storyImagesLink[index]),
                                     ),
                                   ),
-                                  Text(
-                                    widget.newstoryImages[index]['header']
-                                        .toString(),
-                                    style: TextStyle(
-                                      fontSize: 12.0,
+                                  Container(
+                                    width:
+                                        75, // Genişliği 40 piksel ile sınırla
+                                    child: Text(
+                                      widget.newstoryImages[index]['header']
+                                          .toString(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 11.0,
+                                      ),
+                                      softWrap:
+                                          true, // Metni yumuşak bir şekilde sar
+                                      overflow: TextOverflow
+                                          .visible, // Taşan metni görünür yap
                                     ),
                                   )
                                 ],
