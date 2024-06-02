@@ -89,21 +89,9 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
   List _aiChatHistory = [];
 
-  List storyImages = [
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-    // 'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f',
-  ];
+  List storyImages = [];
+
+  List storyImages2 = [];
 
   Offset _floatingActionButtonOffset =
       Offset(320.0, 600.0); // Default sağ alt köşe, 100 px yukarıda
@@ -331,7 +319,10 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         return storyImages.length == 0
             ? CircularProgressIndicator()
-            : AnaSayfa(storyImages: storyImages, userData: userData);
+            : AnaSayfa(
+                storyImages: storyImages,
+                newstoryImages: storyImages2,
+                userData: userData);
 
       case 1:
         return Calendar(userData: userData);
@@ -395,7 +386,17 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _AIStatus = data['AIBot']['Enable'];
         storyImages = data['Stories'];
-        storyImages.sort((a, b) => b['id'].compareTo(a['id']));
+
+        var _tempStoryImages = data['weeklyStories'];
+
+        for (var _tempStoryImage in _tempStoryImages) {
+          if (_tempStoryImage['hafta'] == selectedWeek) {
+            storyImages2.add(_tempStoryImage);
+          }
+        }
+
+        // storyImages = data['weeklyStories'];
+        // storyImages.sort((a, b) => b['id'].compareTo(a['id']));
 
         _apiKey = data['AIBot']['apiKey'];
         _model = data['AIBot']['model'];

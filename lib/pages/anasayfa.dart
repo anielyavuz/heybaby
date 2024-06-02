@@ -23,9 +23,14 @@ import 'package:intl/intl.dart';
 
 class AnaSayfa extends StatefulWidget {
   final List storyImages;
+  final List newstoryImages;
   Map<String, dynamic>? userData;
 
-  AnaSayfa({Key? key, this.userData, required this.storyImages})
+  AnaSayfa(
+      {Key? key,
+      this.userData,
+      required this.newstoryImages,
+      required this.storyImages})
       : super(key: key);
 
   @override
@@ -37,7 +42,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   Map calendarListEventsSoon = {};
   int calendarListEventsSoonDay = 15;
   List _storyImagesLink = [];
-  List _storyIDlist = [];
+
   DateTime bugun = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
   Map<String, String> activities = {};
@@ -467,27 +472,26 @@ class _AnaSayfaState extends State<AnaSayfa> {
   //   }
   // }
 
-  void _sortStoryImagesByDate() {
-    setState(() {
-      widget.storyImages.sort((a, b) {
-        DateTime dateA = DateTime.parse(a['tarih']);
-        DateTime dateB = DateTime.parse(b['tarih']);
-        return dateB.compareTo(dateA); // Yakından uzağa doğru sıralama
-      });
-    });
-  }
+  // void _sortStoryImagesByDate() {
+  //   setState(() {
+  //     widget.storyImages.sort((a, b) {
+  //       DateTime dateA = DateTime.parse(a['tarih']);
+  //       DateTime dateB = DateTime.parse(b['tarih']);
+  //       return dateB.compareTo(dateA); // Yakından uzağa doğru sıralama
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
     setState(() {
-      for (var storyElement in widget.storyImages) {
+      for (var storyElement in widget.newstoryImages) {
         _storyImagesLink.add(storyElement['imageLink']);
-        _storyIDlist.add(storyElement['id']);
       }
     });
 
     super.initState();
-    _sortStoryImagesByDate();
+    // _sortStoryImagesByDate();
     _fetchUserData();
   }
 
@@ -544,10 +548,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => StoryScreen(
-                                      storyies: widget.storyImages,
-                                      storyImages: _storyImagesLink,
-                                      startingPage: index,
-                                      storyIDlist: _storyIDlist),
+                                    storyies: widget.newstoryImages,
+                                    storyImages: _storyImagesLink,
+                                    startingPage: index,
+                                  ),
                                 ),
                               );
                             },
@@ -581,7 +585,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                     ),
                                   ),
                                   Text(
-                                    widget.storyImages[index]['header']
+                                    widget.newstoryImages[index]['header']
                                         .toString(),
                                     style: TextStyle(
                                       fontSize: 12.0,
@@ -990,6 +994,7 @@ void main() {
         storyImages: [
           // Story Images'larınızı ekleyin
         ],
+        newstoryImages: [],
       ),
     ));
   }, (error, stackTrace) {

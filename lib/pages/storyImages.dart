@@ -8,13 +8,11 @@ class StoryScreen extends StatefulWidget {
   final List storyies;
   final List storyImages;
   final int startingPage;
-  final List storyIDlist;
 
   StoryScreen(
       {required this.storyies,
       required this.storyImages,
-      required this.startingPage,
-      required this.storyIDlist});
+      required this.startingPage});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -189,7 +187,6 @@ class _StoryScreenState extends State<StoryScreen>
                           25, // İstenilen boşluk miktarını ayarlayabilirsiniz
                       child: GestureDetector(
                         onTap: () {
-                          print(widget.storyIDlist[index]);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
