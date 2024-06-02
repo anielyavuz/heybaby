@@ -468,29 +468,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                             ),
-                            DropdownButton(
-                              icon: const Icon(Icons.more_vert),
-                              style: const TextStyle(color: Colors.black),
-                              onChanged: (value) => setState(() {
-                                dropdownValue = value!;
-
-                                print(dropdownValue);
-                                if (dropdownValue == "gecmisiSil") {
-                                  setState(() {
-                                    chatHistory = [];
-                                    _aiChatHistory = [];
-                                  });
-
-                                  FirestoreFunctions.aiBotContentClear();
-                                }
-                                // Navigator.pop(context);
-                              }),
-                              items: const [
-                                DropdownMenuItem(
-                                    value: "gecmisiSil",
-                                    child: Text("Geçmişi Sil"),
-                                    alignment: AlignmentDirectional.center),
-                              ],
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                icon: const Icon(Icons.more_vert),
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (value) => setState(() {
+                                  dropdownValue = value!;
+                                  print(dropdownValue);
+                                  if (dropdownValue == "gecmisiSil") {
+                                    setState(() {
+                                      chatHistory = [];
+                                      _aiChatHistory = [];
+                                    });
+                                    FirestoreFunctions.aiBotContentClear();
+                                  }
+                                  // Navigator.pop(context);
+                                }),
+                                items: const [
+                                  DropdownMenuItem(
+                                      value: "gecmisiSil",
+                                      child: Text("Geçmişi Sil"),
+                                      alignment: AlignmentDirectional.center),
+                                ],
+                              ),
                             )
                           ],
                         ),
