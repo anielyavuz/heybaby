@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
+import 'package:heybaby/pages/subpages/kesfetMakaleHaftalik.dart';
 
 class KesfetPage extends StatefulWidget {
   final List stories;
+  final List storiesWeekly;
   KesfetPage({
     required this.stories,
+    required this.storiesWeekly,
   });
   @override
   _KesfetPageState createState() => _KesfetPageState();
@@ -69,13 +72,9 @@ class _KesfetPageState extends State<KesfetPage> {
     },
   ];
 
-  final List<Map<String, String>> _kartlarSizeOzel = [
+  final List<Map<String, String>> _kartlarHaftalik = [
     {
-      'baslik': 'Sıkça Sorulan Sorular',
-      'resimUrl': 'assets/kesfet/sorular.jpeg',
-    },
-    {
-      'baslik': 'Sizlerden Gelenler',
+      'baslik': 'Haftalik Öneriler',
       'resimUrl': 'assets/kesfet/sizdenGelenler.png',
     },
   ];
@@ -97,7 +96,7 @@ class _KesfetPageState extends State<KesfetPage> {
             _buildKartListesi("Beslenme", _kartlarBeslenme),
             _buildKartListesi("Anne & Bebek", _kartlarAnneBebek),
             _buildKartListesi("İyi Hissedin", _kartlarIyiHissedin),
-            _buildKartListesi("Size Özel", _kartlarSizeOzel),
+            _buildKartListesi("Size Özel", _kartlarHaftalik),
             // Buraya ek alt başlıklar ve kartlar eklenebilir.
           ],
         ),
@@ -140,15 +139,29 @@ class _KesfetPageState extends State<KesfetPage> {
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => KesfetMakaleWidget(
-                          baslik: _kartlar[index]['baslik']!,
-                          resimUrl: _kartlar[index]['resimUrl']!,
-                          stories: widget.stories),
-                    ),
-                  );
+                  // print(_kartlar[index]['resimUrl']!);
+                  if (_kartlar[index]['resimUrl'] !=
+                      'assets/kesfet/sizdenGelenler.png') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => KesfetMakaleWidget(
+                            baslik: _kartlar[index]['baslik']!,
+                            resimUrl: _kartlar[index]['resimUrl']!,
+                            stories: widget.stories),
+                      ),
+                    );
+                  } else {
+                    print(widget.storiesWeekly);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => KesfetMakaleHaftalikWidget(
+                          stories: widget.storiesWeekly,
+                        ),
+                      ),
+                    );
+                  }
 
                   // Kartlara tıklanınca yapılacak işlemler buraya yazılabilir.
                 },

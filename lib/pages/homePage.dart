@@ -91,7 +91,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List storyImages = [];
 
-  List storyImages2 = [];
+  List storyImages2 = []; //ilgili haftanın story makaleleri
+  List storyImages3 = []; //tüm haftaların story makaleleri
 
   Offset _floatingActionButtonOffset =
       Offset(320.0, 600.0); // Default sağ alt köşe, 100 px yukarıda
@@ -329,7 +330,10 @@ class _MyHomePageState extends State<MyHomePage> {
         return Calendar(userData: userData);
 
       case 2:
-        return KesfetPage(stories: storyImages);
+        return KesfetPage(
+          stories: storyImages,
+          storiesWeekly: storyImages3,
+        );
 
       case 3:
         return NotlarPage(userData: userData);
@@ -381,7 +385,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _systemData() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 350));
     Map<String, dynamic>? data = await FirestoreFunctions.getSystemData();
     if (data != null) {
       // print(data);
@@ -395,6 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (_tempStoryImage['hafta'] == selectedWeek) {
             storyImages2.add(_tempStoryImage);
           }
+          storyImages3.add(_tempStoryImage);
         }
 
         // storyImages = data['weeklyStories'];

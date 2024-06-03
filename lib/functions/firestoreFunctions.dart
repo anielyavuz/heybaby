@@ -615,6 +615,30 @@ class FirestoreFunctions {
     return returnCode;
   }
 
+  static Future<void> haftalikBildirimleriEkle(
+      List _haftalikBildirimListe) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        String userID = user.uid;
+        print("UserID: " + userID);
+
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"bildirimler.boyut": _haftalikBildirimListe});
+
+        print('Veri başarıyla güncellendi.');
+      } catch (e) {
+        // Firestore'a veri güncelleme sırasında bir hata oluştu
+        print('Firestore veri güncelleme hatası: $e');
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
   static Future<void> aiBotContent(String content1, String content2) async {
     User? user = FirebaseAuth.instance.currentUser;
 

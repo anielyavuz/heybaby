@@ -15,8 +15,8 @@ class TrimesterProgressWidget extends StatefulWidget {
 }
 
 class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
-  late List<dynamic> jsonList = []; // Global değişken tanımı
-  late List<dynamic> jsonList0 = [];
+  late Map jsonList = {}; // Global değişken tanımı
+  late Map jsonList0 = {};
   late int _kacinciHafta = 5;
   late DateTime _currentDay = DateTime.now();
   imageandInfoJsonFileLoad() async {
@@ -190,7 +190,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     }
     bool _kontrol = true;
     for (var _bildirimId in _bildirimIdleri) {
-      if (_bildirimId < 1999) {
+      if (_bildirimId < 1050) {
         _kontrol = false;
       } else {}
     }
@@ -251,9 +251,9 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     Future.delayed(const Duration(milliseconds: 50), () {
       imageandInfoJsonFileLoad();
     });
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      haftalikBoyutBildirimOlustur();
-    });
+    // Future.delayed(const Duration(milliseconds: 3000), () {
+    //   haftalikBoyutBildirimOlustur();
+    // });
 
     // Future.delayed(const Duration(milliseconds: 14000), () {
     //   suBildiriminiOlustur();
@@ -299,24 +299,24 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
     if (jsonList.isNotEmpty) {
       if (weeks < 41) {
         if (weeks >= 4) {
-          _tahminiKilo = jsonList[weeks - 4]['kilo'];
-          _tahminiBoy = jsonList[weeks - 4]['boy'];
-          _imageLink = jsonList[weeks - 4]['foto_link'];
-          _benzerlik = jsonList[weeks - 4]['benzerlik'];
-          _gifLink = jsonList[weeks - 4]['gif_link'];
+          _tahminiKilo = jsonList['$weeks']['kilo'];
+          _tahminiBoy = jsonList['$weeks']['boy'];
+          _imageLink = jsonList['$weeks']['foto_link'];
+          _benzerlik = jsonList['$weeks']['benzerlik'];
+          _gifLink = jsonList['$weeks']['gif_link'];
         } else {
-          _tahminiKilo = jsonList[0]['kilo'];
-          _tahminiBoy = jsonList[0]['boy'];
-          _imageLink = jsonList[0]['foto_link'];
-          _benzerlik = jsonList[0]['benzerlik'];
-          _gifLink = jsonList[0]['gif_link'];
+          _tahminiKilo = jsonList['4']['kilo'];
+          _tahminiBoy = jsonList['4']['boy'];
+          _imageLink = jsonList['4']['foto_link'];
+          _benzerlik = jsonList['4']['benzerlik'];
+          _gifLink = jsonList['4']['gif_link'];
         }
       } else {
-        _tahminiKilo = jsonList[36]['kilo'];
-        _tahminiBoy = jsonList[36]['boy'];
-        _imageLink = jsonList[36]['foto_link'];
-        _benzerlik = jsonList[36]['benzerlik'];
-        _gifLink = jsonList[36]['gif_link'];
+        _tahminiKilo = jsonList['40']['kilo'];
+        _tahminiBoy = jsonList['40']['boy'];
+        _imageLink = jsonList['40']['foto_link'];
+        _benzerlik = jsonList['40']['benzerlik'];
+        _gifLink = jsonList['40']['gif_link'];
       }
     }
 

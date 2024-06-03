@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:heybaby/functions/jsonFiles.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
@@ -47,6 +48,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
   Map<String, String> activities = {};
   int selectedWeek = 4;
+  int yeniHafte = 5;
+  int kacGunSonraYeniHafta = 0;
   bool _aktivitelerAcik = false;
   final GlobalKey expansionTileKey = GlobalKey();
   bool _isVisibleYaklasanAktiviteler = true;
@@ -84,6 +87,139 @@ class _AnaSayfaState extends State<AnaSayfa> {
     return formattedDate;
   }
 
+  late Map jsonList = {}; // Global değişken tanımı
+  late Map jsonList0 = {};
+
+  imageandInfoJsonFileLoad() async {
+    jsonList0 = await JsonReader.readJson();
+    setState(() {
+      jsonList = jsonList0;
+    });
+    // print(jsonList);
+  }
+
+  haftalikBoyutBildirimOlustur(int yeniHafta, int kacGunSonraYeniHafta) async {
+    if (widget.userData!['bildirimler']['boyut'] != null &&
+        widget.userData!['bildirimler']['boyut'].isNotEmpty) {
+      // Map boş değilse yapılacak işlemler
+      print("Map boş değil");
+    } else {
+      var _mevcutBildirimler =
+          await AwesomeNotifications().listScheduledNotifications();
+      List _bildirimIdleri = [];
+      for (var _bildirim in _mevcutBildirimler) {
+        if (_bildirim.content!.id! < 1099) {
+          var _iptal =
+              await AwesomeNotifications().cancel(_bildirim.content!.id!);
+        }
+      }
+      List _tempList = [];
+      int haftalikSayac = 0;
+
+      for (var i = yeniHafte; i < 41; i++) {
+        if (i < 4) {
+          i = 4;
+        }
+        Map _tempMap = {};
+        var sonrakiTarih = DateTime.now()
+            .add(Duration(days: kacGunSonraYeniHafta + (7 * haftalikSayac)));
+        print(i);
+        _tempMap['tarih'] = DateTime(
+            sonrakiTarih.year,
+            sonrakiTarih.month,
+            sonrakiTarih.day,
+            10, // saat
+            0 // dakika
+            );
+        _tempMap['foto_link'] = jsonList['$i']['foto_link'];
+        _tempMap['benzerlik'] = jsonList['$i']['benzerlik'];
+
+        _tempMap['id'] = 1000 + i;
+
+        await BildirimTakip.haftalikBoyutBilgisi(
+            _tempMap['id'],
+            _tempMap['benzerlik'],
+            _tempMap['foto_link'],
+            10,
+            00,
+            sonrakiTarih.day,
+            sonrakiTarih.month,
+            sonrakiTarih.year);
+
+        await Future.delayed(Duration(milliseconds: 200));
+
+        _tempList.add(_tempMap);
+        haftalikSayac = haftalikSayac + 1;
+      }
+      print("Map boş");
+
+      FirestoreFunctions.haftalikBildirimleriEkle(_tempList);
+
+      // Map boşsa yapılacak işlemler
+    }
+
+    // var _bildirimler =
+    //     await AwesomeNotifications().listScheduledNotifications();
+    // List _bildirimIdleri = [];
+    // for (var _bildirim in _bildirimler) {
+    //   _bildirimIdleri.add(_bildirim.content!.id);
+    // }
+    // bool _kontrol = true;
+    // for (var _bildirimId in _bildirimIdleri) {
+    //   if (_bildirimId < 1050) {
+    //     _kontrol = false;
+    //   } else {}
+    // }
+    // if (_kontrol) {
+    //   int sayac = 0;
+    //   for (var i = _kacinciHafta + 1; i < 41; i++) {
+    //     String _testImageLink = "";
+    //     String _testBenzerlik = "";
+
+    //     if (i < 41) {
+    //       if (i >= 4) {
+    //         _testImageLink = jsonList[i - 4]['foto_link'];
+    //         _testBenzerlik = jsonList[i - 4]['benzerlik'];
+    //       } else {
+    //         _testImageLink = jsonList[0]['foto_link'];
+    //         _testBenzerlik = jsonList[0]['benzerlik'];
+    //       }
+    //     } else {
+    //       _testImageLink = jsonList[36]['foto_link'];
+    //       _testBenzerlik = jsonList[36]['benzerlik'];
+    //     }
+    //     // print("_testBenzerlik Test $_testBenzerlik");
+
+    //     Future.delayed(const Duration(milliseconds: 50), () {
+    //       imageandInfoJsonFileLoad();
+    //     });
+
+    //     await BildirimTakip.haftalikBoyutBilgisi(
+    //         (i + 1000),
+    //         _testBenzerlik,
+    //         _testImageLink,
+    //         10,
+    //         00,
+    //         _currentDay
+    //             .add(Duration(days: (8 - _currentDay.weekday) + sayac))
+    //             .day,
+    //         _currentDay
+    //             .add(Duration(days: (8 - _currentDay.weekday) + sayac))
+    //             .month,
+    //         _currentDay
+    //             .add(Duration(days: (8 - _currentDay.weekday) + sayac))
+    //             .year);
+
+    //     // print("Ana sayfa boyut bildirimleri yok, yazılıyor. -- " +
+    //     //     (i + 1000).toString());
+    //     sayac = sayac + 7;
+    //   }
+    // } else {
+    //   print("haftalık bildirimler kurulu durumda.");
+    //   // print(_bildirimIdleri);
+    // }
+  }
+
   Future<void> _fetchUserData() async {
     Map<String, dynamic>? data = await FirestoreFunctions.getUserData();
     if (data != null) {
@@ -93,6 +229,13 @@ class _AnaSayfaState extends State<AnaSayfa> {
             (((DateTime.now().difference(DateTime.parse(data['sonAdetTarihi'])))
                     .inDays) ~/
                 7);
+        yeniHafte = selectedWeek + 1;
+        kacGunSonraYeniHafta = 7 -
+            (((DateTime.now().difference(DateTime.parse(data['sonAdetTarihi'])))
+                    .inDays) %
+                7);
+        print("kacGunSonraYeniHafta $kacGunSonraYeniHafta");
+        haftalikBoyutBildirimOlustur(yeniHafte, kacGunSonraYeniHafta);
       });
 
       // if (!data.containsKey('suBildirimTakipSistemi')) {
@@ -484,13 +627,19 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   void initState() {
+    Future.delayed(const Duration(milliseconds: 50), () {
+      imageandInfoJsonFileLoad();
+    });
+
     setState(() {
-      print("widget.newstoryImage  ");
-      print(widget.newstoryImages);
+      // print("widget.newstoryImage  ");
+      // print(widget.newstoryImages);
       for (var storyElement in widget.newstoryImages) {
         _storyImagesLink.add(storyElement['imageLink']);
       }
     });
+
+    // haftalikBoyutBildirimOlustur();
 
     super.initState();
     // _sortStoryImagesByDate();

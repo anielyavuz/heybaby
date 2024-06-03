@@ -265,16 +265,34 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                               onPressed: () async {
                                 var _bildirimler = await AwesomeNotifications()
                                     .listScheduledNotifications();
+
                                 List _bildirimIdleri = [];
                                 for (var _bildirim in _bildirimler) {
-                                  _bildirimIdleri.add(_bildirim.content!.id);
+                                  if (_bildirim.content!.id == 3) {
+                                    if (_bildirim.schedule != null) {
+                                      // Assuming the schedule is a NotificationCalendar
+                                      var schedule = _bildirim.schedule
+                                          as NotificationCalendar;
+
+                                      print(
+                                          'Scheduled Time: ${schedule.year}-${schedule.month}-${schedule.day} '
+                                          '${schedule.hour}:${schedule.minute}:${schedule.second}   ${schedule.repeats} ');
+                                    } else {
+                                      print(
+                                          'No schedule found for this notification.');
+                                    }
+                                    // print('Title: ${_bildirim.content!.title}');
+                                    // print('Body: ${_bildirim.content!.body}');
+                                    // Add more fields as necessary
+                                  }
+                                  // _bildirimIdleri.add(_bildirim.content!.id);
                                 }
-                                print(_bildirimIdleri);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text(_bildirimIdleri.toString())),
-                                );
+                                // print(_bildirimIdleri);
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //       content:
+                                //           Text(_bildirimIdleri.toString())),
+                                // );
                               },
                               child: Text("Bildirim ID'lerini print et"),
                             ),
