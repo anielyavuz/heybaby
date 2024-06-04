@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -73,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _shouldFetchUserData = true;
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
-  int selectedWeek = 4;
+  late int selectedWeek = -1;
   String _response = "";
   String dropdownValue = "One";
   List<String> drawerItems = [
@@ -319,7 +321,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildBody() {
     switch (_selectedIndex) {
       case 0:
-        return storyImages.length == 0
+        return selectedWeek == -1
             ? CircularProgressIndicator()
             : AnaSayfa(
                 storyImages: storyImages,
@@ -385,13 +387,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _systemData() async {
-    await Future.delayed(Duration(milliseconds: 350));
+    await Future.delayed(Duration(milliseconds: 450));
     Map<String, dynamic>? data = await FirestoreFunctions.getSystemData();
     if (data != null) {
       // print(data);
       setState(() {
+        storyImages = [];
+        storyImages2 = [];
+        storyImages3 = [];
         _AIStatus = data['AIBot']['Enable'];
         storyImages = data['Stories'];
+        storyImages.shuffle(Random());
 
         var _tempStoryImages = data['weeklyStories'];
         print("selectedWeek değeri şuanda $selectedWeek");
