@@ -42,7 +42,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
   var calendarListEvents;
   Map calendarListEventsSoon = {};
   int calendarListEventsSoonDay = 15;
-  List _storyImagesLink = [];
+  // List _storyImagesLink = [];
 
   DateTime bugun = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
@@ -627,17 +627,19 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   void initState() {
+    print("newstoryImages değeri ${widget.newstoryImages}");
     Future.delayed(const Duration(milliseconds: 50), () {
       imageandInfoJsonFileLoad();
     });
 
-    setState(() {
-      // print("widget.newstoryImage  ");
-      // print(widget.newstoryImages);
-      for (var storyElement in widget.newstoryImages) {
-        _storyImagesLink.add(storyElement['imageLink']);
-      }
-    });
+    // setState(() {
+    //   // print("widget.newstoryImage  ");
+    //   // print(widget.newstoryImages);
+    //   for (var storyElement in widget.newstoryImages) {
+    //     _storyImagesLink.add(storyElement['imageLink']);
+    //   }
+    //   print("ZZZZZZZZZZ ${widget.newstoryImages.length}");
+    // });
 
     // haftalikBoyutBildirimOlustur();
 
@@ -685,80 +687,109 @@ class _AnaSayfaState extends State<AnaSayfa> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3),
-                    child: Container(
-                      height: widget.newstoryImages.length > 0 ? 105.0 : 0,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.newstoryImages.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => StoryScreen(
-                                    storyies: widget.newstoryImages,
-                                    storyImages: _storyImagesLink,
-                                    startingPage: index,
+                  widget.newstoryImages.length != 0
+                      ? Column(
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(18, 0, 0, 5),
+                                  child: Text(
+                                    "$selectedWeek. Hafta İpuçlarınız",
+                                    style: TextStyle(
+                                        fontSize: 17.0,
+                                        fontWeight: FontWeight.w500),
+
+                                    // textAlign: TextAlign.left,
                                   ),
                                 ),
-                              );
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 65.0,
-                                    height: 65.0,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Color.fromARGB(255, 55, 105, 245),
-                                          // Color.fromARGB(255, 50, 200, 255),
-                                          Color.fromARGB(255, 168, 60, 187),
-                                        ],
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 3),
+                              child: Container(
+                                height: widget.newstoryImages.length > 0
+                                    ? 105.0
+                                    : 0,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: widget.newstoryImages.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => StoryScreen(
+                                              storyies: widget.newstoryImages,
+                                              // storyImages: _storyImagesLink,
+                                              startingPage: index,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: 65.0,
+                                              height: 65.0,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight,
+                                                  colors: [
+                                                    Color.fromARGB(
+                                                        255, 55, 105, 245),
+                                                    // Color.fromARGB(255, 50, 200, 255),
+                                                    Color.fromARGB(
+                                                        255, 168, 60, 187),
+                                                  ],
+                                                ),
+                                                border: Border.all(
+                                                  color: Colors.transparent,
+                                                  width: 3.0,
+                                                ), // Halkanın rengi ve genişliği
+                                              ),
+                                              child: CircleAvatar(
+                                                radius: 30.0,
+                                                backgroundImage: NetworkImage(
+                                                    widget.newstoryImages[index]
+                                                        ['imageLink']),
+                                              ),
+                                            ),
+                                            Container(
+                                              width:
+                                                  75, // Genişliği 40 piksel ile sınırla
+                                              child: Text(
+                                                widget.newstoryImages[index]
+                                                        ['header']
+                                                    .toString(),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 11.0,
+                                                ),
+                                                softWrap:
+                                                    true, // Metni yumuşak bir şekilde sar
+                                                overflow: TextOverflow
+                                                    .visible, // Taşan metni görünür yap
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      border: Border.all(
-                                        color: Colors.transparent,
-                                        width: 3.0,
-                                      ), // Halkanın rengi ve genişliği
-                                    ),
-                                    child: CircleAvatar(
-                                      radius: 30.0,
-                                      backgroundImage:
-                                          NetworkImage(_storyImagesLink[index]),
-                                    ),
-                                  ),
-                                  Container(
-                                    width:
-                                        75, // Genişliği 40 piksel ile sınırla
-                                    child: Text(
-                                      widget.newstoryImages[index]['header']
-                                          .toString(),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 11.0,
-                                      ),
-                                      softWrap:
-                                          true, // Metni yumuşak bir şekilde sar
-                                      overflow: TextOverflow
-                                          .visible, // Taşan metni görünür yap
-                                    ),
-                                  )
-                                ],
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+                          ],
+                        )
+                      : SizedBox(),
                   // SizedBox(height: 10),
 
                   Divider(

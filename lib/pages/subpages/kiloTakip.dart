@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
@@ -24,6 +25,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
   Timer? _timer;
   bool _longPressAdd = false;
   bool _longPressSubtract = false;
+  String _selectedWeightType = 'Bebek Kilo';
 
   void _updateWeight(bool isIncreasing) {
     setState(() {
@@ -145,37 +147,47 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
   }
 
   void _showWeightInputDialog() {
-    showDialog(
+    showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Kilo Girin"),
-          content: TextField(
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            controller:
-                _weightController, // TextEditingController tanımlanmalıdır.
-            decoration: InputDecoration(labelText: "Kilo"),
+        return Container(
+          height: 280.0, // Yüksekliği biraz artırarak taşma sorununu çözeriz
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context)
+                  .viewInsets
+                  .bottom), // Alt boşluk ekleyerek taşmayı önleriz
+          color: CupertinoColors.systemBackground,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 200.0,
+                child: CupertinoPicker(
+                  scrollController: FixedExtentScrollController(
+                    initialItem: (_currentWeight * 10)
+                        .toInt(), // 0.1 aralıklarla gösterim
+                  ),
+                  itemExtent: 32.0,
+                  onSelectedItemChanged: (int index) {
+                    setState(() {
+                      _currentWeight = index / 10.0;
+                    });
+                  },
+                  children: List<Widget>.generate(1000, (int index) {
+                    return Center(
+                      child: Text((index / 10.0).toStringAsFixed(1)),
+                    );
+                  }),
+                ),
+              ),
+              CupertinoButton(
+                child: Text("Kaydet"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("İptal"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _weightController.clear();
-              },
-            ),
-            TextButton(
-              child: Text("Kaydet"),
-              onPressed: () {
-                // Kullanıcının girdiği kiloyu al ve _currentWeight'i güncelle
-                setState(() {
-                  _currentWeight = double.parse(_weightController.text);
-                });
-                Navigator.of(context).pop();
-                _weightController.clear();
-              },
-            ),
-          ],
         );
       },
     );
@@ -192,7 +204,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                  height: 80,
+                  height: 70,
                   child: Center(
                       child: Text(
                     "Kilo Takip",
@@ -204,17 +216,33 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text('Bebek Kilo'),
-                      Switch(
-                        value: _isMotherWeight,
-                        onChanged: (value) {
-                          setState(() {
-                            _isMotherWeight = value;
-                            _currentWeight = value ? 50.0 : 1.0;
-                          });
-                        },
-                      ),
-                      Text('Anne Kilo'),
+                      Column(
+                        children: [
+                          DropdownButton<String>(
+                            value: _selectedWeightType,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedWeightType = newValue!;
+                                _isMotherWeight =
+                                    _selectedWeightType == 'Anne Kilo';
+                                _currentWeight = _isMotherWeight ? 50.0 : 1.0;
+                              });
+                            },
+                            items: <String>['Bebek Kilo', 'Anne Kilo']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -223,11 +251,6 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        'Mevcut Kilo',
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                      SizedBox(height: 10.0),
                       GestureDetector(
                         onTap: () {
                           _showWeightInputDialog(); // Kullanıcı tıkladığında ağırlık giriş iletişim kutusunu göster
@@ -236,9 +259,32 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                           _updateWeight(
                               details.primaryDelta! < 0); // Changed here
                         },
-                        child: Text(
-                          _currentWeight.toStringAsFixed(1), // Changed here
-                          style: TextStyle(fontSize: 40.0),
+                        child: Container(
+                          width: 150.0, // Halka genişliği
+                          height: 110.0, // Halka yüksekliği
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: _isMotherWeight
+                                  ? Color.fromARGB(255, 243, 101, 148)
+                                  : Color.fromARGB(205, 196, 145,
+                                      247), // Halka rengini ayarlayabilirsiniz.
+                              width: 4.0, // Halka kalınlığı
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              _currentWeight.toStringAsFixed(
+                                  1), // Değeri yuvarlatır ve gösterir.
+                              style: TextStyle(
+                                fontSize: 40.0,
+                                color: _isMotherWeight
+                                    ? Color.fromARGB(255, 243, 101, 148)
+                                    : Color.fromARGB(205, 196, 145,
+                                        247), // Metin rengini ayarlayabilirsiniz.
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -249,55 +295,57 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      GestureDetector(
-                        onTapDown: (_) {
-                          _updateWeight(false); // Changed here
-                          _longPressSubtract = true;
-                          _startTimer(false);
-                        },
-                        onTapUp: (_) {
-                          _longPressSubtract = false;
-                          _stopTimer();
-                        },
-                        child: IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: null,
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTapDown: (_) {
+                      //     _updateWeight(false); // Changed here
+                      //     _longPressSubtract = true;
+                      //     _startTimer(false);
+                      //   },
+                      //   onTapUp: (_) {
+                      //     _longPressSubtract = false;
+                      //     _stopTimer();
+                      //   },
+                      //   child: IconButton(
+                      //     icon: Icon(Icons.remove),
+                      //     onPressed: null,
+                      //   ),
+                      // ),
+
                       ElevatedButton(
                         onPressed: () async {
                           _saveWeight();
                         },
                         child: Text('Kaydet'),
                       ),
-                      GestureDetector(
-                        onTapDown: (_) {
-                          _updateWeight(true); // Changed here
-                          _longPressAdd = true;
-                          _startTimer(true);
-                        },
-                        onTapUp: (_) {
-                          _longPressAdd = false;
-                          _stopTimer();
-                        },
-                        child: IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: null,
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTapDown: (_) {
+                      //     _updateWeight(true); // Changed here
+                      //     _longPressAdd = true;
+                      //     _startTimer(true);
+                      //   },
+                      //   onTapUp: (_) {
+                      //     _longPressAdd = false;
+                      //     _stopTimer();
+                      //   },
+                      //   child: IconButton(
+                      //     icon: Icon(Icons.add),
+                      //     onPressed: null,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
                 Divider(
                   thickness: 4,
-                  color: Colors.red,
+                  // color: Colors.red,
                 ),
                 Container(
                   height: 50,
                   child: Center(
                       child: Text(
                     "Geçmiş",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    style:
+                        TextStyle(fontWeight: FontWeight.normal, fontSize: 30),
                   )),
                 ),
                 Expanded(
@@ -309,7 +357,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                           ? Colors.purple[100]!
                           : Colors.pink[100]!;
                       return Container(
-                        color: bgColor,
+                        // color: bgColor,
                         child: Dismissible(
                           key: Key((_weightHistory[index].weight).toString() +
                               (_weightHistory[index].dateTime).toString() +
@@ -335,73 +383,70 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                                 _weightHistory[index].isMotherWeight,
                                 _weightHistory[index].dogumOnceSonra);
                           },
-                          child: ListTile(
-                            title: widget.userData!['isPregnant']
-                                ? Row(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                        radius: 15.0,
-                                        backgroundColor: const Color.fromARGB(
-                                            255,
-                                            138,
-                                            33,
-                                            243), // Yuvarlağın arka plan rengini ayarlayabilirsiniz.
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              ((((DateTime.parse(_weightHistory[
-                                                                      index]
-                                                                  .dateTime
-                                                                  .substring(
-                                                                      0, 10)))
-                                                              .difference(DateTime
-                                                                  .parse(widget
-                                                                          .userData![
-                                                                      'sonAdetTarihi'])))
-                                                          .inDays) ~/
-                                                      7)
-                                                  .toString(),
-                                              style: TextStyle(
-                                                color: Colors
-                                                    .white, // Metnin rengini ayarlayabilirsiniz.
-                                                fontSize: 16.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                          child: Container(
+                            margin: EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: ListTile(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      // color: const Color.fromARGB(255, 138, 33,
+                                      //     243), // Arka plan rengini ayarlayabilirsiniz.
+                                      borderRadius: BorderRadius.circular(
+                                          8.0), // Köşeleri yuvarlatmak için.
+                                    ),
+                                    child: Text(
+                                      ((((DateTime.parse(_weightHistory[index]
+                                                              .dateTime
+                                                              .substring(
+                                                                  0, 10)))
+                                                          .difference(DateTime
+                                                              .parse(widget
+                                                                      .userData![
+                                                                  'sonAdetTarihi'])))
+                                                      .inDays) ~/
+                                                  7)
+                                              .toString() +
+                                          ". Hafta",
+                                      style: TextStyle(
+                                        color: Colors
+                                            .black, // Metnin rengini ayarlayabilirsiniz.
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                  // CircleAvatar ve metin arasında biraz boşluk bırakır.
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${_weightHistory[index].weight.toStringAsFixed(1)} kg',
+                                        style: TextStyle(fontSize: 17.0),
                                       ),
                                       SizedBox(
-                                          width:
-                                              10.0), // CircleAvatar ve metin arasında biraz boşluk bırakır.
-                                      Text(
-                                        'Kilo: ${_weightHistory[index].weight.toStringAsFixed(1)} kg',
-                                        style: TextStyle(fontSize: 16.0),
+                                        width: 20,
                                       ),
+                                      _weightHistory[index].isMotherWeight
+                                          ? Icon(
+                                              Icons.pregnant_woman,
+                                              size: 40,
+                                            )
+                                          : Icon(Icons.child_care, size: 40)
                                     ],
-                                  )
-                                : Text(
-                                    '${_weightHistory[index].weight.toStringAsFixed(1)} kg',
-                                    // Changed here
-                                    style: TextStyle(fontSize: 16.0),
                                   ),
-                            subtitle: Text(
-                              'Kayıt Tarihi: ${_weightHistory[index].dateTime}',
-                              style: TextStyle(fontSize: 12.0),
+                                ],
+                              ),
+                              subtitle: Text(
+                                '${_weightHistory[index].dateTime}',
+                                style: TextStyle(fontSize: 13.0),
+                              ),
                             ),
-                            // trailing: Container(
-                            //   width: 60,
-                            //   child: Column(
-                            //     mainAxisAlignment: MainAxisAlignment.center,
-                            //     children: [
-                            //       Icon(
-                            //         Icons.edit_note_sharp,
-                            //         size: 30,
-                            //         // color: Color.fromARGB(255, 0, 0, 0),
-                            //       ),
-                            //       Text("Not Ekle"),
-                            //     ],
-                            //   ),
-                            // ),
                           ),
                         ),
                       );

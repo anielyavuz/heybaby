@@ -61,11 +61,14 @@ class FunctionsWidget extends StatelessWidget {
       children: [
         FloatingActionButton(
           onPressed: onPressed,
+          backgroundColor: Colors.transparent,
+          elevation: 0, // Butonun normal gölgesini kaldır
+          highlightElevation: 0, // Butona tıklanıldığında oluşan gölgeyi kaldır
           child: Container(
             width: 96.0, // Genişlik ayarı
             height: 96.0, // Yükseklik ayarı
             decoration: BoxDecoration(
-              // color: Colors.white.withOpacity(0.1),
+              // color: Colors.white.withOpacity(0.0),
               shape: BoxShape.circle,
               image: DecorationImage(
                 image: AssetImage(

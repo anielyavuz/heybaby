@@ -6,12 +6,12 @@ import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 
 class StoryScreen extends StatefulWidget {
   final List storyies;
-  final List storyImages;
+  // final List storyImages;
   final int startingPage;
 
   StoryScreen(
       {required this.storyies,
-      required this.storyImages,
+      // required this.storyImages,
       required this.startingPage});
 
   @override
@@ -29,7 +29,7 @@ class _StoryScreenState extends State<StoryScreen>
   bool _isTouching = false;
   Map _data = {};
   Future<void> _getData() async {
-    print(widget.storyImages);
+    // print(widget.storyImages);
     String data = await rootBundle.loadString('assets/kesfetMakale.json');
     Map<String, dynamic> jsonResult = json.decode(data);
     setState(() {
@@ -86,7 +86,7 @@ class _StoryScreenState extends State<StoryScreen>
   }
 
   void _nextImage() {
-    if (_currentIndex < widget.storyImages.length - 1) {
+    if (_currentIndex < widget.storyies.length - 1) {
       setState(() {
         _currentIndex++;
       });
@@ -157,7 +157,7 @@ class _StoryScreenState extends State<StoryScreen>
             },
             child: PageView.builder(
               controller: _pageController,
-              itemCount: widget.storyImages.length,
+              itemCount: widget.storyies.length,
               onPageChanged: (index) {
                 setState(() {
                   _currentIndex = index;
@@ -176,7 +176,7 @@ class _StoryScreenState extends State<StoryScreen>
                           .size
                           .height, // Ekran yüksekliği kadar
                       child: Image.network(
-                        widget.storyImages[index],
+                        widget.storyies[index]['imageLink'],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -193,7 +193,8 @@ class _StoryScreenState extends State<StoryScreen>
                                 builder: (context) => MakaleDetay(
                                     baslik: widget.storyies[index]['baslik'],
                                     icerik: widget.storyies[index]['icerik'],
-                                    resimURL: widget.storyImages[index])),
+                                    resimURL: widget.storyies[index]
+                                        ['imageLink'])),
                           ).then((value) {
                             Navigator.pop(context);
                           });

@@ -260,6 +260,27 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<Map> verileriTemizleveCik() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+
+    try {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(user!.uid)
+          .delete()
+          .whenComplete(() {
+        returnCode['status'] = true;
+      });
+    } on FirebaseAuthException catch (e) {
+      returnCode['status'] = false;
+      returnCode['value'] = e.code;
+      print('Failed with error code: ${e.code}');
+      print(e.message);
+    }
+    return returnCode;
+  }
+
   static Future<void> deleteKiloDataRecord(
       WeightEntry newData, String _type) async {
     User? user = FirebaseAuth.instance.currentUser;

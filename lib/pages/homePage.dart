@@ -344,8 +344,9 @@ class _MyHomePageState extends State<MyHomePage> {
         return Center(
           child: HesapSayfasi(
             userData: userData,
-            onSignOutPressed: () {
+            onSignOutPressed: () async {
               _authService.signOut();
+              await Future.delayed(Duration(milliseconds: 450));
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => CheckAuth()),
@@ -407,6 +408,7 @@ class _MyHomePageState extends State<MyHomePage> {
           }
           storyImages3.add(_tempStoryImage);
         }
+        // print("storyImages2 değeri $storyImages2");
 
         // storyImages = data['weeklyStories'];
         // storyImages.sort((a, b) => b['id'].compareTo(a['id']));

@@ -1,9 +1,12 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/adminPages/storyPaylas.dart';
+import 'package:heybaby/pages/authentication.dart';
+import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/subpages/ayarlar.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -11,8 +14,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 class HesapSayfasi extends StatefulWidget {
   final Map<String, dynamic>? userData;
   final VoidCallback? onSignOutPressed;
+  final VoidCallback? onSRegisterPressed;
 
-  HesapSayfasi({Key? key, this.userData, this.onSignOutPressed})
+  HesapSayfasi(
+      {Key? key, this.userData, this.onSignOutPressed, this.onSRegisterPressed})
       : super(key: key);
 
   @override
@@ -20,10 +25,12 @@ class HesapSayfasi extends StatefulWidget {
 }
 
 class _HesapSayfasiState extends State<HesapSayfasi> {
+  AuthService _authService = AuthService();
   int _selectedStarIndex = -1;
   final TextEditingController feedbackController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   String lastPeriodDate = "";
+  String dogumOnceSonra = "";
   String _version = 'Unknown';
 
   String formatDate(String dateString) {
@@ -43,6 +50,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
   void initState() {
     super.initState();
     lastPeriodDate = widget.userData?['sonAdetTarihi'];
+    dogumOnceSonra = widget.userData?['dogumOnceSonra'];
     _initPackageInfo();
   }
 
@@ -50,8 +58,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hesap Sayfası'),
-      ),
+          // title: Text('Hesap Sayfası'),
+          ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -238,7 +246,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                 }
               },
             ),
-            SizedBox(height: 26),
+            SizedBox(height: 66),
             if (widget.userData!['userSubscription'] == "Admin") ...[
               ElevatedButton(
                 child: Text('Admin Features'),
@@ -315,9 +323,115 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             ),
             SizedBox(height: 14),
             ElevatedButton(
-              onPressed: widget.onSignOutPressed,
-              child: Text("Çıkış Yap"),
+              onPressed: () async {
+                bool? confirm = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title:
+                          Text('Bu işlemi yapmak istediğinize emin misiniz?'),
+                      content: Text(
+                          'İşleme devam ederseniz bütün verileriniz silinecek.'),
+                      actions: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            TextButton(
+                              child: Text('Hayır'),
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            ),
+                            SizedBox(
+                                width:
+                                    16), // Butonlar arasında biraz boşluk bırakmak için
+                            TextButton(
+                              child: Text('Evet'),
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (confirm == true) {
+                  var sonuc = await FirestoreFunctions.verileriTemizleveCik();
+                  if (sonuc.containsKey('status') && sonuc['status']) {
+                    _authService.signOut();
+                    await Future.delayed(Duration(milliseconds: 450));
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => CheckAuth()),
+                    );
+                  }
+                }
+              },
+              child: Text("Verileri temizle ve uygulamadan çık."),
             ),
+            SizedBox(height: 14),
+            widget.userData?['userName'] != "Guest"
+                ? ElevatedButton(
+                    onPressed: () async {
+                      bool? confirm = await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              'Çıkış yapmak istediğinize emin misiniz?',
+                              textAlign: TextAlign.center,
+                            ),
+                            // content: Text(
+                            //     'Bu işlemi yapmak istediğinize emin misiniz?'),
+                            actions: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  TextButton(
+                                    child: Text('Hayır'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    },
+                                  ),
+                                  SizedBox(
+                                      width:
+                                          16), // Butonlar arasında biraz boşluk bırakmak için
+                                  TextButton(
+                                    child: Text('Evet'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      );
+
+                      if (confirm == true) {
+                        widget.onSignOutPressed!();
+                      }
+                    },
+                    child: Text("Çıkış Yap"),
+                  )
+                : ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisterScreen(
+                                  userData: widget.userData,
+                                  lastPeriodDate: lastPeriodDate,
+                                  dogumOnceSonra: dogumOnceSonra,
+                                )),
+                      );
+                    },
+                    child: Text("Hesap Oluştur"),
+                  ),
           ],
         ),
       ),

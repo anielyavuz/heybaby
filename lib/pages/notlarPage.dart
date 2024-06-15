@@ -178,10 +178,16 @@ class _NotlarPageState extends State<NotlarPage> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return Container(
-          color: Colors.white,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
+            ),
+          ),
           padding: EdgeInsets.all(16.0),
           height: MediaQuery.of(context).size.height *
-              0.95, // İstediğiniz yükseklik
+              0.85, // İstediğiniz yükseklik
 
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -202,7 +208,7 @@ class _NotlarPageState extends State<NotlarPage> {
                       gunlukDBEkle();
                       Navigator.of(context).pop();
                     },
-                    child: Text("Bitti"),
+                    child: Text("Kaydet"),
                   ),
                 ],
               ),

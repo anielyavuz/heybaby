@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/jsonFiles.dart';
+import 'package:heybaby/pages/authentication.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 void main() {
@@ -16,7 +18,6 @@ class IntroPage extends StatelessWidget {
     return MaterialApp(
       home: OnboardingScreen(),
       routes: {
-        '/register': (context) => RegisterScreen(),
         '/login': (context) => LoginScreen(),
       },
     );
@@ -244,14 +245,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ],
                 ),
-                width: 160,
+                width: 200,
                 height: 40,
                 child: Center(
                   child: GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, '/login');
                     },
-                    child: Text("Oturum Aç / Kayıt Ol",
+                    child: Text("HeyBaby hesabım var",
                         style: TextStyle(
                           color: Color.fromARGB(255, 92, 0, 197),
                           fontSize: 14.0,
@@ -360,12 +361,12 @@ final List onboardingPages = [
 
   _loginPages(
       'Sağlık yolculuğunuz başlasın! Kişisel sağlık asistanınız burada!',
-      "Sağlıklı yaşamınızı destekleyen bir yolculuğa hazır mısınız? Günlük su alımınızı takip edin, anne ve bebeğinizin gelişimini izleyin, ilaçlarınızı düzenleyin ve haftalık planlarınızı oluşturun. Size özel tasarlanmış bir uygulama ile sağlıklı yaşamınızı şekillendirmenize yardımcı oluyoruz!",
+      "Yapay zeka destekli olarak size özel geliştirilen kişisel sağlık asistanınız HeyBaby AI ile aklınıza takılan veya öğrenmek istediğiniz tüm bilgiler her an yanınızda!",
       'robotWelcome'),
 
   _loginPages(
-      "Her gün yeni içerikler ve bildirimlerle eğlencenin adresi!",
-      'Her gün sizi yeni bir maceraya davet eden bildirimler alın! Heyecan dolu anları kaçırmayın, uygulamamızın eğlenceli dünyasına adım atın!',
+      "Bildirimler ile anı yakalayın!",
+      'Günlük su alımınızı takip edin, anne ve bebeğinizin gelişimini izleyin, ilaçlarınızı düzenleyin ve haftalık planlarınızı oluşturun. Size özel tasarlanmış bir uygulama ile sağlıklı yaşamınızı şekillendirmenize yardımcı oluyoruz!',
       'welcomeNotification'),
 
   Stack(
@@ -437,18 +438,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late List<dynamic> jsonList = [];
+  bool _obscureText = true;
   // Global değişken tanımı
-  late List<dynamic> jsonList0 = [];
+  // late List<dynamic> jsonList0 = [];
   bool emailValid = true;
   bool passwordValid = true;
 
-  imageandInfoJsonFileLoad() async {
-    jsonList0 = await JsonReader.readJson();
-    setState(() {
-      jsonList = jsonList0;
-    });
-    // print(jsonList);
-  }
+  // imageandInfoJsonFileLoad() async {
+  //   jsonList0 = await JsonReader.readJson();
+  //   setState(() {
+  //     jsonList = jsonList0;
+  //   });
+  //   // print(jsonList);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -487,8 +489,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.red, width: 2.0),
                 ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                ),
               ),
-              obscureText: true,
+              obscureText: _obscureText,
             ),
 
             SizedBox(height: 8.0),
@@ -596,23 +608,22 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text('Giriş Yap'),
             ),
             SizedBox(height: 12.0),
-            ElevatedButton(
-              onPressed: () async {
-                _showGuestLoginPopup(context);
-                // var a = await _authService.anonymSignIn();
-                // Burada giriş işlemlerini gerçekleştirebilirsiniz.
-                // Örneğin, emailController.text ve passwordController.text'i kullanarak kontrol yapabilirsiniz.
-                // Eğer giriş başarılıysa başka bir ekran açabilir veya işlemleri gerçekleştirebilirsiniz.
-              },
-              child: Text('Misafir olarak Gir'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     _showGuestLoginPopup(context);
+            //     // var a = await _authService.anonymSignIn();
+            //     // Burada giriş işlemlerini gerçekleştirebilirsiniz.
+            //     // Örneğin, emailController.text ve passwordController.text'i kullanarak kontrol yapabilirsiniz.
+            //     // Eğer giriş başarılıysa başka bir ekran açabilir veya işlemleri gerçekleştirebilirsiniz.
+            //   },
+            //   child: Text('Giriş Yap'),
+            // ),
             SizedBox(height: 16.0),
             TextButton(
               onPressed: () {
-                // Kayıt ekranına yönlendirme işlemi
-                Navigator.pushNamed(context, '/register');
+                _showGuestLoginPopup(context);
               },
-              child: Text('Hesabınız yok mu? Kayıt olun.'),
+              child: Text('Hesabınız yok mu? İlk defa giriş yapın.'),
             ),
           ],
         ),
@@ -630,7 +641,13 @@ void _showGuestLoginPopup(BuildContext context) {
           borderRadius: BorderRadius.circular(
               20), // Burada pop-up'ın köşelerini yuvarlak yapabiliriz.
         ),
-        title: Text('Misafir Olarak Giriş Yap'),
+        title: Text('Giriş Yap',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color.fromARGB(255, 0, 0, 0),
+              fontSize: 26.0,
+              fontWeight: FontWeight.normal,
+            )),
         content: SizedBox(
             width: MediaQuery.of(context).size.width *
                 0.8, // Burada pop-up'ın genişliğini ekranın %80'i olarak ayarladık.
@@ -655,7 +672,7 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
   AuthService _authService = AuthService();
   late List<dynamic> jsonList = [];
   // Global değişken tanımı
-  late List<dynamic> jsonList0 = [];
+  // late List<dynamic> jsonList0 = [];
 
   String _tahminiKilo = "";
   String _tahminiBoy = "";
@@ -667,18 +684,18 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 50), () {
-      imageandInfoJsonFileLoad();
-    });
+    // Future.delayed(const Duration(milliseconds: 50), () {
+    //   imageandInfoJsonFileLoad();
+    // });
   }
 
-  imageandInfoJsonFileLoad() async {
-    jsonList0 = await JsonReader.readJson();
-    setState(() {
-      jsonList = jsonList0;
-    });
-    // print(jsonList);
-  }
+  // imageandInfoJsonFileLoad() async {
+  //   jsonList0 = await JsonReader.readJson();
+  //   setState(() {
+  //     jsonList = jsonList0;
+  //   });
+  //   // print(jsonList);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -688,8 +705,16 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Divider(),
             SwitchListTile(
-              title: isPregnant ? Text('Hamileyim') : Text("Bebeğim var"),
+              title: isPregnant
+                  ? Text('Hamileyim',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 17.0,
+                        fontWeight: FontWeight.normal,
+                      ))
+                  : Text("Bebeğim var"),
               value: isPregnant,
               onChanged: (bool value) async {
                 setState(() {
@@ -710,38 +735,79 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                 }
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                isPregnant
-                    ? Text('Son regl tarihinizi giriniz:')
-                    : Text('Bebeğiniz doğduğu tarihi giriniz:'),
-                SizedBox(height: 8),
-                InkWell(
-                  onTap: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: lastPeriodDate,
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
-                    if (picked != null && picked != lastPeriodDate) {
-                      setState(() {
-                        lastPeriodDate = picked;
-                      });
-                    }
-                  },
-                  child: Text(
-                    '${lastPeriodDate.day}/${lastPeriodDate.month}/${lastPeriodDate.year}',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  isPregnant
+                      ? Text('Son regl tarihiniz:',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.normal,
+                          ))
+                      : Text('Bebeğiniz doğum günü:',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.normal,
+                          )),
+                  SizedBox(height: 55),
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext builder) {
+                          return Container(
+                            height:
+                                MediaQuery.of(context).copyWith().size.height /
+                                    3,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 200,
+                                  child: CupertinoDatePicker(
+                                    initialDateTime: lastPeriodDate,
+                                    minimumDate: DateTime.now()
+                                        .subtract(Duration(days: 10 * 30)),
+                                    maximumDate: DateTime.now(),
+                                    mode: CupertinoDatePickerMode.date,
+                                    onDateTimeChanged: (DateTime newDate) {
+                                      setState(() {
+                                        lastPeriodDate = newDate;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Done'),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      DateFormat.yMMMd(
+                              Localizations.localeOf(context).toString())
+                          .format(lastPeriodDate),
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 19.0,
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 6.0),
             ElevatedButton(
                 onPressed: () async {
                   Navigator.of(context).pop();
@@ -796,6 +862,16 @@ void _showForgotPasswordDialog(BuildContext context) {
 }
 
 class RegisterScreen extends StatefulWidget {
+  final Map<String, dynamic>? userData;
+  final String? lastPeriodDate;
+  final String? dogumOnceSonra;
+  RegisterScreen(
+      {Key? key,
+      required this.userData,
+      required this.lastPeriodDate,
+      required this.dogumOnceSonra})
+      : super(key: key);
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -809,8 +885,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool isPregnant = true;
   String _dogumOnceSonra = "Once";
-  DateTime lastPeriodDate = DateTime.now();
+  String lastPeriodDate = "";
   AuthService _authService = AuthService();
+  bool _obscureText = true;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _dogumOnceSonra = widget.dogumOnceSonra!;
+      lastPeriodDate = widget.lastPeriodDate!;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -835,90 +921,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
             SizedBox(height: 16.0),
             TextField(
               controller: registerPasswordController,
-              decoration: InputDecoration(labelText: 'Şifre'),
-              obscureText: true,
-            ),
-            SizedBox(height: 24.0),
-            SizedBox(height: 24.0),
-            SwitchListTile(
-              title: isPregnant
-                  ? Text('Hamileyim',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 56, 0, 140),
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.normal,
-                      ))
-                  : Text("Bebeğim var",
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 56, 0, 140),
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.normal,
-                      )),
-              value: isPregnant,
-              onChanged: (bool value) async {
-                setState(() {
-                  _dogumOnceSonra = "Once";
-                  isPregnant = value;
-                });
-
-                if (!value) {
-                  await Future.delayed(Duration(milliseconds: 100));
-                  setState(() {
-                    isPregnant = true;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content:
-                            Text('Yeni doğum modu henüz desteklenmemektedir.')),
-                  );
-                }
-              },
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                isPregnant
-                    ? Text('Son regl tarihi giriniz:',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 56, 0, 140),
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.normal,
-                        ))
-                    : Text('Bebek doğum tarihini giriniz:'),
-                SizedBox(height: 8),
-                InkWell(
-                  onTap: () async {
-                    final DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: lastPeriodDate,
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
-                    if (picked != null && picked != lastPeriodDate) {
-                      setState(() {
-                        lastPeriodDate = picked;
-                      });
-                    }
-                  },
-                  child: Text(
-                    '${lastPeriodDate.day}/${lastPeriodDate.month}/${lastPeriodDate.year}',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
+              decoration: InputDecoration(
+                labelText: 'Şifre',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off,
                   ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
                 ),
-              ],
+              ),
+              obscureText: _obscureText,
             ),
+            SizedBox(height: 24.0),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
                 var a = await _authService.createPerson(
+                    widget.userData?['id'],
                     registerEmailController.text,
                     registerPasswordController.text,
                     isPregnant,
                     lastPeriodDate,
-                    registerUsernameController.text);
+                    registerUsernameController.text,
+                    widget.userData?['bildirimler'],
+                    widget.userData?['dogumOnceSonra'],
+                    widget.userData?['createTime'],
+                    widget.userData?['dataRecord']);
+                if (a['status']) {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (_) {
+                    return CheckAuth();
+                  }));
+                }
                 // Burada kayıt işlemlerini gerçekleştirebilirsiniz.
                 // Örneğin, registerEmailController.text ve registerPasswordController.text'i kullanarak yeni bir kullanıcı kaydedebilirsiniz.
               },

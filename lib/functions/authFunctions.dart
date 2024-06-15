@@ -103,14 +103,21 @@ class AuthService {
   }
 
   Future<Map> createPerson(
+    String _currentID,
     String email,
     String password,
     bool _isPregnant,
-    DateTime _tarih,
+    String _tarih,
     String userName,
+    Map _bildirimler,
+    String _dogumOnceSonra,
+    String _createTime,
+    Map _dataRecord,
   ) async {
     Map returnCode = {};
     try {
+      await _auth.signOut();
+
       var user = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
@@ -132,8 +139,8 @@ class AuthService {
           "dogumOnceSonra": "Once",
           "isPregnant": true,
           "dataRecord": {},
-          "sonAdetTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
-          "bebekDogumTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "sonAdetTarihi": _tarih,
+          "bebekDogumTarihi": _tarih,
           "userAuth": "Prod",
           "userSubscription": "Free",
           "createTime": DateFormat('yyyy-MM-dd HH:mm:ss')
@@ -158,8 +165,8 @@ class AuthService {
           "registerType": "Authenticated",
           "dogumOnceSonra": "Sonra",
           "isPregnant": false,
-          "sonAdetTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
-          "bebekDogumTarihi": DateFormat('yyyy-MM-dd').format(_tarih),
+          "sonAdetTarihi": _tarih,
+          "bebekDogumTarihi": _tarih,
           "userAuth": "Prod",
           "userSubscription": "Free",
           "createTime": DateFormat('yyyy-MM-dd HH:mm:ss')
@@ -169,6 +176,16 @@ class AuthService {
       }
       returnCode['status'] = true;
       returnCode['value'] = user.user;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(_currentID)
+            .delete();
+        print("$_currentID User deleted successfully");
+      } catch (e) {
+        print("Error deleting user: $e");
+      }
 
       return returnCode;
     } on FirebaseAuthException catch (e) {
