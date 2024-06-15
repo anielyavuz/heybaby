@@ -96,7 +96,8 @@ class _KesfetPageState extends State<KesfetPage> {
             _buildKartListesi("Beslenme", _kartlarBeslenme),
             _buildKartListesi("Anne & Bebek", _kartlarAnneBebek),
             _buildKartListesi("İyi Hissedin", _kartlarIyiHissedin),
-            _buildKartListesi("Size Özel", _kartlarHaftalik),
+            _buildKartListesi(
+                "Hayatı Kolaylaştıran İpuçları", _kartlarHaftalik),
             // Buraya ek alt başlıklar ve kartlar eklenebilir.
           ],
         ),
