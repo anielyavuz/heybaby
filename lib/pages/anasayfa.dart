@@ -627,7 +627,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   void initState() {
-    print("newstoryImages değeri ${widget.newstoryImages}");
+    print("newstoryImages değeri ${widget.newstoryImages.length}");
     Future.delayed(const Duration(milliseconds: 50), () {
       imageandInfoJsonFileLoad();
     });
@@ -696,7 +696,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                   padding:
                                       const EdgeInsets.fromLTRB(18, 0, 0, 5),
                                   child: Text(
-                                    "$selectedWeek. Hafta İpuçlarınız",
+                                    "$selectedWeek. Haftanıza Özel İpuçlarınız",
                                     style: TextStyle(
                                         fontSize: 17.0,
                                         fontWeight: FontWeight.w500),
@@ -992,7 +992,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                               baslik: widget.storyImages[index]
                                                   ['baslik'],
                                               icerik: widget.storyImages[index]
-                                                  ['icerik'],
+                                                      ['icerik']
+                                                  .toString()
+                                                  .replaceAll('%', '\n'),
                                               resimURL:
                                                   widget.storyImages[index]
                                                       ['imageLink'])),

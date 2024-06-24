@@ -74,7 +74,9 @@ class _KesfetMakaleHaftalikWidgetState
                                     MaterialPageRoute(
                                       builder: (context) => MakaleDetay(
                                         baslik: story['baslik'],
-                                        icerik: story['icerik'],
+                                        icerik: story['icerik']
+                                            .toString()
+                                            .replaceAll('%', '\n'),
                                         resimURL: story['imageLink'],
                                       ),
                                     ),

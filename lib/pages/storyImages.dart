@@ -187,16 +187,21 @@ class _StoryScreenState extends State<StoryScreen>
                           25, // İstenilen boşluk miktarını ayarlayabilirsiniz
                       child: GestureDetector(
                         onTap: () {
+                          _timer?.cancel();
+
+                          Navigator.pop(context);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MakaleDetay(
                                     baslik: widget.storyies[index]['baslik'],
-                                    icerik: widget.storyies[index]['icerik'],
+                                    icerik: widget.storyies[index]['icerik']
+                                        .toString()
+                                        .replaceAll('%', '\n'),
                                     resimURL: widget.storyies[index]
                                         ['imageLink'])),
                           ).then((value) {
-                            Navigator.pop(context);
+                            // Timer'ı iptal et
                           });
                         },
                         child: Container(

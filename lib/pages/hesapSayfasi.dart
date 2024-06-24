@@ -57,9 +57,9 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          // title: Text('Hesap Sayfası'),
-          ),
+      // appBar: AppBar(
+      //     // title: Text('Hesap Sayfası'),
+      //     ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(

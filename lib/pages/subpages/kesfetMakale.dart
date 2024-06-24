@@ -73,7 +73,9 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
                                       MaterialPageRoute(
                                         builder: (context) => MakaleDetay(
                                           baslik: makale['baslik'],
-                                          icerik: makale['icerik'],
+                                          icerik: makale['icerik']
+                                              .toString()
+                                              .replaceAll('%', '\n'),
                                           resimURL:
                                               makale.containsKey('imageLink')
                                                   ? makale['imageLink']
@@ -223,8 +225,12 @@ class MakaleDetay extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               Text(
-                icerik,
+                icerik.toString(),
                 style: TextStyle(fontSize: 18.0),
+                softWrap:
+                    true, // Metnin satır sonuna geldiğinde otomatik olarak sarılmasını sağlar
+                overflow: TextOverflow
+                    .visible, // Metin taşarsa görünür olmasını sağlar
               ),
               SizedBox(height: 25.0),
               Center(

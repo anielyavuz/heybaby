@@ -119,7 +119,8 @@ class BildirimTakip {
           id: _id,
           channelKey: "basic_channel",
           title: "Merhaba Annecim",
-          body: "Bu hafta bir $meyve boyutundayım. Tıklayıp resmime bak ☺️",
+          body:
+              "Bu hafta bir $meyve boyutundayım. Resmime bakıp haftalık ipuçlarını okumak için tıkla ☺️",
           wakeUpScreen: true,
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: _firebaseLink),
