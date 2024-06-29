@@ -403,10 +403,21 @@ class _MyHomePageState extends State<MyHomePage> {
         var _tempStoryImages = data['weeklyStories'];
         print("selectedWeek değeri şuanda $selectedWeek");
         for (var _tempStoryImage in _tempStoryImages) {
-          print("hafta değeri şuanda ${_tempStoryImage['hafta']}");
-          if (_tempStoryImage['hafta'] == selectedWeek) {
-            storyImages2.add(_tempStoryImage);
+          // print("hafta değeri şuanda ${_tempStoryImage['hafta']}");
+          if (selectedWeek > 40) {
+            if (_tempStoryImage['hafta'] == 40) {
+              storyImages2.add(_tempStoryImage);
+            }
+          } else if (selectedWeek < 4) {
+            if (_tempStoryImage['hafta'] == 4) {
+              storyImages2.add(_tempStoryImage);
+            }
+          } else {
+            if (_tempStoryImage['hafta'] == selectedWeek) {
+              storyImages2.add(_tempStoryImage);
+            }
           }
+
           storyImages3.add(_tempStoryImage);
         }
         // print("storyImages2 değeri $storyImages2");

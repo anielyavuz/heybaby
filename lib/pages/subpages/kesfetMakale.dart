@@ -249,10 +249,38 @@ class MakaleDetay extends StatelessWidget {
                           onPressed: () async {
                             var _sonuc =
                                 await FirestoreFunctions.makaleGeriBildirim(
-                                    "Guest",
-                                    "Beğendi",
-                                    DateFormat('hh:mm - dd-MM-yyyy')
-                                        .format(DateTime.now()));
+                                        "Guest",
+                                        "Beğendi",
+                                        DateFormat('hh:mm - dd-MM-yyyy')
+                                            .format(DateTime.now()),
+                                        baslik)
+                                    .whenComplete(() {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Geri bildirim başarılı olarak iletildi.',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  backgroundColor: Color.fromARGB(255, 126, 52,
+                                      253), // Snackbar arka plan rengi
+                                  duration: Duration(
+                                      seconds: 3), // Snackbar gösterim süresi
+                                  behavior: SnackBarBehavior
+                                      .floating, // Snackbar davranışı
+                                  shape: RoundedRectangleBorder(
+                                    // Snackbar şekli
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 4, // Snackbar yükseltilmesi
+                                  margin: EdgeInsets.all(
+                                      10), // Snackbar kenar boşlukları
+                                ),
+                              );
+                            });
                             print("Beğendi");
                           },
                         ),
@@ -262,10 +290,38 @@ class MakaleDetay extends StatelessWidget {
                           onPressed: () async {
                             var _sonuc =
                                 await FirestoreFunctions.makaleGeriBildirim(
-                                    "Guest",
-                                    "Beğenmedi",
-                                    DateFormat('hh:mm - dd-MM-yyyy')
-                                        .format(DateTime.now()));
+                                        "Guest",
+                                        "Beğenmedi",
+                                        DateFormat('hh:mm - dd-MM-yyyy')
+                                            .format(DateTime.now()),
+                                        baslik)
+                                    .whenComplete(() {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Geri bildirim başarılı olarak iletildi.',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  backgroundColor: Color.fromARGB(255, 126, 52,
+                                      253), // Snackbar arka plan rengi
+                                  duration: Duration(
+                                      seconds: 3), // Snackbar gösterim süresi
+                                  behavior: SnackBarBehavior
+                                      .floating, // Snackbar davranışı
+                                  shape: RoundedRectangleBorder(
+                                    // Snackbar şekli
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 4, // Snackbar yükseltilmesi
+                                  margin: EdgeInsets.all(
+                                      10), // Snackbar kenar boşlukları
+                                ),
+                              );
+                            });
 
                             print("Beğenmedi");
                           },

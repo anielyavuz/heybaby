@@ -533,7 +533,8 @@ class FirestoreFunctions {
     }
   }
 
-  static Future<Map> makaleGeriBildirim(userName, durum, tarih) async {
+  static Future<Map> makaleGeriBildirim(
+      userName, durum, tarih, makaleBaslik) async {
     User? user = FirebaseAuth.instance.currentUser;
     Map returnCode = {};
     if (user != null) {
@@ -543,6 +544,7 @@ class FirestoreFunctions {
       _tempMap['userID'] = userID;
       _tempMap['tarih'] = tarih;
       _tempMap['durum'] = durum;
+      _tempMap['makaleBaslik'] = makaleBaslik;
 
       _tempList.add(_tempMap);
       try {
@@ -551,6 +553,41 @@ class FirestoreFunctions {
             .doc('geriBildirim')
             .update({"makale": FieldValue.arrayUnion(_tempList)}).whenComplete(
                 () {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
+  static Future<Map> makaleGeriBildirimHaftalik(
+      userName, durum, tarih, makaleBaslik) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+      List _tempList = [];
+      Map _tempMap = {};
+      _tempMap['userID'] = userID;
+      _tempMap['tarih'] = tarih;
+      _tempMap['durum'] = durum;
+      _tempMap['makaleBaslik'] = makaleBaslik;
+
+      _tempList.add(_tempMap);
+      try {
+        await FirebaseFirestore.instance
+            .collection("System")
+            .doc('geriBildirim')
+            .update({
+          "makaleHaftalik": FieldValue.arrayUnion(_tempList)
+        }).whenComplete(() {
           returnCode['status'] = true;
         });
       } on FirebaseAuthException catch (e) {
