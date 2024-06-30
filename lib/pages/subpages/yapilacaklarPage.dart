@@ -324,6 +324,7 @@ class _YapilacaklarPageState extends State<YapilacaklarPage> {
               .inDays) ~/
           7);
     });
+    print("Buradaaaaa $selectedWeek");
 
     if (widget.userData != null &&
         widget.userData!['dataRecord'].containsKey('yapilacaklarData')) {
@@ -336,6 +337,18 @@ class _YapilacaklarPageState extends State<YapilacaklarPage> {
         }
       });
     } else {
+      setState(() {
+        oneriler = [];
+
+        print(yapilacaklar);
+        for (var _element in hamilelikYapilacaklar[selectedWeek]!) {
+          if (!yapilacaklar.contains(_element)) {
+            if (!yapilacaklar.contains("-" + _element)) {
+              oneriler.add(_element);
+            }
+          }
+        }
+      });
       print('yapilacaklarData parametresi bulunamadı veya null.');
     }
 
