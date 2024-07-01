@@ -691,6 +691,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       ? Column(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
                                   padding:
@@ -698,12 +699,39 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                   child: Text(
                                     "$selectedWeek. Haftanıza Özel İpuçlarınız",
                                     style: TextStyle(
-                                        fontSize: 17.0,
-                                        fontWeight: FontWeight.w500),
-
-                                    // textAlign: TextAlign.left,
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
+                                widget.userData!.containsKey('myToken')
+                                    ? Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 18, 5),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              widget.userData!['myToken']
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 17.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                width:
+                                                    4), // Icon ile token sayısı arasında boşluk
+
+                                            Icon(
+                                              Icons.diamond,
+                                              size: 24.0,
+                                              color: Color.fromARGB(
+                                                  255, 119, 46, 141),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : SizedBox()
                               ],
                             ),
                             Padding(

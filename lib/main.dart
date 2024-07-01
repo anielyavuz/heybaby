@@ -2,6 +2,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:heybaby/firebase_options.dart';
 import 'package:heybaby/pages/authentication.dart';
 
@@ -17,6 +18,7 @@ void main() async {
         channelGroupKey: "basic_channel_group", channelGroupName: "Basic Group")
   ]);
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

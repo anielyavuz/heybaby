@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:heybaby/functions/ad_helper.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 import 'package:heybaby/pages/subpages/kesfetMakaleHaftalik.dart';
 
@@ -79,6 +81,43 @@ class _KesfetPageState extends State<KesfetPage> {
     },
   ];
 
+  @override
+  void initState() {
+    super.initState();
+
+    _loadInterstitialAd();
+  }
+
+  // TODO: Add _interstitialAd
+  InterstitialAd? _interstitialAd;
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _loadInterstitialAd(); // Yeni reklam yükleme
+            },
+            onAdFailedToShowFullScreenContent: (ad, err) {
+              ad.dispose();
+              print('Failed to show the ad: ${err.message}');
+            },
+          );
+          setState(() {
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
   void
       storiesAyristirma() //cloud da bulunan storyleri ayrıştırarak kendi alanlarına ekleriz
   {}
@@ -154,14 +193,22 @@ class _KesfetPageState extends State<KesfetPage> {
                     );
                   } else {
                     print(widget.storiesWeekly);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => KesfetMakaleHaftalikWidget(
-                          stories: widget.storiesWeekly,
+
+                    if (_interstitialAd != null) {
+                      _interstitialAd!.show();
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => KesfetMakaleHaftalikWidget(
+                            stories: widget.storiesWeekly,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      print('Reklam yüklenmedi veya gösterilemedi.');
+                      _loadInterstitialAd();
+                    }
                   }
 
                   // Kartlara tıklanınca yapılacak işlemler buraya yazılabilir.

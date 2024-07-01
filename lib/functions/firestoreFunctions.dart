@@ -391,6 +391,23 @@ class FirestoreFunctions {
     }
   }
 
+  static Future<void> tokenSayiGuncelle(tokenCount) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String userID = user.uid;
+
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userID)
+          .update({"myToken": tokenCount}).whenComplete(() {
+        print("token sayısı güncellendi $tokenCount ");
+      });
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+  }
+
   static Future<void> duzenleCalendarDataRecord(
       selectedDay, calendarListEventsForDay) async {
     User? user = FirebaseAuth.instance.currentUser;

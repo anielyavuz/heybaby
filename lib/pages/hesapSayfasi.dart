@@ -1,6 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:heybaby/functions/ad_helper.dart';
 import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
@@ -46,12 +48,43 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
     });
   }
 
+  // TODO: Add _interstitialAd
+  InterstitialAd? _interstitialAd;
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _loadInterstitialAd(); // Yeni reklam yükleme
+            },
+            onAdFailedToShowFullScreenContent: (ad, err) {
+              ad.dispose();
+              print('Failed to show the ad: ${err.message}');
+            },
+          );
+          setState(() {
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     lastPeriodDate = widget.userData?['sonAdetTarihi'];
     dogumOnceSonra = widget.userData?['dogumOnceSonra'];
     _initPackageInfo();
+    _loadInterstitialAd();
   }
 
   @override
@@ -270,39 +303,16 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                               child: Text("Story Paylaş"),
                             ),
                             ElevatedButton(
-                              onPressed: () async {
-                                var _bildirimler = await AwesomeNotifications()
-                                    .listScheduledNotifications();
-
-                                List _bildirimIdleri = [];
-                                for (var _bildirim in _bildirimler) {
-                                  if (_bildirim.content!.id == 3) {
-                                    if (_bildirim.schedule != null) {
-                                      // Assuming the schedule is a NotificationCalendar
-                                      var schedule = _bildirim.schedule
-                                          as NotificationCalendar;
-
-                                      print(
-                                          'Scheduled Time: ${schedule.year}-${schedule.month}-${schedule.day} '
-                                          '${schedule.hour}:${schedule.minute}:${schedule.second}   ${schedule.repeats} ');
-                                    } else {
-                                      print(
-                                          'No schedule found for this notification.');
-                                    }
-                                    // print('Title: ${_bildirim.content!.title}');
-                                    // print('Body: ${_bildirim.content!.body}');
-                                    // Add more fields as necessary
-                                  }
-                                  // _bildirimIdleri.add(_bildirim.content!.id);
+                              onPressed: () {
+                                if (_interstitialAd != null) {
+                                  _interstitialAd!.show();
+                                } else {
+                                  print(
+                                      'Reklam yüklenmedi veya gösterilemedi.');
+                                  _loadInterstitialAd();
                                 }
-                                // print(_bildirimIdleri);
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   SnackBar(
-                                //       content:
-                                //           Text(_bildirimIdleri.toString())),
-                                // );
                               },
-                              child: Text("Bildirim ID'lerini print et"),
+                              child: Text("Test Button"),
                             ),
                           ],
                         ),

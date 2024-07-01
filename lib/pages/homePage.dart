@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -76,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
   late int selectedWeek = -1;
+  late int _myToken;
   String _response = "";
   String dropdownValue = "One";
   List<String> drawerItems = [
@@ -383,8 +385,19 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           });
         }
+        if (userData!.containsKey('myToken')) {
+          _myToken = userData?['myToken'];
+          print("MyToken değeri $_myToken");
+        } else {
+          print("MyToken değeri db'de yok güncelliyorum");
+          _tokenGuncelle(50);
+        }
       });
     }
+  }
+
+  Future<void> _tokenGuncelle(int myToken) async {
+    var _result = await FirestoreFunctions.tokenSayiGuncelle(myToken);
   }
 
   Future<void> _systemData() async {
@@ -465,8 +478,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: Stack(
-                          alignment: Alignment.centerRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: Padding(
@@ -604,6 +617,28 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                           ],
                         ),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Premium üyelik ile sınırsız Token hakkı için ",
+                            style:
+                                TextStyle(fontSize: 13.0, color: Colors.black),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                              print("premium login");
+                            },
+                            child: Text(
+                              "TIKLAYIN.",
+                              style: TextStyle(
+                                  fontSize: 13.0, color: Colors.black),
+                            ),
+                          )
+                        ],
                       ),
                       SizedBox(height: 10),
                       Row(
