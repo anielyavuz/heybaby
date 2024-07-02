@@ -4,9 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:heybaby/firebase_options.dart';
+import 'package:heybaby/functions/boxes.dart';
+import 'package:heybaby/functions/person.dart';
 import 'package:heybaby/pages/authentication.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(PersonAdapter());
+  boxPersons = await Hive.openBox<Person>('personBox');
+
   await AwesomeNotifications().initialize(null, [
     NotificationChannel(
         channelGroupKey: "basic_channel_group",

@@ -5,14 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:heybaby/functions/ad_helper.dart';
 import 'package:heybaby/functions/authFunctions.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
+import 'package:heybaby/functions/boxes.dart';
 import 'package:heybaby/functions/chatgptService.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/functions/heybabyai.dart';
 import 'package:heybaby/functions/notificationController.dart';
 import 'package:heybaby/functions/notificationSender.dart';
+import 'package:heybaby/functions/person.dart';
 import 'package:heybaby/pages/anasayfa.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:heybaby/pages/hesapSayfasi.dart';
@@ -33,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   FocusNode _focusNode = FocusNode();
+  late Person _tokenClass;
   void initState() {
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
@@ -57,6 +62,10 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
 
+    // haftalikBoyutBildirimOlustur();
+    _tokenClass = boxPersons.get('currentToken',
+        defaultValue: Person(token: 50, subnName: 'myToken'));
+
     // TODO: implement initState
     super.initState();
   }
@@ -68,6 +77,36 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  // TODO: Add _interstitialAd
+  InterstitialAd? _interstitialAd;
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _loadInterstitialAd(); // Yeni reklam yükleme
+            },
+            onAdFailedToShowFullScreenContent: (ad, err) {
+              ad.dispose();
+              print('Failed to show the ad: ${err.message}');
+            },
+          );
+          setState(() {
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   AuthService _authService = AuthService();
@@ -77,9 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
   late int selectedWeek = -1;
-  late int _myToken;
+
   String _response = "";
   String dropdownValue = "One";
+  int _tokenLost = 10;
   List<String> drawerItems = [
     'Bildirim 1',
     'Bildirim 2',
@@ -385,19 +425,18 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           });
         }
-        if (userData!.containsKey('myToken')) {
-          _myToken = userData?['myToken'];
-          print("MyToken değeri $_myToken");
-        } else {
-          print("MyToken değeri db'de yok güncelliyorum");
-          _tokenGuncelle(50);
+        if (_interstitialAd == null) {
+          print("Reklam değeri null, yeni reklam oluşabilir.");
+
+          if (userData!['userSubscription'] != 'Free') {
+            {
+              print("free user reklam oluşuruluyor");
+              _loadInterstitialAd();
+            }
+          }
         }
       });
     }
-  }
-
-  Future<void> _tokenGuncelle(int myToken) async {
-    var _result = await FirestoreFunctions.tokenSayiGuncelle(myToken);
   }
 
   Future<void> _systemData() async {
@@ -410,6 +449,7 @@ class _MyHomePageState extends State<MyHomePage> {
         storyImages2 = [];
         storyImages3 = [];
         _AIStatus = data['AIBot']['Enable'];
+        _tokenLost = data['Token']['AIBotToken'];
         storyImages = data['Stories'];
         storyImages.shuffle(Random());
 
@@ -572,7 +612,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: isHeyBabyAI
                                             ? Text(
                                                 chatHistory[index]
-                                                    .substring(12),
+                                                        .substring(12) +
+                                                    "\n $_tokenLost 💎",
                                                 style: TextStyle(
                                                     fontSize: 16.0,
                                                     color: Colors.white),
@@ -619,27 +660,43 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Premium üyelik ile sınırsız Token hakkı için ",
-                            style:
-                                TextStyle(fontSize: 13.0, color: Colors.black),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                              print("premium login");
-                            },
-                            child: Text(
-                              "TIKLAYIN.",
-                              style: TextStyle(
-                                  fontSize: 13.0, color: Colors.black),
-                            ),
-                          )
-                        ],
-                      ),
+                      userData!['userSubscription'] != 'Free'
+                          ? Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Kalan 💎: ${_tokenClass.token}",
+                                      style: TextStyle(
+                                          fontSize: 14.0, color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Premium üyelik ile sınırsız Token hakkı için ",
+                                      style: TextStyle(
+                                          fontSize: 13.0, color: Colors.black),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        print("premium login");
+                                      },
+                                      child: Text(
+                                        "TIKLAYIN.",
+                                        style: TextStyle(
+                                            fontSize: 13.0,
+                                            color: Colors.black),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            )
+                          : SizedBox(),
                       SizedBox(height: 10),
                       Row(
                         children: [
@@ -699,6 +756,35 @@ class _MyHomePageState extends State<MyHomePage> {
                                     _tempMap['ai'] = _response;
                                     _aiChatHistory.add(_tempMap);
                                   }
+                                  if (_tokenClass.token - _tokenLost >= 0) {
+                                    setState(() {
+                                      boxPersons.put(
+                                          'currentToken',
+                                          Person(
+                                              token: _tokenClass.token -
+                                                  _tokenLost,
+                                              subnName: 'myToken'));
+                                    });
+                                    _tokenClass.token =
+                                        _tokenClass.token - _tokenLost;
+                                  } else {
+                                    if (_interstitialAd != null) {
+                                      _interstitialAd!.show();
+
+                                      setState(() {
+                                        boxPersons.put(
+                                            'currentToken',
+                                            Person(
+                                                token: 50,
+                                                subnName: 'myToken'));
+                                      });
+                                      _tokenClass.token = 50;
+                                    } else {
+                                      print(
+                                          'Reklam yüklenmedi veya gösterilemedi.');
+                                      _loadInterstitialAd();
+                                    }
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.fromLTRB(3, 0, 0, 0),
@@ -707,7 +793,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         30.0), // Yuvarlak köşeler için büyük bir değer
                                   ),
                                 ),
-                                child: Icon(Icons.send, size: 30)),
+                                child: _tokenClass.token - _tokenLost >= 0
+                                    ? Icon(Icons.send, size: 30)
+                                    : Icon(Icons.diamond, size: 30)),
                           ),
                         ],
                       ),

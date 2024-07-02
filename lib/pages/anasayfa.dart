@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
+import 'package:heybaby/functions/boxes.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/functions/jsonFiles.dart';
+import 'package:heybaby/functions/person.dart';
 import 'package:heybaby/pages/functions.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
@@ -39,6 +41,7 @@ class AnaSayfa extends StatefulWidget {
 }
 
 class _AnaSayfaState extends State<AnaSayfa> {
+  late Person _token;
   var calendarListEvents;
   Map calendarListEventsSoon = {};
   int calendarListEventsSoonDay = 15;
@@ -642,7 +645,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
     // });
 
     // haftalikBoyutBildirimOlustur();
-
+    _token = boxPersons.get('currentToken',
+        defaultValue: Person(token: 50, subnName: 'myToken'));
+    print("Evet ${_token.subnName} token değeri ${_token.token}");
     super.initState();
     // _sortStoryImagesByDate();
     _fetchUserData();
@@ -704,15 +709,14 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                     ),
                                   ),
                                 ),
-                                widget.userData!.containsKey('myToken')
+                                widget.userData!['userSubscription'] != 'Free'
                                     ? Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 0, 18, 5),
                                         child: Row(
                                           children: [
                                             Text(
-                                              widget.userData!['myToken']
-                                                  .toString(),
+                                              _token.token.toString(),
                                               style: TextStyle(
                                                 fontSize: 17.0,
                                                 fontWeight: FontWeight.w500,
@@ -722,11 +726,20 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                 width:
                                                     4), // Icon ile token sayısı arasında boşluk
 
-                                            Icon(
-                                              Icons.diamond,
-                                              size: 24.0,
-                                              color: Color.fromARGB(
-                                                  255, 119, 46, 141),
+                                            InkWell(
+                                              onTap: () {
+                                                boxPersons.put(
+                                                    'currentToken',
+                                                    Person(
+                                                        token: 50,
+                                                        subnName: 'myToken'));
+                                              },
+                                              child: Icon(
+                                                Icons.diamond,
+                                                size: 24.0,
+                                                color: Color.fromARGB(
+                                                    255, 119, 46, 141),
+                                              ),
                                             ),
                                           ],
                                         ),
