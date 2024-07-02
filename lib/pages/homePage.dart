@@ -375,9 +375,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case 2:
         return KesfetPage(
-          stories: storyImages,
-          storiesWeekly: storyImages3,
-        );
+            stories: storyImages,
+            storiesWeekly: storyImages3,
+            userData: userData);
 
       case 3:
         return NotlarPage(userData: userData);
@@ -426,9 +426,10 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         }
         if (_interstitialAd == null) {
-          print("Reklam değeri null, yeni reklam oluşabilir.");
+          print(
+              "Home page: Reklam değeri null, yeni reklam oluşabilir. yetkilerine bakılacak");
 
-          if (userData!['userSubscription'] != 'Free') {
+          if (userData!['userSubscription'] == 'Free') {
             {
               print("free user reklam oluşuruluyor");
               _loadInterstitialAd();
@@ -660,7 +661,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      userData!['userSubscription'] != 'Free'
+                      userData!['userSubscription'] == 'Free'
                           ? Column(
                               children: [
                                 Row(

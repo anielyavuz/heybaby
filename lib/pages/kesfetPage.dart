@@ -7,10 +7,11 @@ import 'package:heybaby/pages/subpages/kesfetMakaleHaftalik.dart';
 class KesfetPage extends StatefulWidget {
   final List stories;
   final List storiesWeekly;
-  KesfetPage({
-    required this.stories,
-    required this.storiesWeekly,
-  });
+  Map<String, dynamic>? userData;
+  KesfetPage(
+      {required this.stories,
+      required this.storiesWeekly,
+      required this.userData});
   @override
   _KesfetPageState createState() => _KesfetPageState();
 }
@@ -85,7 +86,11 @@ class _KesfetPageState extends State<KesfetPage> {
   void initState() {
     super.initState();
 
-    _loadInterstitialAd();
+    if (widget.userData!['userSubscription'] == 'Free') {
+      _loadInterstitialAd();
+    } else {
+      print("Free user değil reklam yüklemeye gerek yok");
+    }
   }
 
   // TODO: Add _interstitialAd
@@ -194,8 +199,24 @@ class _KesfetPageState extends State<KesfetPage> {
                   } else {
                     print(widget.storiesWeekly);
 
-                    if (_interstitialAd != null) {
-                      _interstitialAd!.show();
+                    if (widget.userData!['userSubscription'] == 'Free') {
+                      if (_interstitialAd != null) {
+                        _interstitialAd!.show();
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => KesfetMakaleHaftalikWidget(
+                              stories: widget.storiesWeekly,
+                            ),
+                          ),
+                        );
+                      } else {
+                        print('Reklam yüklenmedi veya gösterilemedi.');
+                        _loadInterstitialAd();
+                      }
+                    } else {
+                      print("Free user değil reklam yüklemeye gerek yok");
 
                       Navigator.push(
                         context,
@@ -205,9 +226,6 @@ class _KesfetPageState extends State<KesfetPage> {
                           ),
                         ),
                       );
-                    } else {
-                      print('Reklam yüklenmedi veya gösterilemedi.');
-                      _loadInterstitialAd();
                     }
                   }
 
