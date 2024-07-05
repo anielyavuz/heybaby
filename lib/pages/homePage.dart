@@ -116,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
   late int selectedWeek = -1;
+  int _mainScreenStoryCount = 5;
 
   String _response = "";
   String dropdownValue = "One";
@@ -134,12 +135,13 @@ class _MyHomePageState extends State<MyHomePage> {
   List _aiChatHistory = [];
 
   List storyImages = [];
+  List storyImagesKesfet = [];
 
   List storyImages2 = []; //ilgili haftanın story makaleleri
   List storyImages3 = []; //tüm haftaların story makaleleri
 
   Offset _floatingActionButtonOffset =
-      Offset(320.0, 600.0); // Default sağ alt köşe, 100 px yukarıda
+      Offset(320.0, 400.0); // Default sağ alt köşe, 100 px yukarıda
 
   String _apiKey = "";
   String _model = "";
@@ -375,7 +377,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case 2:
         return KesfetPage(
-            stories: storyImages,
+            stories: storyImagesKesfet,
             storiesWeekly: storyImages3,
             userData: userData);
 
@@ -447,12 +449,22 @@ class _MyHomePageState extends State<MyHomePage> {
       // print(data);
       setState(() {
         storyImages = [];
+        storyImagesKesfet = [];
         storyImages2 = [];
         storyImages3 = [];
         _AIStatus = data['AIBot']['Enable'];
         _tokenLost = data['Token']['AIBotToken'];
         storyImages = data['Stories'];
-        storyImages.shuffle(Random());
+        storyImagesKesfet = data['Stories'];
+        _mainScreenStoryCount = data['GeneralConfig']['mainScreenStoryCount'];
+        // Listeyi id'ye göre sıralama
+        storyImages.sort((a, b) => a['id'].compareTo(b['id']));
+
+        // Son 5 elemanı alma ve storyImages'a atama
+        storyImages = storyImages.sublist(
+            storyImages.length > _mainScreenStoryCount
+                ? storyImages.length - _mainScreenStoryCount
+                : 0);
 
         var _tempStoryImages = data['weeklyStories'];
         print("selectedWeek değeri şuanda $selectedWeek");

@@ -618,15 +618,17 @@ class _AnaSayfaState extends State<AnaSayfa> {
   //   }
   // }
 
-  // void _sortStoryImagesByDate() {
-  //   setState(() {
-  //     widget.storyImages.sort((a, b) {
-  //       DateTime dateA = DateTime.parse(a['tarih']);
-  //       DateTime dateB = DateTime.parse(b['tarih']);
-  //       return dateB.compareTo(dateA); // Yakından uzağa doğru sıralama
-  //     });
-  //   });
-  // }
+  void _sortStoryImagesByDate() {
+    setState(() {
+      widget.storyImages.sort((a, b) {
+        int idA = a['id'];
+        int idB = b['id'];
+        return idB.compareTo(
+            idA); // Büyükten küçüğe doğru sıralama// Yakından uzağa doğru sıralama
+      });
+    });
+    print("Ana ekran İçerikler tarihe göre sıralandı ${widget.storyImages}  ");
+  }
 
   @override
   void initState() {
@@ -649,7 +651,11 @@ class _AnaSayfaState extends State<AnaSayfa> {
         defaultValue: Person(token: 50, subnName: 'myToken'));
     print("Evet ${_token.subnName} token değeri ${_token.token}");
     super.initState();
-    // _sortStoryImagesByDate();
+
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   _sortStoryImagesByDate();
+    // });
+
     _fetchUserData();
   }
 
@@ -709,7 +715,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                     ),
                                   ),
                                 ),
-                                widget.userData!['userSubscription'] != 'Free'
+                                widget.userData!['userSubscription'] == 'Free'
                                     ? Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 0, 18, 5),

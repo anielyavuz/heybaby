@@ -213,6 +213,32 @@ class _KesfetPageState extends State<KesfetPage> {
                         );
                       } else {
                         print('Reklam yüklenmedi veya gösterilemedi.');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'İçeriklerinizi hazırlıyoruz, Lütfen bir kaç saniye bekleyip tekrar deneyin. 😇',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Color.fromARGB(255, 26, 2, 61),
+                              ),
+                            ),
+                            backgroundColor: Color.fromARGB(
+                                255, 224, 210, 246), // Snackbar arka plan rengi
+                            duration: Duration(
+                                seconds: 3), // Snackbar gösterim süresi
+                            behavior:
+                                SnackBarBehavior.floating, // Snackbar davranışı
+                            shape: RoundedRectangleBorder(
+                              // Snackbar şekli
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 4, // Snackbar yükseltilmesi
+                            margin:
+                                EdgeInsets.all(10), // Snackbar kenar boşlukları
+                          ),
+                        );
+
                         _loadInterstitialAd();
                       }
                     } else {

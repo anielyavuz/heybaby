@@ -652,7 +652,7 @@ void _showGuestLoginPopup(BuildContext context) {
             width: MediaQuery.of(context).size.width *
                 0.8, // Burada pop-up'ın genişliğini ekranın %80'i olarak ayarladık.
             height: MediaQuery.of(context).size.height *
-                0.2, // Burada pop-up'ın yüksekliğini ekranın %50'si olarak ayarladık.
+                0.3, // Burada pop-up'ın yüksekliğini ekranın %50'si olarak ayarladık.
 
             child: GuestLoginContent()),
       );
@@ -730,7 +730,7 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: Text(
-                            'Yeni doğum modu henüz geliştirme adımındadır.')),
+                            'Doğum sonrası modu henüz geliştirme adımındadır.')),
                   );
                 }
               },
