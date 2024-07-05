@@ -109,6 +109,30 @@ class _KesfetPageState extends State<KesfetPage> {
             },
             onAdFailedToShowFullScreenContent: (ad, err) {
               ad.dispose();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    '${err.message}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 26, 2, 61),
+                    ),
+                  ),
+                  backgroundColor: Color.fromARGB(
+                      255, 224, 210, 246), // Snackbar arka plan rengi
+                  duration: Duration(seconds: 3), // Snackbar gösterim süresi
+                  behavior: SnackBarBehavior.floating, // Snackbar davranışı
+                  shape: RoundedRectangleBorder(
+                    // Snackbar şekli
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 4, // Snackbar yükseltilmesi
+                  margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+                ),
+              );
+
               print('Failed to show the ad: ${err.message}');
             },
           );
@@ -117,6 +141,29 @@ class _KesfetPageState extends State<KesfetPage> {
           });
         },
         onAdFailedToLoad: (err) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '${err.message}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Color.fromARGB(255, 26, 2, 61),
+                ),
+              ),
+              backgroundColor: Color.fromARGB(
+                  255, 224, 210, 246), // Snackbar arka plan rengi
+              duration: Duration(seconds: 3), // Snackbar gösterim süresi
+              behavior: SnackBarBehavior.floating, // Snackbar davranışı
+              shape: RoundedRectangleBorder(
+                // Snackbar şekli
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 4, // Snackbar yükseltilmesi
+              margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+            ),
+          );
+
           print('Failed to load an interstitial ad: ${err.message}');
         },
       ),
@@ -197,7 +244,7 @@ class _KesfetPageState extends State<KesfetPage> {
                       ),
                     );
                   } else {
-                    print(widget.storiesWeekly);
+                    // print(widget.storiesWeekly);
 
                     if (widget.userData!['userSubscription'] == 'Free') {
                       if (_interstitialAd != null) {
@@ -213,31 +260,31 @@ class _KesfetPageState extends State<KesfetPage> {
                         );
                       } else {
                         print('Reklam yüklenmedi veya gösterilemedi.');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'İçeriklerinizi hazırlıyoruz, Lütfen bir kaç saniye bekleyip tekrar deneyin. 😇',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Color.fromARGB(255, 26, 2, 61),
-                              ),
-                            ),
-                            backgroundColor: Color.fromARGB(
-                                255, 224, 210, 246), // Snackbar arka plan rengi
-                            duration: Duration(
-                                seconds: 3), // Snackbar gösterim süresi
-                            behavior:
-                                SnackBarBehavior.floating, // Snackbar davranışı
-                            shape: RoundedRectangleBorder(
-                              // Snackbar şekli
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 4, // Snackbar yükseltilmesi
-                            margin:
-                                EdgeInsets.all(10), // Snackbar kenar boşlukları
-                          ),
-                        );
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text(
+                        //       'İçeriklerinizi hazırlıyoruz, Lütfen bir kaç saniye bekleyip tekrar deneyin. 😇',
+                        //       style: TextStyle(
+                        //         fontWeight: FontWeight.bold,
+                        //         fontSize: 16,
+                        //         color: Color.fromARGB(255, 26, 2, 61),
+                        //       ),
+                        //     ),
+                        //     backgroundColor: Color.fromARGB(
+                        //         255, 224, 210, 246), // Snackbar arka plan rengi
+                        //     duration: Duration(
+                        //         seconds: 3), // Snackbar gösterim süresi
+                        //     behavior:
+                        //         SnackBarBehavior.floating, // Snackbar davranışı
+                        //     shape: RoundedRectangleBorder(
+                        //       // Snackbar şekli
+                        //       borderRadius: BorderRadius.circular(10),
+                        //     ),
+                        //     elevation: 4, // Snackbar yükseltilmesi
+                        //     margin:
+                        //         EdgeInsets.all(10), // Snackbar kenar boşlukları
+                        //   ),
+                        // );
 
                         _loadInterstitialAd();
                       }

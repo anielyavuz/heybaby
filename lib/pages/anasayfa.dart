@@ -974,6 +974,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                   // Renkli kutular
                   Column(
                     children: List.generate(widget.storyImages.length, (index) {
+                      int reverseIndex = widget.storyImages.length - 1 - index;
                       return Column(
                         children: [
                           Divider(),
@@ -984,9 +985,12 @@ class _AnaSayfaState extends State<AnaSayfa> {
                               border: Border.all(color: Colors.black),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
-                            child: widget.storyImages[index]['imageLink'] != ""
+                            child: widget.storyImages[reverseIndex]
+                                        ['imageLink'] !=
+                                    ""
                                 ? Image.network(
-                                    widget.storyImages[index]['imageLink'],
+                                    widget.storyImages[reverseIndex]
+                                        ['imageLink'],
                                     fit: BoxFit.cover,
                                   )
                                 : CircularProgressIndicator(),
@@ -996,12 +1000,12 @@ class _AnaSayfaState extends State<AnaSayfa> {
                             width: MediaQuery.of(context).size.width * 0.9,
                             height: 20.0,
                             decoration: BoxDecoration(
-                              // color: Colors.primaries[index %
+                              // color: Colors.primaries[reverseIndex %
                               //     Colors.primaries.length], // Renkli kutular
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             child: Text(
-                              "${widget.storyImages[index]['baslik']}",
+                              "${widget.storyImages[reverseIndex]['baslik']}",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -1013,7 +1017,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                             width: MediaQuery.of(context).size.width * 0.9,
                             height: 20.0,
                             decoration: BoxDecoration(
-                              // color: Colors.primaries[index %
+                              // color: Colors.primaries[reverseIndex %
                               //     Colors.primaries.length], // Renkli kutular
                               borderRadius: BorderRadius.circular(10.0),
                             ),
@@ -1021,7 +1025,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${widget.storyImages[index]['icerik'].substring(0, 30)} ... ",
+                                  "${widget.storyImages[reverseIndex]['icerik'].substring(0, 30)} ... ",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.normal,
@@ -1036,15 +1040,17 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => MakaleDetay(
-                                              baslik: widget.storyImages[index]
+                                              baslik: widget
+                                                      .storyImages[reverseIndex]
                                                   ['baslik'],
-                                              icerik: widget.storyImages[index]
+                                              icerik: widget
+                                                  .storyImages[reverseIndex]
                                                       ['icerik']
                                                   .toString()
                                                   .replaceAll('%', '\n'),
-                                              resimURL:
-                                                  widget.storyImages[index]
-                                                      ['imageLink'])),
+                                              resimURL: widget
+                                                      .storyImages[reverseIndex]
+                                                  ['imageLink'])),
                                     );
                                   },
                                   child: Text(
