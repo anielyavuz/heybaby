@@ -1110,107 +1110,111 @@ class _AnaSayfaState extends State<AnaSayfa> {
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ExpansionTile(
-                    onExpansionChanged: (bool expanded) {
-                      setState(() {
-                        _aktivitelerAcik = expanded;
-                      });
-                    },
-                    title: Row(
+              child: _isVisibleYaklasanAktiviteler
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.info_rounded),
-                        Text(
-                          'Yaklaşan Aktiviteler' +
-                              (activities.keys.toList().length != 0
-                                  ? " (${activities.keys.toList().length.toString()})"
-                                  : ""),
-                          style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.all(5), child: SizedBox()),
-                      ...activities.entries.map((entry) {
-                        return Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                  entry.value.split('%%%')[3] +
-                                      " " +
-                                      entry.value.split('%%%')[1],
-                                  style: TextStyle(
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              subtitle: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    entry.value.split('%%%')[2] +
-                                        "   " +
-                                        formatDate(entry.value
-                                            .split('%%%')[0]
-                                            .split(' ')[0]),
-                                  ),
-                                  entry.value.split('%%%')[4] == true
-                                      ? Icon(Icons.alarm_on)
-                                      : Icon(Icons.alarm_off)
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        );
-                      }).toList(),
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Calendar(
-                                  userData: widget.userData,
-                                  ekranYukseklikKontrol: 1,
-                                ),
-                              ),
-                            ).then((_) {
-                              // Navigator.pop ile geri dönüldüğünde burası çalışacak
-                              _fetchUserData(); // Çağırmak istediğiniz fonksiyon
+                        ExpansionTile(
+                          onExpansionChanged: (bool expanded) {
+                            setState(() {
+                              _aktivitelerAcik = expanded;
                             });
                           },
-                          child: Text(
-                            "Aktivite Ekle",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.none,
-                              fontWeight: FontWeight.bold,
-                              background: Paint()
-                                ..color = Colors.transparent
-                                ..style = PaintingStyle.stroke
-                                ..strokeWidth = 1.5
-                                ..strokeJoin = StrokeJoin.round,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black,
-                                  offset: Offset(0, 0),
-                                  blurRadius: 0,
-                                ),
-                              ],
-                            ),
+                          title: Row(
+                            children: [
+                              Icon(Icons.info_rounded),
+                              Text(
+                                'Yaklaşan Aktiviteler' +
+                                    (activities.keys.toList().length != 0
+                                        ? " (${activities.keys.toList().length.toString()})"
+                                        : ""),
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            ],
                           ),
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: SizedBox()),
+                            ...activities.entries.map((entry) {
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                        entry.value.split('%%%')[3] +
+                                            " " +
+                                            entry.value.split('%%%')[1],
+                                        style: TextStyle(
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    subtitle: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          entry.value.split('%%%')[2] +
+                                              "   " +
+                                              formatDate(entry.value
+                                                  .split('%%%')[0]
+                                                  .split(' ')[0]),
+                                        ),
+                                        entry.value.split('%%%')[4] == true
+                                            ? Icon(Icons.alarm_on)
+                                            : Icon(Icons.alarm_off)
+                                      ],
+                                    ),
+                                  ),
+                                  Divider()
+                                ],
+                              );
+                            }).toList(),
+                            Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Calendar(
+                                        userData: widget.userData,
+                                        ekranYukseklikKontrol: 1,
+                                      ),
+                                    ),
+                                  ).then((_) {
+                                    // Navigator.pop ile geri dönüldüğünde burası çalışacak
+                                    _fetchUserData(); // Çağırmak istediğiniz fonksiyon
+                                  });
+                                },
+                                child: Text(
+                                  "Aktivite Ekle",
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.none,
+                                    fontWeight: FontWeight.bold,
+                                    background: Paint()
+                                      ..color = Colors.transparent
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 1.5
+                                      ..strokeJoin = StrokeJoin.round,
+                                    shadows: [
+                                      Shadow(
+                                        color: Colors.black,
+                                        offset: Offset(0, 0),
+                                        blurRadius: 0,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    )
+                  : SizedBox(),
             ),
           ),
         ),
