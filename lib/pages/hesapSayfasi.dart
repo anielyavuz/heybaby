@@ -351,6 +351,12 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             TextButton(
+                              style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  side: BorderSide(color: Colors.black),
+                                ),
+                              ),
                               child: Text('Hayır'),
                               onPressed: () {
                                 Navigator.of(context).pop(false);
@@ -360,6 +366,12 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                                 width:
                                     16), // Butonlar arasında biraz boşluk bırakmak için
                             TextButton(
+                              style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  side: BorderSide(color: Colors.black),
+                                ),
+                              ),
                               child: Text('Evet'),
                               onPressed: () {
                                 Navigator.of(context).pop(true);
@@ -405,6 +417,13 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   TextButton(
+                                    style: TextButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        side: BorderSide(color: Colors.black),
+                                      ),
+                                    ),
                                     child: Text('Hayır'),
                                     onPressed: () {
                                       Navigator.of(context).pop(false);
@@ -414,6 +433,13 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                                       width:
                                           16), // Butonlar arasında biraz boşluk bırakmak için
                                   TextButton(
+                                    style: TextButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        side: BorderSide(color: Colors.black),
+                                      ),
+                                    ),
                                     child: Text('Evet'),
                                     onPressed: () {
                                       Navigator.of(context).pop(true);

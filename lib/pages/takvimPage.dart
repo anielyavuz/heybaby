@@ -416,143 +416,158 @@ class _CalendarState extends State<Calendar> {
                     builder: (context) {
                       return StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
-                          return Container(
-                            padding: EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Aktivite Düzenle",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0,
-                                  ),
+                          return Wrap(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
                                 ),
-                                SizedBox(height: 10.0),
-                                DropdownButtonFormField<String>(
-                                  value: selectedCategory,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedCategory = value!;
-                                    });
-                                    // print(selectedCategory);
-                                  },
-                                  items: [
-                                    'Doktor Randevusu 👩‍⚕️',
-                                    'Sosyal ☕️',
-                                    'Kişisel Zaman 💃'
-                                  ].map((category) {
-                                    return DropdownMenuItem<String>(
-                                      value: category,
-                                      child: Text(category),
-                                    );
-                                  }).toList(),
-                                ),
-                                SizedBox(height: 20.0),
-                                TextFormField(
-                                  controller: _eventController,
-                                  decoration: InputDecoration(
-                                    hintText: "Aktivite adını girin",
-                                    labelText: "Aktivite",
-                                    border: OutlineInputBorder(),
-                                  ),
-                                ),
-                                SizedBox(height: 10.0),
-                                TextFormField(
-                                  controller: _subEventController,
-                                  decoration: InputDecoration(
-                                    hintText: "Not",
-                                    labelText: "Not (isteğe bağlı)",
-                                    border: OutlineInputBorder(),
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text('Zaman'),
-                                        Switch(
-                                          value: isSwitchedTime,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              isSwitchedTime = value;
-                                              if (!isSwitchedTime) {
-                                                isSwitchedAlarm = false;
-                                              }
-                                            });
-                                          },
+                                child: Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Aktivite Düzenle",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20.0,
                                         ),
-                                      ],
-                                    ),
-                                    isSwitchedTime
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              showTimePicker(
-                                                context: context,
-                                                initialTime: TimeOfDay.now(),
-                                              ).then((pickedTime) {
-                                                if (pickedTime != null) {
-                                                  setState(() {
-                                                    _secilenZaman = pickedTime;
-                                                  });
-                                                }
-                                              });
-                                            },
-                                            child: Text(
-                                                formatTimeOfDay(_secilenZaman)),
-                                          )
-                                        : SizedBox()
-                                  ],
-                                ),
-                                SizedBox(height: 20.0),
-                                isSwitchedTime
-                                    ? Row(
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      DropdownButtonFormField<String>(
+                                        value: selectedCategory,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedCategory = value!;
+                                          });
+                                        },
+                                        items: [
+                                          'Doktor Randevusu 👩‍⚕️',
+                                          'Sosyal ☕️',
+                                          'Kişisel Zaman 💃'
+                                        ].map((category) {
+                                          return DropdownMenuItem<String>(
+                                            value: category,
+                                            child: Text(category),
+                                          );
+                                        }).toList(),
+                                      ),
+                                      SizedBox(height: 20.0),
+                                      TextFormField(
+                                        controller: _eventController,
+                                        decoration: InputDecoration(
+                                          hintText: "Aktivite adını girin",
+                                          labelText: "Aktivite",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      TextFormField(
+                                        controller: _subEventController,
+                                        decoration: InputDecoration(
+                                          hintText: "Not",
+                                          labelText: "Not (isteğe bağlı)",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20.0),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('Alarm'),
-                                          Switch(
-                                            value: isSwitchedAlarm,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                isSwitchedAlarm = value;
-                                              });
+                                          Row(
+                                            children: [
+                                              Text('Zaman'),
+                                              Switch(
+                                                value: isSwitchedTime,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    isSwitchedTime = value;
+                                                    if (!isSwitchedTime) {
+                                                      isSwitchedAlarm = false;
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          isSwitchedTime
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    showTimePicker(
+                                                      context: context,
+                                                      initialTime:
+                                                          TimeOfDay.now(),
+                                                    ).then((pickedTime) {
+                                                      if (pickedTime != null) {
+                                                        setState(() {
+                                                          _secilenZaman =
+                                                              pickedTime;
+                                                        });
+                                                      }
+                                                    });
+                                                  },
+                                                  child: Text(formatTimeOfDay(
+                                                      _secilenZaman)),
+                                                )
+                                              : SizedBox()
+                                        ],
+                                      ),
+                                      SizedBox(height: 20.0),
+                                      isSwitchedTime
+                                          ? Row(
+                                              children: [
+                                                Text('Alarm'),
+                                                Switch(
+                                                  value: isSwitchedAlarm,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      isSwitchedAlarm = value;
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            )
+                                          : SizedBox(),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          TextButton(
+                                            child: Text("İptal"),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                          ),
+                                          SizedBox(width: 10.0),
+                                          ElevatedButton(
+                                            child: Text("Düzenle"),
+                                            onPressed: () {
+                                              duzenleActivity(
+                                                item['id'],
+                                                _eventController.text,
+                                                _subEventController.text,
+                                                selectedCategory,
+                                                isSwitchedTime
+                                                    ? '${_secilenZaman.hour.toString().padLeft(2, '0')}:${_secilenZaman.minute.toString().padLeft(2, '0')}'
+                                                    : '',
+                                                isSwitchedAlarm,
+                                              );
+                                              Navigator.pop(context);
+                                              _eventController.clear();
+                                              _subEventController.clear();
                                             },
                                           ),
                                         ],
-                                      )
-                                    : SizedBox(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    TextButton(
-                                      child: Text("İptal"),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    ElevatedButton(
-                                      child: Text("Düzenle"),
-                                      onPressed: () {
-                                        duzenleActivity(
-                                            item['id'],
-                                            _eventController.text,
-                                            _subEventController.text,
-                                            selectedCategory,
-                                            isSwitchedTime
-                                                ? '${_secilenZaman.hour.toString().padLeft(2, '0')}:${_secilenZaman.minute.toString().padLeft(2, '0')}'
-                                                : '',
-                                            isSwitchedAlarm);
-                                        Navigator.pop(context);
-                                        _eventController.clear();
-                                        _subEventController.clear();
-                                      },
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           );
                         },
                       );
@@ -623,9 +638,9 @@ class _CalendarState extends State<Calendar> {
               return StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
                   return Container(
+                    height: MediaQuery.of(context).size.height * 0.75,
                     padding: EdgeInsets.all(20.0),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -677,60 +692,55 @@ class _CalendarState extends State<Calendar> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                Text('Saat'),
-                                Switch(
-                                  value: isSwitchedTime,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isSwitchedTime = value;
-                                      if (!isSwitchedTime) {
-                                        isSwitchedAlarm = false;
-                                      }
-                                    });
-                                  },
-                                ),
-                              ],
+                            Text('Saat'),
+                            Switch(
+                              value: isSwitchedTime,
+                              onChanged: (value) {
+                                setState(() {
+                                  isSwitchedTime = value;
+                                  if (!isSwitchedTime) {
+                                    isSwitchedAlarm = false;
+                                  }
+                                });
+                              },
                             ),
-                            isSwitchedTime
-                                ? GestureDetector(
-                                    onTap: () {
-                                      showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now(),
-                                      ).then((pickedTime) {
-                                        if (pickedTime != null) {
-                                          setState(() {
-                                            _secilenZaman = pickedTime;
-                                          });
-                                        }
-                                      });
-                                    },
-                                    child: Text(formatTimeOfDay(_secilenZaman)),
-                                  )
-                                : SizedBox()
                           ],
                         ),
-                        SizedBox(height: 20.0),
-                        isSwitchedTime
-                            ? Row(
-                                children: [
-                                  Text('Alarm'),
-                                  Switch(
-                                    value: isSwitchedAlarm,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isSwitchedAlarm = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          height: 20,
-                        ),
+                        if (isSwitchedTime)
+                          Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now(),
+                                ).then((pickedTime) {
+                                  if (pickedTime != null) {
+                                    setState(() {
+                                      _secilenZaman = pickedTime;
+                                    });
+                                  }
+                                });
+                              },
+                              child: Text(formatTimeOfDay(_secilenZaman)),
+                            ),
+                          ),
+                        if (isSwitchedTime) SizedBox(height: 20.0),
+                        if (isSwitchedTime)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Alarm'),
+                              Switch(
+                                value: isSwitchedAlarm,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isSwitchedAlarm = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        Spacer(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -738,7 +748,6 @@ class _CalendarState extends State<Calendar> {
                               child: Text("İptal"),
                               onPressed: () => Navigator.pop(context),
                             ),
-                            SizedBox(width: 10.0),
                             ElevatedButton(
                               child: Text("Ekle"),
                               onPressed: () {
@@ -776,9 +785,7 @@ class _CalendarState extends State<Calendar> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                        SizedBox(height: 20.0),
                       ],
                     ),
                   );

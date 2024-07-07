@@ -286,7 +286,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                     child: ElevatedButton(
                       onPressed: () async {
-                        _showGuestLoginPopup(context);
+                        _showGuestLoginModal(context);
                       },
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -621,7 +621,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 16.0),
             TextButton(
               onPressed: () {
-                _showGuestLoginPopup(context);
+                _showGuestLoginModal(context);
               },
               child: Text('Hesabınız yok mu? İlk defa giriş yapın.'),
             ),
@@ -632,29 +632,37 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-void _showGuestLoginPopup(BuildContext context) {
-  showDialog(
+void _showGuestLoginModal(BuildContext context) {
+  showModalBottomSheet(
     context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
     builder: (BuildContext context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-              20), // Burada pop-up'ın köşelerini yuvarlak yapabiliriz.
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        height: MediaQuery.of(context).size.height * 0.37,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Giriş Yap',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontSize: 26.0,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Expanded(
+              child: GuestLoginContent(),
+            ),
+          ],
         ),
-        title: Text('Giriş Yap',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color.fromARGB(255, 0, 0, 0),
-              fontSize: 26.0,
-              fontWeight: FontWeight.normal,
-            )),
-        content: SizedBox(
-            width: MediaQuery.of(context).size.width *
-                0.8, // Burada pop-up'ın genişliğini ekranın %80'i olarak ayarladık.
-            height: MediaQuery.of(context).size.height *
-                0.3, // Burada pop-up'ın yüksekliğini ekranın %50'si olarak ayarladık.
-
-            child: GuestLoginContent()),
       );
     },
   );
@@ -734,11 +742,12 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                   );
                 }
               },
+              contentPadding: EdgeInsets.zero, // Bu satırı ekleyin
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(6, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   isPregnant
                       ? Text('Son regl tarihiniz:',
@@ -807,7 +816,7 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                 ],
               ),
             ),
-            SizedBox(height: 6.0),
+            SizedBox(height: 56.0),
             ElevatedButton(
                 onPressed: () async {
                   Navigator.of(context).pop();

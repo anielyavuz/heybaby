@@ -300,7 +300,7 @@ class BildirimTakip {
         content: NotificationContent(
             id: _id,
             channelKey: "basic_channel",
-            title: "Aktivite Vakti Annecim 🗓️",
+            title: "Aktivite Vakti 🗓️",
             body: "$_aktivite aktivitesi için planladığın zaman geldi. 😇",
             wakeUpScreen: true,
             payload: {'page': 'suTakip'}),
