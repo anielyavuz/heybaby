@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -66,8 +67,15 @@ class _MyHomePageState extends State<MyHomePage> {
     _tokenClass = boxPersons.get('currentToken',
         defaultValue: Person(token: 50, subnName: 'myToken'));
 
+    _getToken();
+
     // TODO: implement initState
     super.initState();
+  }
+
+  void _getToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    print('Firebase Messaging Token: $token');
   }
 
   @override

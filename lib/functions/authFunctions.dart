@@ -14,7 +14,8 @@ class AuthService {
   // GoogleSignInAccount? _user;
   // GoogleSignInAccount get user => _user!;
 
-  Future<Map> anonymSignIn(bool _isPregnant, DateTime _tarih) async {
+  Future<Map> anonymSignIn(
+      bool _isPregnant, DateTime _tarih, String _referansCode) async {
     Map returnCode = {};
     try {
       var user = await _auth.signInAnonymously();
@@ -22,6 +23,7 @@ class AuthService {
       if (_isPregnant) {
         _finalData = {
           "userName": "Guest",
+          "referansCode": _referansCode,
           "email": "",
           "photoUrl": "",
           "dataRecord": {},
@@ -49,6 +51,7 @@ class AuthService {
       } else {
         _finalData = {
           "userName": "Guest",
+          "referansCode": _referansCode,
           "email": "",
           "photoUrl": "",
           "dataRecord": {},

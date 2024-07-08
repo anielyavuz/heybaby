@@ -641,10 +641,49 @@ void _showGuestLoginModal(BuildContext context) {
         topRight: Radius.circular(20),
       ),
     ),
+    isScrollControlled: true,
     builder: (BuildContext context) {
-      return Container(
-        padding: EdgeInsets.all(16.0),
-        height: MediaQuery.of(context).size.height * 0.37,
+      return GuestLoginModalContent();
+    },
+  );
+}
+
+class GuestLoginModalContent extends StatefulWidget {
+  @override
+  _GuestLoginModalContentState createState() => _GuestLoginModalContentState();
+}
+
+class _GuestLoginModalContentState extends State<GuestLoginModalContent>
+    with WidgetsBindingObserver {
+  double heightFactor = 0.4;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    setState(() {
+      heightFactor = bottomInset > 0 ? 0.8 : 0.4;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      child: FractionallySizedBox(
+        heightFactor: heightFactor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -663,9 +702,9 @@ void _showGuestLoginModal(BuildContext context) {
             ),
           ],
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }
 
 class GuestLoginContent extends StatefulWidget {
@@ -674,14 +713,13 @@ class GuestLoginContent extends StatefulWidget {
 }
 
 class _GuestLoginContentState extends State<GuestLoginContent> {
+  final TextEditingController _referansController = TextEditingController();
+
   String _dogumOnceSonra = "Once";
   bool isPregnant = true;
   DateTime lastPeriodDate = DateTime.now().add(Duration(days: -30));
   AuthService _authService = AuthService();
   late List<dynamic> jsonList = [];
-  // Global değişken tanımı
-  // late List<dynamic> jsonList0 = [];
-
   String _tahminiKilo = "";
   String _tahminiBoy = "";
   String _imageLink = "";
@@ -691,142 +729,132 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
   @override
   void initState() {
     super.initState();
-
-    // Future.delayed(const Duration(milliseconds: 50), () {
-    //   imageandInfoJsonFileLoad();
-    // });
   }
-
-  // imageandInfoJsonFileLoad() async {
-  //   jsonList0 = await JsonReader.readJson();
-  //   setState(() {
-  //     jsonList = jsonList0;
-  //   });
-  //   // print(jsonList);
-  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Builder(builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Divider(),
-            SwitchListTile(
-              title: isPregnant
-                  ? Text('Hamileyim',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.normal,
-                      ))
-                  : Text("Bebeğim var"),
-              value: isPregnant,
-              onChanged: (bool value) async {
-                setState(() {
-                  _dogumOnceSonra = "Once";
-                  isPregnant = value;
-                });
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(),
+          SwitchListTile(
+            title: isPregnant
+                ? Text('Hamileyim',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.normal,
+                    ))
+                : Text("Bebeğim var"),
+            value: isPregnant,
+            onChanged: (bool value) async {
+              setState(() {
+                _dogumOnceSonra = "Once";
+                isPregnant = value;
+              });
 
-                if (!value) {
-                  await Future.delayed(Duration(milliseconds: 100));
-                  setState(() {
-                    isPregnant = true;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            'Doğum sonrası modu henüz geliştirme adımındadır.')),
-                  );
-                }
-              },
-              contentPadding: EdgeInsets.zero, // Bu satırı ekleyin
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  isPregnant
-                      ? Text('Son regl tarihiniz:',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.normal,
-                          ))
-                      : Text('Bebeğiniz doğum günü:',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.normal,
-                          )),
-                  SizedBox(height: 55),
-                  InkWell(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext builder) {
-                          return Container(
-                            height:
-                                MediaQuery.of(context).copyWith().size.height /
-                                    3,
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  child: CupertinoDatePicker(
-                                    initialDateTime: lastPeriodDate,
-                                    minimumDate: DateTime.now()
-                                        .subtract(Duration(days: 10 * 30)),
-                                    maximumDate: DateTime.now(),
-                                    mode: CupertinoDatePickerMode.date,
-                                    onDateTimeChanged: (DateTime newDate) {
-                                      setState(() {
-                                        lastPeriodDate = newDate;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
+              if (!value) {
+                await Future.delayed(Duration(milliseconds: 100));
+                setState(() {
+                  isPregnant = true;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Doğum sonrası modu henüz geliştirme adımındadır.')),
+                );
+              }
+            },
+            contentPadding: EdgeInsets.zero,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                isPregnant
+                    ? Text('Son regl tarihiniz:',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.normal,
+                        ))
+                    : Text('Bebeğiniz doğum günü:',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.normal,
+                        )),
+                SizedBox(height: 55),
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext builder) {
+                        return Container(
+                          height:
+                              MediaQuery.of(context).copyWith().size.height / 3,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 200,
+                                child: CupertinoDatePicker(
+                                  initialDateTime: lastPeriodDate,
+                                  minimumDate: DateTime.now()
+                                      .subtract(Duration(days: 10 * 30)),
+                                  maximumDate: DateTime.now(),
+                                  mode: CupertinoDatePickerMode.date,
+                                  onDateTimeChanged: (DateTime newDate) {
+                                    setState(() {
+                                      lastPeriodDate = newDate;
+                                    });
                                   },
-                                  child: Text('Done'),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      DateFormat.yMMMd(
-                              Localizations.localeOf(context).toString())
-                          .format(lastPeriodDate),
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.normal,
-                        decoration: TextDecoration.underline,
-                      ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Done'),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Text(
+                    DateFormat.yMMMd(Localizations.localeOf(context).toString())
+                        .format(lastPeriodDate),
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 0, 0, 0),
+                      fontSize: 19.0,
+                      fontWeight: FontWeight.normal,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(height: 56.0),
-            ElevatedButton(
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  var a = await _authService.anonymSignIn(
-                      isPregnant, lastPeriodDate);
-                },
-                child: Text('Giriş Yap'))
-          ],
-        );
-      }),
+          ),
+          SizedBox(height: 16.0),
+          TextField(
+            controller: _referansController,
+            decoration: InputDecoration(
+              hintText: 'Referans Kodu (Opsiyonel)',
+            ),
+          ),
+          SizedBox(height: 16.0),
+          ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                var a = await _authService.anonymSignIn(
+                    isPregnant, lastPeriodDate, _referansController.text);
+              },
+              child: Text('Giriş Yap'))
+        ],
+      ),
     );
   }
 }
