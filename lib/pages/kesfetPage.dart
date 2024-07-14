@@ -3,15 +3,18 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:heybaby/functions/ad_helper.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 import 'package:heybaby/pages/subpages/kesfetMakaleHaftalik.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KesfetPage extends StatefulWidget {
   final List stories;
   final List storiesWeekly;
+  final String language;
   Map<String, dynamic>? userData;
   KesfetPage(
       {required this.stories,
       required this.storiesWeekly,
-      required this.userData});
+      required this.userData,
+      required this.language});
   @override
   _KesfetPageState createState() => _KesfetPageState();
 }
@@ -82,9 +85,52 @@ class _KesfetPageState extends State<KesfetPage> {
     },
   ];
 
+  void baslikDegistir() async {
+    if (AppLocalizations.of(context)!.language == "English") {
+      setState(() {
+        _kartlarBeslenme[0]['baslik'] = 'Food & Drink';
+        _kartlarBeslenme[1]['baslik'] = 'Basic Foods';
+        _kartlarBeslenme[2]['baslik'] = 'Vitamin Minerals';
+        _kartlarBeslenme[3]['baslik'] = 'To be done & Not to be done';
+        _kartlarAnneBebek[0]['baslik'] = 'Weight Gain';
+        _kartlarAnneBebek[1]['baslik'] = 'Body Change';
+        _kartlarAnneBebek[2]['baslik'] = 'Baby Development';
+        _kartlarAnneBebek[3]['baslik'] = 'Baby Safety';
+        _kartlarIyiHissedin[0]['baslik'] = 'Peace and Happiness';
+        _kartlarIyiHissedin[1]['baslik'] = 'Sleep';
+        _kartlarIyiHissedin[2]['baslik'] = 'Pysical Health';
+        _kartlarIyiHissedin[3]['baslik'] = 'Pregnancy Pain';
+        _kartlarHaftalik[0]['baslik'] = 'Weekly Tips';
+
+        // final List<Map<String, String>> _kartlarBeslenme = [
+        //   {
+        //     'baslik': 'Food & Drink',
+        //     'resimUrl': 'assets/yiyecek_icicek.jpg',
+        //   },
+        //   {
+        //     'baslik': 'Basic Foods',
+        //     'resimUrl': 'assets/temel_gidalar.jpg',
+        //   },
+        //   {
+        //     'baslik': 'Vitamin Minerals',
+        //     'resimUrl': 'assets/vitamin_mineraller.jpg',
+        //   },
+        //   {
+        //     'baslik': 'To be done & Not to be done',
+        //     'resimUrl': 'assets/yapilacak_yapilmayacak.jpg',
+        //   },
+        // ];
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      baslikDegistir();
+    });
 
     if (widget.userData!['userSubscription'] == 'Free') {
       _loadInterstitialAd();
@@ -181,17 +227,29 @@ class _KesfetPageState extends State<KesfetPage> {
       //   title: Text('Keşfet'),
       // ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildKartListesi("Beslenme", _kartlarBeslenme),
-            _buildKartListesi("Anne & Bebek", _kartlarAnneBebek),
-            _buildKartListesi("İyi Hissedin", _kartlarIyiHissedin),
-            _buildKartListesi(
-                "Hayatı Kolaylaştıran İpuçları", _kartlarHaftalik),
-            // Buraya ek alt başlıklar ve kartlar eklenebilir.
-          ],
-        ),
+        child: widget.language == "Türkçe"
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildKartListesi("Beslenme", _kartlarBeslenme),
+                  _buildKartListesi("Anne & Bebek", _kartlarAnneBebek),
+                  _buildKartListesi("İyi Hissedin", _kartlarIyiHissedin),
+                  _buildKartListesi(
+                      "Hayatı Kolaylaştıran İpuçları", _kartlarHaftalik),
+                  // Buraya ek alt başlıklar ve kartlar eklenebilir.
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildKartListesi("Nutrition", _kartlarBeslenme),
+                  _buildKartListesi("Mother & Baby", _kartlarAnneBebek),
+                  _buildKartListesi("Feel Good", _kartlarIyiHissedin),
+                  _buildKartListesi(
+                      "Tips to Make Life Easier", _kartlarHaftalik),
+                  // Buraya ek alt başlıklar ve kartlar eklenebilir.
+                ],
+              ),
       ),
     );
   }
@@ -240,7 +298,8 @@ class _KesfetPageState extends State<KesfetPage> {
                         builder: (context) => KesfetMakaleWidget(
                             baslik: _kartlar[index]['baslik']!,
                             resimUrl: _kartlar[index]['resimUrl']!,
-                            stories: widget.stories),
+                            stories: widget.stories,
+                            language: AppLocalizations.of(context)!.language),
                       ),
                     );
                   } else {

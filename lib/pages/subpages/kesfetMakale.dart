@@ -3,26 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KesfetMakaleWidget extends StatefulWidget {
   final List stories;
   final String baslik;
   final String resimUrl;
+  final String language;
 
-  KesfetMakaleWidget({
-    required this.stories,
-    required this.baslik,
-    required this.resimUrl,
-  });
+  KesfetMakaleWidget(
+      {required this.stories,
+      required this.baslik,
+      required this.resimUrl,
+      required this.language});
 
   @override
   _KesfetMakaleWidgetState createState() => _KesfetMakaleWidgetState();
 }
 
 class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
-  late Map<String, dynamic> _data;
-  late List makaleler;
-
+  late Map<String, dynamic> _data = {};
+  late List makaleler = [];
+  String data = "";
   @override
   void initState() {
     // print(widget.stories);
@@ -32,7 +34,14 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
   }
 
   Future<void> _getData() async {
-    String data = await rootBundle.loadString('assets/kesfetMakale.json');
+    if (widget.language == "English") {
+      print("Dil ingilizce, ing makaleler çekiyorum.");
+      data = await rootBundle.loadString('assets/kesfetMakale_en.json');
+    } else {
+      print("Dil türkçe, türkçe makaleler çekiyorum.");
+
+      data = await rootBundle.loadString('assets/kesfetMakale.json');
+    }
     Map<String, dynamic> jsonResult = json.decode(data);
     setState(() {
       _data = jsonResult;

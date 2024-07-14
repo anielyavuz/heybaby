@@ -6,6 +6,7 @@ import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Event {
   final String title;
@@ -84,6 +85,10 @@ class _CalendarState extends State<Calendar> {
       }
       print(calendarListEvents);
       // calendarListEvents = (widget.userData?['calendarListEvents'] ?? {});
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+        selectedCategory = AppLocalizations.of(context)!.takvimDoktorRandevusu;
+      });
     });
     selectedWeek = (((DateTime.now()
                 .difference(DateTime.parse(widget.userData?['sonAdetTarihi'])))
@@ -128,9 +133,9 @@ class _CalendarState extends State<Calendar> {
     }
 
     var _tempIcon = "";
-    if (b == 'Doktor Randevusu 👩‍⚕️') {
+    if (b == AppLocalizations.of(context)!.takvimDoktorRandevusu) {
       _tempIcon = "\uD83D\uDC69\u200D\u2695\uFE0F";
-    } else if (b == "Sosyal ☕️") {
+    } else if (b == AppLocalizations.of(context)!.takvimSostal) {
       _tempIcon = "\u2615";
     } else {
       _tempIcon = "\u{1F483}";
@@ -224,9 +229,11 @@ class _CalendarState extends State<Calendar> {
           // print(editNote);
           // print(selectedCategory);
           var _tempIcon = "";
-          if (selectedCategory == 'Doktor Randevusu 👩‍⚕️') {
+          if (selectedCategory ==
+              AppLocalizations.of(context)!.takvimDoktorRandevusu) {
             _tempIcon = "\uD83D\uDC69\u200D\u2695\uFE0F";
-          } else if (selectedCategory == "Sosyal ☕️") {
+          } else if (selectedCategory ==
+              AppLocalizations.of(context)!.takvimSostal) {
             _tempIcon = "\u2615";
           } else {
             _tempIcon = "\u{1F483}";
@@ -285,7 +292,7 @@ class _CalendarState extends State<Calendar> {
     return Scaffold(
       appBar: widget.ekranYukseklikKontrol == 1
           ? AppBar(
-              title: Text("Aktiviteler"),
+              title: Text(AppLocalizations.of(context)!.anasayfaAktiviteler),
               centerTitle: true,
             )
           : null,
@@ -365,7 +372,7 @@ class _CalendarState extends State<Calendar> {
           Divider(),
           Text(
               selectedWeek < 44
-                  ? "Hamileliğin $selectedWeek. haftası 🤰"
+                  ? " ${AppLocalizations.of(context)!.takvimhafta1}$selectedWeek.${AppLocalizations.of(context)!.takvimhafta2}"
                   : "Doğum tahmini olarak gerçekleşmiş olacak 👩‍🍼",
               style: TextStyle(fontSize: 20)),
           ..._getEventsfromDay(selectedDay).map(
@@ -393,11 +400,14 @@ class _CalendarState extends State<Calendar> {
                     _eventController.text = item['title'];
                     _subEventController.text = item['note'];
                     if (item['icon'] == "👩‍⚕️") {
-                      selectedCategory = 'Doktor Randevusu 👩‍⚕️';
+                      selectedCategory =
+                          AppLocalizations.of(context)!.takvimDoktorRandevusu;
                     } else if (item['icon'] == "☕") {
-                      selectedCategory = 'Sosyal ☕️';
+                      selectedCategory =
+                          AppLocalizations.of(context)!.takvimSostal;
                     } else {
-                      selectedCategory = 'Kişisel Zaman 💃';
+                      selectedCategory =
+                          AppLocalizations.of(context)!.takvimKisiselZaman;
                     }
                     if (item['time'] == '') {
                       isSwitchedTime = false;
@@ -431,7 +441,8 @@ class _CalendarState extends State<Calendar> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Aktivite Düzenle",
+                                        AppLocalizations.of(context)!
+                                            .takvimAktiviteDuzenle,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20.0,
@@ -446,9 +457,12 @@ class _CalendarState extends State<Calendar> {
                                           });
                                         },
                                         items: [
-                                          'Doktor Randevusu 👩‍⚕️',
-                                          'Sosyal ☕️',
-                                          'Kişisel Zaman 💃'
+                                          AppLocalizations.of(context)!
+                                              .takvimDoktorRandevusu,
+                                          AppLocalizations.of(context)!
+                                              .takvimSostal,
+                                          AppLocalizations.of(context)!
+                                              .takvimKisiselZaman
                                         ].map((category) {
                                           return DropdownMenuItem<String>(
                                             value: category,
@@ -461,7 +475,9 @@ class _CalendarState extends State<Calendar> {
                                         controller: _eventController,
                                         decoration: InputDecoration(
                                           hintText: "Aktivite adını girin",
-                                          labelText: "Aktivite",
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .takvimAktivite,
                                           border: OutlineInputBorder(),
                                         ),
                                       ),
@@ -469,8 +485,12 @@ class _CalendarState extends State<Calendar> {
                                       TextFormField(
                                         controller: _subEventController,
                                         decoration: InputDecoration(
-                                          hintText: "Not",
-                                          labelText: "Not (isteğe bağlı)",
+                                          hintText:
+                                              AppLocalizations.of(context)!
+                                                  .takvimNot,
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .takvimNotIstegeBagli,
                                           border: OutlineInputBorder(),
                                         ),
                                       ),
@@ -481,7 +501,8 @@ class _CalendarState extends State<Calendar> {
                                         children: [
                                           Row(
                                             children: [
-                                              Text('Zaman'),
+                                              Text(AppLocalizations.of(context)!
+                                                  .takvimZaman),
                                               Switch(
                                                 value: isSwitchedTime,
                                                 onChanged: (value) {
@@ -521,7 +542,9 @@ class _CalendarState extends State<Calendar> {
                                       isSwitchedTime
                                           ? Row(
                                               children: [
-                                                Text('Alarm'),
+                                                Text(AppLocalizations.of(
+                                                        context)!
+                                                    .takvimAlarm),
                                                 Switch(
                                                   value: isSwitchedAlarm,
                                                   onChanged: (value) {
@@ -538,13 +561,17 @@ class _CalendarState extends State<Calendar> {
                                             MainAxisAlignment.end,
                                         children: [
                                           TextButton(
-                                            child: Text("İptal"),
+                                            child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .takvimIptal),
                                             onPressed: () =>
                                                 Navigator.pop(context),
                                           ),
                                           SizedBox(width: 10.0),
                                           ElevatedButton(
-                                            child: Text("Düzenle"),
+                                            child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .takvimDuzenle),
                                             onPressed: () {
                                               duzenleActivity(
                                                 item['id'],
@@ -644,7 +671,7 @@ class _CalendarState extends State<Calendar> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Aktivite Ekle",
+                          AppLocalizations.of(context)!.anasayfaAktiviteEkle,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20.0,
@@ -660,9 +687,9 @@ class _CalendarState extends State<Calendar> {
                             print(selectedCategory);
                           },
                           items: [
-                            'Doktor Randevusu 👩‍⚕️',
-                            'Sosyal ☕️',
-                            'Kişisel Zaman 💃'
+                            AppLocalizations.of(context)!.takvimDoktorRandevusu,
+                            AppLocalizations.of(context)!.takvimSostal,
+                            AppLocalizations.of(context)!.takvimKisiselZaman
                           ].map((category) {
                             return DropdownMenuItem<String>(
                               value: category,
@@ -674,8 +701,10 @@ class _CalendarState extends State<Calendar> {
                         TextFormField(
                           controller: _eventController,
                           decoration: InputDecoration(
-                            hintText: "Aktivite adını girin",
-                            labelText: "Aktivite",
+                            hintText: AppLocalizations.of(context)!
+                                .takvimAktiviteAdiniGir,
+                            labelText:
+                                AppLocalizations.of(context)!.takvimAktivite,
                             border: OutlineInputBorder(),
                           ),
                         ),
@@ -683,8 +712,9 @@ class _CalendarState extends State<Calendar> {
                         TextFormField(
                           controller: _subEventController,
                           decoration: InputDecoration(
-                            hintText: "Not",
-                            labelText: "Not (isteğe bağlı)",
+                            hintText: AppLocalizations.of(context)!.takvimNot,
+                            labelText: AppLocalizations.of(context)!
+                                .takvimNotIstegeBagli,
                             border: OutlineInputBorder(),
                           ),
                         ),
@@ -692,7 +722,7 @@ class _CalendarState extends State<Calendar> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Saat'),
+                            Text(AppLocalizations.of(context)!.takvimSaat),
                             Switch(
                               value: isSwitchedTime,
                               onChanged: (value) {
@@ -729,7 +759,7 @@ class _CalendarState extends State<Calendar> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Alarm'),
+                              Text(AppLocalizations.of(context)!.takvimAlarm),
                               Switch(
                                 value: isSwitchedAlarm,
                                 onChanged: (value) {
@@ -745,11 +775,13 @@ class _CalendarState extends State<Calendar> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             TextButton(
-                              child: Text("İptal"),
+                              child: Text(
+                                  AppLocalizations.of(context)!.takvimIptal),
                               onPressed: () => Navigator.pop(context),
                             ),
                             ElevatedButton(
-                              child: Text("Ekle"),
+                              child: Text(
+                                  AppLocalizations.of(context)!.takvimEkle),
                               onPressed: () {
                                 if (_eventController.text.isNotEmpty) {
                                   if (calendarListEvents[selectedDay] != null) {
@@ -794,7 +826,7 @@ class _CalendarState extends State<Calendar> {
             },
           );
         },
-        label: Text("Aktivite Ekle"),
+        label: Text(AppLocalizations.of(context)!.anasayfaAktiviteEkle),
         icon: Icon(Icons.add),
       ),
     );

@@ -5,11 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IlacTakip extends StatefulWidget {
   Map<String, dynamic>? userData;
+  final String language;
 
-  IlacTakip({Key? key, this.userData}) : super(key: key);
+  IlacTakip({Key? key, this.userData, required this.language})
+      : super(key: key);
   @override
   _IlacTakipState createState() => _IlacTakipState();
 }
@@ -129,7 +132,7 @@ class _IlacTakipState extends State<IlacTakip> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('İlaç Takip'),
+        title: Text(AppLocalizations.of(context)!.ilactakipIlactakip),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,7 +266,7 @@ class _IlacTakipState extends State<IlacTakip> {
             _fetchUserData();
           });
         },
-        tooltip: 'İlaç Ekle',
+        tooltip: AppLocalizations.of(context)!.ilactakipIlactekle,
         child: Icon(Icons.add),
       ),
     );
@@ -326,7 +329,7 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('İlaç Ekle'),
+        title: Text(AppLocalizations.of(context)!.ilactakipIlactekle),
       ),
       body: SafeArea(
         child: Stack(
@@ -352,7 +355,9 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                         inputFormatters: <TextInputFormatter>[
                           UpperCaseTextFormatter()
                         ],
-                        decoration: InputDecoration(hintText: 'İlaç Adı'),
+                        decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!
+                                .ilactakipIlacAdin),
                       ),
                     ),
                   ),
@@ -409,9 +414,10 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Text('Saat'),
+                          child:
+                              Text(AppLocalizations.of(context)!.ilactakipSaat),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -529,9 +535,10 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Text("Tok"),
+                          child:
+                              Text(AppLocalizations.of(context)!.ilactakipTok),
                         ),
                         Switch(
                           value: tokMu,
@@ -557,9 +564,10 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 8),
-                          child: Text('Kaç Gün Kullanılacak'),
+                          child: Text(AppLocalizations.of(context)!
+                              .ilactakipKacGunKullanilacak),
                         ),
                         NumberPicker(
                           value: kacGunKullanilacak,
@@ -599,7 +607,9 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                       onPressed: () {
                         if (_ilacAdiController.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('İlaç Adı boş olamaz.')),
+                            SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .ilacTakipIlacAdiBosOlamaz)),
                           );
                         } else {
                           if (ilacSaatleri.length > 0) {
@@ -607,13 +617,13 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                  content: Text(
-                                      'En az bir adet ilac saati eklemesiniz.')),
+                                  content: Text(AppLocalizations.of(context)!
+                                      .ilacTakipEnAzbirSaat)),
                             );
                           }
                         }
                       },
-                      child: Text('Ekle'),
+                      child: Text(AppLocalizations.of(context)!.takvimEkle),
                     ),
                   ),
                 ],
@@ -785,10 +795,4 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
         return '';
     }
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: IlacTakip(),
-  ));
 }

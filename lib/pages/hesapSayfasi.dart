@@ -14,6 +14,7 @@ import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/subpages/ayarlar.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HesapSayfasi extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -110,10 +111,10 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             Center(
               child: GestureDetector(
                 onTap: () async {
-                  await AwesomeNotifications().cancelAll();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Bütün bildirimler temizlendi !!!')),
-                  );
+                  // await AwesomeNotifications().cancelAll();
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(content: Text('Bütün bildirimler temizlendi !!!')),
+                  // );
                 },
                 child: Text(
                   widget.userData?['userName'] ?? 'Guest',
@@ -183,13 +184,14 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
               controller: noteController,
               textInputAction: TextInputAction.done,
               decoration: InputDecoration(
-                hintText: 'Geri bildirim ve önerilerinizi bize yazın 😊',
+                hintText: AppLocalizations.of(context)!.hesapGeriBildirimYaz,
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              child: Text('Geri Bildirim Gönder'),
+              child:
+                  Text(AppLocalizations.of(context)!.hesapGeriBildirimGonder),
               onPressed: () async {
                 FocusScope.of(context).unfocus();
                 if (noteController.text != "") {
@@ -207,7 +209,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          'Geri bildirim başarılı olarak iletildi.',
+                          AppLocalizations.of(context)!
+                              .hesapGeriBildirimBasarili,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -258,7 +261,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Lütfen geri bildirim göndermek için bir kaç kelime yazın.',
+                        AppLocalizations.of(context)!
+                            .hesapGeriBildirimKelimeYaz,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -333,7 +337,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                   return SettingsPage(userData: widget.userData);
                 }));
               },
-              child: Text("Ayarlar"),
+              child: Text(AppLocalizations.of(context)!.hesapAyarlar),
             ),
             SizedBox(height: 14),
             ElevatedButton(
@@ -342,10 +346,10 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title:
-                          Text('Bu işlemi yapmak istediğinize emin misiniz?'),
-                      content: Text(
-                          'İşleme devam ederseniz bütün verileriniz silinecek.'),
+                      title: Text(
+                          AppLocalizations.of(context)!.hesapCikisEminMisin),
+                      content:
+                          Text(AppLocalizations.of(context)!.hesapDevamEmin),
                       actions: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -357,7 +361,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                                   side: BorderSide(color: Colors.black),
                                 ),
                               ),
-                              child: Text('Hayır'),
+                              child: Text(
+                                  AppLocalizations.of(context)!.hesapHayir),
                               onPressed: () {
                                 Navigator.of(context).pop(false);
                               },
@@ -372,7 +377,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                                   side: BorderSide(color: Colors.black),
                                 ),
                               ),
-                              child: Text('Evet'),
+                              child:
+                                  Text(AppLocalizations.of(context)!.hesapEvet),
                               onPressed: () {
                                 Navigator.of(context).pop(true);
                               },
@@ -396,7 +402,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                   }
                 }
               },
-              child: Text("Verileri temizle ve uygulamadan çık."),
+              child: Text(AppLocalizations.of(context)!
+                  .hesapVerileriTemizleVeUygulamadanCik),
             ),
             SizedBox(height: 14),
             widget.userData?['userName'] != "Guest"
@@ -407,7 +414,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text(
-                              'Çıkış yapmak istediğinize emin misiniz?',
+                              AppLocalizations.of(context)!.hesapCikisEminMisin,
                               textAlign: TextAlign.center,
                             ),
                             // content: Text(
@@ -424,7 +431,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                                         side: BorderSide(color: Colors.black),
                                       ),
                                     ),
-                                    child: Text('Hayır'),
+                                    child: Text(AppLocalizations.of(context)!
+                                        .hesapHayir),
                                     onPressed: () {
                                       Navigator.of(context).pop(false);
                                     },
@@ -440,7 +448,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                                         side: BorderSide(color: Colors.black),
                                       ),
                                     ),
-                                    child: Text('Evet'),
+                                    child: Text(AppLocalizations.of(context)!
+                                        .hesapEvet),
                                     onPressed: () {
                                       Navigator.of(context).pop(true);
                                     },
@@ -456,7 +465,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
                         widget.onSignOutPressed!();
                       }
                     },
-                    child: Text("Çıkış Yap"),
+                    child: Text(AppLocalizations.of(context)!.hesapCikis),
                   )
                 : ElevatedButton(
                     onPressed: () {

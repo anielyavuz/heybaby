@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotlarPage extends StatefulWidget {
   const NotlarPage({
@@ -208,7 +209,7 @@ class _NotlarPageState extends State<NotlarPage> {
                       gunlukDBEkle();
                       Navigator.of(context).pop();
                     },
-                    child: Text("Kaydet"),
+                    child: Text(AppLocalizations.of(context)!.gunlukKaydet),
                   ),
                 ],
               ),
@@ -216,8 +217,8 @@ class _NotlarPageState extends State<NotlarPage> {
                 child: TextFormField(
                   controller: notController,
                   decoration: InputDecoration(
-                    hintText:
-                        'Yazmaya başlayın...', // labelText yerine hintText kullanıldı
+                    hintText: AppLocalizations.of(context)!
+                        .gunlukYazmayaBaslayin, // labelText yerine hintText kullanıldı
                     border: InputBorder.none, // Alt çizgiyi kaldırır
                   ),
                   maxLines: null, // Yeni satırlara izin vermek için

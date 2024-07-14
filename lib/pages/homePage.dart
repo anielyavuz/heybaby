@@ -27,6 +27,7 @@ import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/notlarPage.dart';
 import 'package:heybaby/pages/takvimPage.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -303,23 +304,23 @@ class _MyHomePageState extends State<MyHomePage> {
         tabs: [
           GButton(
             icon: (Icons.home),
-            text: 'Ana Sayfa',
+            text: AppLocalizations.of(context)!.homeAnaSayfa,
           ),
           GButton(
             icon: Icons.calendar_today,
-            text: 'Aktiviteler',
+            text: AppLocalizations.of(context)!.homeAktiviteler,
           ),
           GButton(
             icon: Icons.explore,
-            text: 'Keşfet',
+            text: AppLocalizations.of(context)!.homeKesfet,
           ),
           GButton(
             icon: Icons.note,
-            text: 'Günlük',
+            text: AppLocalizations.of(context)!.homeGunluk,
           ),
           GButton(
             icon: Icons.account_circle,
-            text: 'Hesap',
+            text: AppLocalizations.of(context)!.homeHesap,
           ),
         ],
         selectedIndex: _selectedIndex,
@@ -387,7 +388,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return KesfetPage(
             stories: storyImagesKesfet,
             storiesWeekly: storyImages3,
-            userData: userData);
+            userData: userData,
+            language: AppLocalizations.of(context)!.language);
 
       case 3:
         return NotlarPage(userData: userData);
@@ -549,9 +551,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Chat with HeyBaby AI',
+                                      AppLocalizations.of(context)!
+                                          .homeChatwithHeyBabyAI,
                                       style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Container(
@@ -585,10 +588,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                   }
                                   // Navigator.pop(context);
                                 }),
-                                items: const [
+                                items: [
                                   DropdownMenuItem(
                                       value: "gecmisiSil",
-                                      child: Text("Geçmişi Sil"),
+                                      child: Text(AppLocalizations.of(context)!
+                                          .homeGecmisiSil),
                                       alignment: AlignmentDirectional.center),
                                 ],
                               ),
@@ -631,14 +635,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     .width *
                                                 0.75),
                                         child: isHeyBabyAI
-                                            ? Text(
-                                                chatHistory[index]
-                                                        .substring(12) +
-                                                    "\n $_tokenLost 💎",
-                                                style: TextStyle(
-                                                    fontSize: 16.0,
-                                                    color: Colors.white),
-                                              )
+                                            ? userData!['userSubscription'] ==
+                                                    'Free'
+                                                ? Text(
+                                                    chatHistory[index]
+                                                            .substring(12) +
+                                                        "\n $_tokenLost 💎",
+                                                    style: TextStyle(
+                                                        fontSize: 16.0,
+                                                        color: Colors.white),
+                                                  )
+                                                : Text(
+                                                    chatHistory[index]
+                                                        .substring(12),
+                                                    style: TextStyle(
+                                                        fontSize: 16.0,
+                                                        color: Colors.white),
+                                                  )
                                             : Text(
                                                 chatHistory[index],
                                                 style: TextStyle(
@@ -697,7 +710,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Premium üyelik ile sınırsız Token hakkı için ",
+                                      AppLocalizations.of(context)!.homeToken1,
                                       style: TextStyle(
                                           fontSize: 13.0, color: Colors.black),
                                     ),
@@ -707,7 +720,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         print("premium login");
                                       },
                                       child: Text(
-                                        "TIKLAYIN.",
+                                        AppLocalizations.of(context)!
+                                            .homeToken2,
                                         style: TextStyle(
                                             fontSize: 13.0,
                                             color: Colors.black),
@@ -736,7 +750,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     .unfocus(); // Klavyeyi kapat
                               },
                               decoration: InputDecoration(
-                                hintText: 'Soru sor...',
+                                hintText:
+                                    AppLocalizations.of(context)!.homeSoruSor,
                                 border: OutlineInputBorder(),
                               ),
                             ),

@@ -6,6 +6,7 @@ import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/anasayfa.dart';
 import 'package:heybaby/pages/authentication.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SpinningWheel extends StatelessWidget {
   final Map<String, dynamic>? userData;
@@ -14,13 +15,34 @@ class SpinningWheel extends StatelessWidget {
   String selectedItem;
   String selectedValue;
 
-  SpinningWheel({
-    required this.userData,
-    required this.pageType,
-    required this.pageItems,
-    required this.selectedItem,
-    required this.selectedValue,
-  });
+  String suTakipSuTakipAyarlariniz;
+  String suTakipgunlukSuHedefi;
+  String suTakipGunlukOzet;
+  String suTakipGunIciHatirlatici;
+  String suTakipSuhedefi;
+  String suTakipBugunListesi;
+  String suTakipHicSuIcmedin;
+  String suTakipSuGecmisi;
+
+  String saat;
+  String kaydet;
+
+  SpinningWheel(
+      {required this.userData,
+      required this.pageType,
+      required this.pageItems,
+      required this.selectedItem,
+      required this.selectedValue,
+      required this.suTakipBugunListesi,
+      required this.suTakipGunIciHatirlatici,
+      required this.suTakipGunlukOzet,
+      required this.suTakipHicSuIcmedin,
+      required this.suTakipSuGecmisi,
+      required this.suTakipSuTakipAyarlariniz,
+      required this.suTakipSuhedefi,
+      required this.suTakipgunlukSuHedefi,
+      required this.saat,
+      required this.kaydet});
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +51,21 @@ class SpinningWheel extends StatelessWidget {
         // appBar: AppBar(),
         body: Center(
           child: RotatingHalfWheel(
-            userData: userData,
-            pageType: pageType,
-            pageItems: pageItems,
-            selectedItem: selectedItem,
-            selectedValue: selectedValue,
-          ),
+              userData: userData,
+              pageType: pageType,
+              pageItems: pageItems,
+              selectedItem: selectedItem,
+              selectedValue: selectedValue,
+              suTakipSuTakipAyarlariniz: suTakipSuTakipAyarlariniz,
+              suTakipgunlukSuHedefi: suTakipgunlukSuHedefi,
+              suTakipGunlukOzet: suTakipGunlukOzet,
+              suTakipGunIciHatirlatici: suTakipGunIciHatirlatici,
+              suTakipSuhedefi: suTakipSuhedefi,
+              suTakipBugunListesi: suTakipBugunListesi,
+              suTakipHicSuIcmedin: suTakipHicSuIcmedin,
+              suTakipSuGecmisi: suTakipSuGecmisi,
+              saat: saat,
+              kaydet: kaydet),
         ),
       ),
     );
@@ -48,13 +79,34 @@ class RotatingHalfWheel extends StatefulWidget {
   Map<String, String> pageItems;
   String selectedItem;
   String selectedValue;
-  RotatingHalfWheel({
-    required this.userData,
-    required this.pageType,
-    required this.pageItems,
-    required this.selectedItem,
-    required this.selectedValue,
-  });
+
+  String suTakipSuTakipAyarlariniz;
+  String suTakipgunlukSuHedefi;
+  String suTakipGunlukOzet;
+  String suTakipGunIciHatirlatici;
+  String suTakipSuhedefi;
+  String suTakipBugunListesi;
+  String suTakipHicSuIcmedin;
+  String suTakipSuGecmisi;
+
+  String kaydet;
+  String saat;
+  RotatingHalfWheel(
+      {required this.userData,
+      required this.pageType,
+      required this.pageItems,
+      required this.selectedItem,
+      required this.selectedValue,
+      required this.suTakipBugunListesi,
+      required this.suTakipGunIciHatirlatici,
+      required this.suTakipGunlukOzet,
+      required this.suTakipHicSuIcmedin,
+      required this.suTakipSuGecmisi,
+      required this.suTakipSuTakipAyarlariniz,
+      required this.suTakipSuhedefi,
+      required this.suTakipgunlukSuHedefi,
+      required this.kaydet,
+      required this.saat});
 
   @override
   _RotatingHalfWheelState createState() => _RotatingHalfWheelState();
@@ -92,7 +144,6 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
   ///
   Future<void> _showIlkSUNotificationTimesModal() async {
     await Future.delayed(Duration(milliseconds: 550));
-    print('_showIlkSUNotificationTimesModal değeri kontrol ediliyor.');
     List<TimeOfDay> notificationTimes = [
       TimeOfDay(hour: 10, minute: 0),
       TimeOfDay(hour: 13, minute: 0),
@@ -139,7 +190,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Su Takip Ayarlarınız',
+                    widget.suTakipSuTakipAyarlariniz,
                     style: TextStyle(
                       fontSize: 17.0,
                       fontWeight: FontWeight.bold,
@@ -149,7 +200,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Günlük Su Hedefi'),
+                      Text(widget.suTakipgunlukSuHedefi),
                       Row(
                         children: [
                           IconButton(
@@ -176,7 +227,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Günlük Özet Bildirimi'),
+                      Text(widget.suTakipGunlukOzet),
                       Checkbox(
                         value: waterSummary,
                         onChanged: (bool? value) {
@@ -190,7 +241,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Gün İçi Hatırlatıcıları'),
+                      Text(widget.suTakipGunIciHatirlatici),
                       Checkbox(
                         value: waterReminder,
                         onChanged: (bool? value) {
@@ -215,9 +266,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.only(left: 8),
-                                  child: Text('Saat'),
+                                  child: Text(widget.saat),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -408,7 +459,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                             .suBildirimTakipSistemiOlustur(waterIntake,
                                 waterSummary, waterReminder, notificationTimes);
                       },
-                      child: Text('Kaydet'),
+                      child: Text(widget.kaydet),
                     ),
                   ),
                 ],
@@ -711,7 +762,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Su Takip Ayarlarınız',
+                    widget.suTakipSuTakipAyarlariniz,
                     style: TextStyle(
                       fontSize: 17.0,
                       fontWeight: FontWeight.bold,
@@ -721,7 +772,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Günlük Su Hedefi'),
+                      Text(widget.suTakipgunlukSuHedefi),
                       Row(
                         children: [
                           IconButton(
@@ -748,7 +799,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Günlük Özet Bildirimi'),
+                      Text(widget.suTakipGunlukOzet),
                       Checkbox(
                         value: waterSummary,
                         onChanged: (bool? value) {
@@ -766,7 +817,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Gün İçi Hatırlatıcıları'),
+                      Text(widget.suTakipGunIciHatirlatici),
                       Checkbox(
                         value: waterReminder,
                         onChanged: (bool? value) {
@@ -791,9 +842,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.only(left: 8),
-                                  child: Text('Saat'),
+                                  child: Text(widget.saat),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -1097,7 +1148,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                         //   // );
                         // }
                       },
-                      child: Text('Kaydet'),
+                      child: Text(widget.kaydet),
                     ),
                   ),
                 ],
@@ -1137,7 +1188,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                       height: MediaQuery.of(context).size.height / 10,
                       child: Center(
                         child: Text(
-                            "Su Hedefi " +
+                            "${widget.suTakipSuhedefi} " +
                                 _historyValue.toString() +
                                 "/" +
                                 _targetValue.toString(),
@@ -1229,10 +1280,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                 )
                               : SizedBox(),
                           Text(
-                            widget.selectedItem +
-                                " (" +
-                                widget.selectedValue +
-                                "ml)",
+                            // widget.selectedItem +
+                            "" + widget.selectedValue + " ml",
                             style: TextStyle(fontSize: 22, color: Colors.black),
                           ),
                         ],
@@ -1317,7 +1366,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                   await FirestoreFunctions.updateDataRecord(
                                       newData, widget.pageType);
                             },
-                            child: Text('Kaydet',
+                            child: Text(widget.kaydet,
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 46, 2, 100))),
                           ),
@@ -1335,7 +1384,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        "Bugünün Listesi",
+                        widget.suTakipBugunListesi,
                         style: TextStyle(
                             fontSize: 22,
                             color: Colors.black,
@@ -1360,14 +1409,17 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                             child: ListTile(
                                               title: item['count'] > 1
                                                   ? Container(
-                                                      child: Text(item['count']
-                                                              .toString() +
-                                                          "x " +
-                                                          item['type'] +
-                                                          " - " +
-                                                          item['amount']
-                                                              .toString() +
-                                                          item['unit']),
+                                                      child: Center(
+                                                        child: Text(item[
+                                                                    'count']
+                                                                .toString() +
+                                                            "x " +
+                                                            // item['type'] +
+                                                            "  " +
+                                                            item['amount']
+                                                                .toString() +
+                                                            item['unit']),
+                                                      ),
                                                     )
                                                   : Container(
                                                       child: Text("1 " +
@@ -1396,7 +1448,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "Bugün için hiç su girişiniz yok. Lütfen su iç.  🐳",
+                                  widget.suTakipHicSuIcmedin,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 17, color: Colors.black),
@@ -1409,9 +1461,9 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (_) {
                               return WaterTrackingHistory(
-                                pastItems: pastItems,
-                                dailyPurpose: _targetValue,
-                              );
+                                  pastItems: pastItems,
+                                  dailyPurpose: _targetValue,
+                                  suTakipSuGecmisi: widget.suTakipSuGecmisi);
                             }));
                           },
                           child: Icon(
@@ -1424,26 +1476,26 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                 )
               ],
             ),
-            Positioned(
-              left: 5,
-              top: 10,
-              child: Container(
-                height: 40,
-                child: IconButton(
-                    onPressed: () {
-                      // Navigator.pop(context);
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) {
-                        return CheckAuth();
-                      }));
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios_new_outlined,
-                      size: 35,
-                      color: Color.fromARGB(255, 0, 0, 0),
-                    )),
-              ),
-            )
+            // Positioned(
+            //   left: 5,
+            //   top: 10,
+            //   child: Container(
+            //     height: 40,
+            //     child: IconButton(
+            //         onPressed: () {
+            //           Navigator.pop(context);
+            //           // Navigator.pushReplacement(context,
+            //           //     MaterialPageRoute(builder: (_) {
+            //           //   return CheckAuth();
+            //           // }));
+            //         },
+            //         icon: Icon(
+            //           Icons.arrow_back_ios_new_outlined,
+            //           size: 35,
+            //           color: Color.fromARGB(255, 0, 0, 0),
+            //         )),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -1454,8 +1506,12 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
 class WaterTrackingHistory extends StatefulWidget {
   List pastItems;
   int dailyPurpose;
+  String suTakipSuGecmisi;
 
-  WaterTrackingHistory({required this.pastItems, required this.dailyPurpose});
+  WaterTrackingHistory(
+      {required this.pastItems,
+      required this.dailyPurpose,
+      required this.suTakipSuGecmisi});
 
   @override
   _WaterTrackingHistoryState createState() => _WaterTrackingHistoryState();
@@ -1501,7 +1557,7 @@ class _WaterTrackingHistoryState extends State<WaterTrackingHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Su Geçmişi'),
+        title: Text(widget.suTakipSuGecmisi),
       ),
       body: ListView.builder(
         itemCount: _gunlukListeFinal.length,

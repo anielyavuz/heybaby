@@ -23,6 +23,7 @@ import 'package:heybaby/pages/subpages/suTakip.dart';
 import 'package:heybaby/pages/subpages/yapilacaklarPage.dart';
 import 'package:heybaby/pages/takvimPage.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AnaSayfa extends StatefulWidget {
   final List storyImages;
@@ -94,7 +95,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
   late Map jsonList0 = {};
 
   imageandInfoJsonFileLoad() async {
-    jsonList0 = await JsonReader.readJson();
+    jsonList0 =
+        await JsonReader.readJson(AppLocalizations.of(context)!.language);
     setState(() {
       jsonList = jsonList0;
     });
@@ -708,7 +710,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                   padding:
                                       const EdgeInsets.fromLTRB(18, 0, 0, 5),
                                   child: Text(
-                                    "$selectedWeek. Haftanıza Özel İpuçlarınız",
+                                    "$selectedWeek. " +
+                                        AppLocalizations.of(context)!
+                                            .anasayfaIpucu,
+                                    // "$selectedWeek. Haftanıza Özel İpuçlarınız",
                                     style: TextStyle(
                                       fontSize: 17.0,
                                       fontWeight: FontWeight.w500,
@@ -863,6 +868,26 @@ class _AnaSayfaState extends State<AnaSayfa> {
                           },
                           selectedItem: 'Bardak',
                           selectedValue: '200',
+                          suTakipBugunListesi:
+                              AppLocalizations.of(context)!.suTakipBugunListesi,
+                          suTakipGunIciHatirlatici:
+                              AppLocalizations.of(context)!
+                                  .suTakipGunIciHatirlatici,
+                          suTakipGunlukOzet:
+                              AppLocalizations.of(context)!.suTakipGunlukOzet,
+                          suTakipHicSuIcmedin:
+                              AppLocalizations.of(context)!.suTakipHicSuIcmedin,
+                          suTakipSuGecmisi:
+                              AppLocalizations.of(context)!.suTakipSuGecmisi,
+                          suTakipSuTakipAyarlariniz:
+                              AppLocalizations.of(context)!
+                                  .suTakipSuTakipAyarlariniz,
+                          suTakipSuhedefi:
+                              AppLocalizations.of(context)!.suTakipSuhedefi,
+                          suTakipgunlukSuHedefi: AppLocalizations.of(context)!
+                              .suTakipgunlukSuHedefi,
+                          kaydet: AppLocalizations.of(context)!.gunlukKaydet,
+                          saat: AppLocalizations.of(context)!.takvimSaat,
                         );
                       })).then((value) {
                         _fetchUserData();
@@ -877,6 +902,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                         MaterialPageRoute(
                             builder: (context) => KiloTakipPage(
                                   userData: widget.userData,
+                                  language:
+                                      AppLocalizations.of(context)!.language,
                                 )),
                       ).then((value) {
                         _fetchUserData();
@@ -890,6 +917,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                         MaterialPageRoute(
                             builder: (context) => IlacTakip(
                                   userData: widget.userData,
+                                  language:
+                                      AppLocalizations.of(context)!.language,
                                 )),
                       ).then((value) {
                         _fetchUserData();
@@ -908,10 +937,14 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
                       print("Test1");
                     },
-                    function1Description: 'Su Takibi',
-                    function2Description: 'Kilo Takibi',
-                    function3Description: 'İlaç/Vitamin',
-                    function4Description: 'Yapılacaklar',
+                    function1Description:
+                        AppLocalizations.of(context)!.anasayfaSuTakibi,
+                    function2Description:
+                        AppLocalizations.of(context)!.anasayfaKiloTakibi,
+                    function3Description:
+                        AppLocalizations.of(context)!.anasayfailacVitamin,
+                    function4Description:
+                        AppLocalizations.of(context)!.anasayfaYapilacaklar,
                   ),
                   SizedBox(height: 10),
 
@@ -955,7 +988,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Text(
-                                '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
+                                '$selectedWeek. ${AppLocalizations.of(context)!.anasayfaSizeOzel}',
+                                // '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 17,
@@ -1054,7 +1088,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                     );
                                   },
                                   child: Text(
-                                    "Devam et",
+                                    AppLocalizations.of(context)!.devamEt,
                                     style: TextStyle(
                                       color: Colors.blue,
                                       decoration: TextDecoration.none,
@@ -1130,7 +1164,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                             children: [
                               Icon(Icons.info_rounded),
                               Text(
-                                'Yaklaşan Aktiviteler' +
+                                AppLocalizations.of(context)!
+                                        .anasayfaAktiviteler +
+                                    // 'Yaklaşan Aktiviteler' +
                                     (activities.keys.toList().length != 0
                                         ? " (${activities.keys.toList().length.toString()})"
                                         : ""),
@@ -1195,7 +1231,10 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                   });
                                 },
                                 child: Text(
-                                  "Aktivite Ekle",
+                                  AppLocalizations.of(context)!
+                                      .anasayfaAktiviteEkle,
+                                  // "Aktivite Ekle",
+
                                   style: TextStyle(
                                     color: Colors.blue,
                                     decoration: TextDecoration.none,

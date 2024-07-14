@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -62,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ayarlar'),
+        title: Text(AppLocalizations.of(context)!.hesapAyarlar),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -73,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Hesap Durumu:'),
+                Text(AppLocalizations.of(context)!.hesapHesapDurumu),
                 Text(premiumStatus),
               ],
             ),
@@ -81,26 +82,27 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Dil:'),
-                DropdownButton<String>(
-                  value: selectedLanguage,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedLanguage = newValue!;
-                    });
-                  },
-                  items: <String>[
-                    'Türkçe',
-                    // 'İngilizce',
-                    // 'Almanca',
-                    // 'İspanyolca'
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
+                Text(AppLocalizations.of(context)!.hesapDil),
+                Text(AppLocalizations.of(context)!.language)
+                // DropdownButton<String>(
+                //   value: selectedLanguage,
+                //   onChanged: (String? newValue) {
+                //     setState(() {
+                //       selectedLanguage = newValue!;
+                //     });
+                //   },
+                //   items: <String>[
+                //     'Türkçe',
+                //     // 'İngilizce',
+                //     // 'Almanca',
+                //     // 'İspanyolca'
+                //   ].map<DropdownMenuItem<String>>((String value) {
+                //     return DropdownMenuItem<String>(
+                //       value: value,
+                //       child: Text(value),
+                //     );
+                //   }).toList(),
+                // ),
               ],
             ),
             SizedBox(height: 20),
@@ -108,9 +110,9 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Son regl tarihi: ${formatDate(lastPeriodDate)}',
+                  '${AppLocalizations.of(context)!.hesapSonReglTarihi} ${formatDate(lastPeriodDate)}',
                   style: TextStyle(
-                    fontSize: 12,
+                    // fontSize: 12,
                     color: Colors.black,
                   ),
                 ),
@@ -165,7 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Kaydet'),
+                  child: Text(AppLocalizations.of(context)!.gunlukKaydet),
                 ),
               ),
             ),

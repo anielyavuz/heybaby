@@ -4,6 +4,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/jsonFiles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrimesterProgressWidget extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -20,7 +21,8 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
   late int _kacinciHafta = 5;
   late DateTime _currentDay = DateTime.now();
   imageandInfoJsonFileLoad() async {
-    jsonList0 = await JsonReader.readJson();
+    jsonList0 =
+        await JsonReader.readJson(AppLocalizations.of(context)!.language);
     setState(() {
       jsonList = jsonList0;
     });
@@ -322,12 +324,12 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
 
     String _mevcutTarih;
     if (weeks > 0) {
-      _mevcutTarih = '$weeks. hafta';
+      _mevcutTarih = '$weeks. ${AppLocalizations.of(context)!.hafta}';
       if (remainingDays > 0) {
-        _mevcutTarih += ' $remainingDays. gün';
+        _mevcutTarih += ' $remainingDays. ${AppLocalizations.of(context)!.gun}';
       }
     } else {
-      _mevcutTarih = '$remainingDays. gün';
+      _mevcutTarih = '$remainingDays. ${AppLocalizations.of(context)!.gun}';
     }
 
     ///
@@ -370,7 +372,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
                         left: (0.05) *
                             300), // Soldan 16 birimlik bir padding ekler
                     child: Text(
-                      "1.Trimester",
+                      "1.${AppLocalizations.of(context)!.trimester}",
                       style: TextStyle(
                           fontSize:
                               14.0), // Opsiyonel olarak stil ekleyebilirsiniz
@@ -396,7 +398,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
                         left: (0.373) *
                             300), // Soldan 16 birimlik bir padding ekler
                     child: Text(
-                      "2.Trimester",
+                      "2.${AppLocalizations.of(context)!.trimester}",
                       style: TextStyle(
                           fontSize:
                               14.0), // Opsiyonel olarak stil ekleyebilirsiniz
@@ -425,7 +427,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
                         left: (0.696) *
                             300), // Soldan 16 birimlik bir padding ekler
                     child: Text(
-                      "3.Trimester",
+                      "3.${AppLocalizations.of(context)!.trimester}",
                       style: TextStyle(
                           fontSize:
                               14.0), // Opsiyonel olarak stil ekleyebilirsiniz
@@ -439,11 +441,12 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
         SizedBox(height: 2),
         _dogumaKalanHafta > 0
             ? Text(
-                'Doğuma yaklaşık $_dogumaKalanHafta hafta kaldı',
+                '${AppLocalizations.of(context)!.anasayfaFotoDogumaYaklasik1}$_dogumaKalanHafta${AppLocalizations.of(context)!.anasayfaFotoDogumaYaklasik2}',
                 style: TextStyle(fontSize: 15),
               )
             : Text(
-                'Doğum çok yakında 😇',
+                AppLocalizations.of(context)!.anasayfaFotoDogumaYaklasik3,
+                // 'Doğum çok yakında 😇',
                 style: TextStyle(fontSize: 15),
               ),
         SizedBox(height: 5),
@@ -472,13 +475,15 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
                 )
               : CircularProgressIndicator(),
         ),
-        Text("Bebeğiniz şuan bir $_benzerlik boyutunda",
+        Text(
+            "${AppLocalizations.of(context)!.anasayfaFotoBebeginizBoyu1} $_benzerlik ${AppLocalizations.of(context)!.anasayfaFotoBebeginizBoyu2}",
+            // "Bebeğiniz şuan bir $_benzerlik boyutunda",
             style: TextStyle(fontSize: 14)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              'Boy: $_tahminiBoy',
+              '${AppLocalizations.of(context)!.boyu}: $_tahminiBoy',
               style: TextStyle(fontSize: 15),
             ),
             Text(
@@ -486,7 +491,7 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
               style: TextStyle(fontSize: 15),
             ),
             Text(
-              'Ağırlık: $_tahminiKilo',
+              '${AppLocalizations.of(context)!.kilosu}: $_tahminiKilo',
               style: TextStyle(fontSize: 15),
             ),
           ],

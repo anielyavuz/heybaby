@@ -2,12 +2,17 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:heybaby/firebase_options.dart';
 import 'package:heybaby/functions/boxes.dart';
 import 'package:heybaby/functions/person.dart';
+import 'package:heybaby/l10n/l10n.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'dart:ui' as ui;
 
 void main() async {
   await Hive.initFlutter();
@@ -37,6 +42,7 @@ void main() async {
   } else {
     // print("Bildirim yetkisi var");
   }
+
   runApp(const MyApp());
 }
 
@@ -48,32 +54,47 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 157, 107, 242)),
-        useMaterial3: true,
+    // Telefonun varsayılan dilini al
+    Locale deviceLocale = ui.window.locale;
+
+    return ChangeNotifierProvider(
+      create: (_) => LocaleNotifier(deviceLocale),
+      child: Consumer<LocaleNotifier>(
+        builder: (context, localeNotifier, child) {
+          return MaterialApp(
+            title: '',
+            supportedLocales: L10n.all,
+            locale: localeNotifier.currentLocale,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                  seedColor: const Color.fromARGB(255, 157, 107, 242)),
+              useMaterial3: true,
+            ),
+            home: CheckAuth(),
+          );
+        },
       ),
-      home: CheckAuth(),
     );
+  }
+}
+
+class LocaleNotifier extends ChangeNotifier {
+  Locale _currentLocale;
+
+  LocaleNotifier(this._currentLocale);
+
+  Locale get currentLocale => _currentLocale;
+
+  void changeLocale(Locale newLocale) {
+    _currentLocale = newLocale;
+    notifyListeners();
   }
 }

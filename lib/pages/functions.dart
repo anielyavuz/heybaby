@@ -83,7 +83,9 @@ class FunctionsWidget extends StatelessWidget {
         Text(
           description,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 12),
+          style: TextStyle(
+            fontSize: 10,
+          ),
         ),
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class YapilacaklarPage extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -377,11 +378,11 @@ class _YapilacaklarPageState extends State<YapilacaklarPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Yapılacaklar'),
+          title: Text(AppLocalizations.of(context)!.yapilacaklarYapilacaklar),
           bottom: TabBar(
             tabs: [
-              Tab(text: 'Öneriler'),
-              Tab(text: 'Yapılacaklar'),
+              Tab(text: AppLocalizations.of(context)!.yapilacaklarOneriler),
+              Tab(text: AppLocalizations.of(context)!.yapilacaklarYapilacaklar),
             ],
           ),
         ),
@@ -394,7 +395,8 @@ class _YapilacaklarPageState extends State<YapilacaklarPage> {
                   items: List.generate(42, (index) => index + 1).map((week) {
                     return DropdownMenuItem<int>(
                       value: week,
-                      child: Text('Hafta $week'),
+                      child:
+                          Text('${AppLocalizations.of(context)!.hafta} $week'),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -444,7 +446,11 @@ class _YapilacaklarPageState extends State<YapilacaklarPage> {
                         ],
                         controller: _textEditingController,
                         decoration: InputDecoration(
-                          hintText: 'Yapılacak Ekle',
+                          hintText: AppLocalizations.of(context)!
+                              .yapilacaklarYapilacakEkle,
+                          contentPadding: EdgeInsets.only(
+                              left:
+                                  10.0), // Sadece sol tarafa 10 birim boşluk ekler
                         ),
                       ),
                     ),
@@ -462,7 +468,7 @@ class _YapilacaklarPageState extends State<YapilacaklarPage> {
                             await FirestoreFunctions.yapilacaklarDataRecord(
                                 yapilacaklar);
                       },
-                      child: Text('Ekle'),
+                      child: Text(AppLocalizations.of(context)!.takvimEkle),
                     ),
                   ],
                 ),

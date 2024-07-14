@@ -6,11 +6,14 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KiloTakipPage extends StatefulWidget {
   final Map<String, dynamic>? userData;
+  final String language;
 
-  const KiloTakipPage({Key? key, this.userData}) : super(key: key);
+  const KiloTakipPage({Key? key, this.userData, required this.language})
+      : super(key: key);
 
   @override
   _KiloTakipPageState createState() => _KiloTakipPageState();
@@ -94,6 +97,14 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      if (widget.language == "English") {
+        _selectedWeightType = "Baby Weight";
+      } else {
+        _selectedWeightType = "Bebek Kilo";
+      }
+    });
+
     if (widget.userData != null) {
       if (widget.userData!['dataRecord'] != null) {
         if (widget.userData!['dataRecord']['KiloSaveData'] != null) {
@@ -207,7 +218,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                   height: 70,
                   child: Center(
                       child: Text(
-                    "Kilo Takip",
+                    AppLocalizations.of(context)!.kiloTakipKiloTakibi,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   )),
                 ),
@@ -228,8 +239,11 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                                 _currentWeight = _isMotherWeight ? 50.0 : 1.0;
                               });
                             },
-                            items: <String>['Bebek Kilo', 'Anne Kilo']
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: <String>[
+                              AppLocalizations.of(context)!.kiloTakipBebekKilo,
+                              AppLocalizations.of(context)!.kiloTakipAnneKilo
+                              // 'Bebek Kilo', 'Anne Kilo'
+                            ].map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(
@@ -315,7 +329,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                         onPressed: () async {
                           _saveWeight();
                         },
-                        child: Text('Kaydet'),
+                        child: Text(AppLocalizations.of(context)!.gunlukKaydet),
                       ),
                       // GestureDetector(
                       //   onTapDown: (_) {
@@ -343,7 +357,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                   height: 50,
                   child: Center(
                       child: Text(
-                    "Geçmiş",
+                    AppLocalizations.of(context)!.kiloTakipGecmis,
                     style:
                         TextStyle(fontWeight: FontWeight.normal, fontSize: 30),
                   )),
