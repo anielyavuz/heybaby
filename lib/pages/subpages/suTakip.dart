@@ -27,6 +27,8 @@ class SpinningWheel extends StatelessWidget {
   String saat;
   String kaydet;
 
+  String language;
+
   SpinningWheel(
       {required this.userData,
       required this.pageType,
@@ -42,7 +44,8 @@ class SpinningWheel extends StatelessWidget {
       required this.suTakipSuhedefi,
       required this.suTakipgunlukSuHedefi,
       required this.saat,
-      required this.kaydet});
+      required this.kaydet,
+      required this.language});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,8 @@ class SpinningWheel extends StatelessWidget {
               suTakipHicSuIcmedin: suTakipHicSuIcmedin,
               suTakipSuGecmisi: suTakipSuGecmisi,
               saat: saat,
-              kaydet: kaydet),
+              kaydet: kaydet,
+              language: language),
         ),
       ),
     );
@@ -91,6 +95,7 @@ class RotatingHalfWheel extends StatefulWidget {
 
   String kaydet;
   String saat;
+  String language;
   RotatingHalfWheel(
       {required this.userData,
       required this.pageType,
@@ -106,7 +111,8 @@ class RotatingHalfWheel extends StatefulWidget {
       required this.suTakipSuhedefi,
       required this.suTakipgunlukSuHedefi,
       required this.kaydet,
-      required this.saat});
+      required this.saat,
+      required this.language});
 
   @override
   _RotatingHalfWheelState createState() => _RotatingHalfWheelState();
@@ -430,7 +436,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                 time.minute,
                                 simdi.day,
                                 simdi.month,
-                                simdi.year);
+                                simdi.year,
+                                widget.language);
                             await Future.delayed(Duration(milliseconds: 350));
                           }
 
@@ -453,7 +460,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                               firstNotificationDate.minute,
                               firstNotificationDate.day,
                               firstNotificationDate.month,
-                              firstNotificationDate.year);
+                              firstNotificationDate.year,
+                              widget.language);
                         } else {}
                         var _result = await FirestoreFunctions
                             .suBildirimTakipSistemiOlustur(waterIntake,
@@ -623,7 +631,7 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
           // print('${date.year}${date.month}${date.day}');
 
           await BildirimTakip.gunlukSuIc(
-              _id, 19, 00, date.day, date.month, date.year);
+              _id, 19, 00, date.day, date.month, date.year, widget.language);
           await Future.delayed(Duration(milliseconds: 350));
         }
       } else {
@@ -1043,7 +1051,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                 time.minute,
                                 simdi.day,
                                 simdi.month,
-                                simdi.year);
+                                simdi.year,
+                                widget.language);
 
                             await Future.delayed(Duration(milliseconds: 350));
                           }
@@ -1058,7 +1067,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                               firstNotificationDate.minute,
                               firstNotificationDate.day,
                               firstNotificationDate.month,
-                              firstNotificationDate.year);
+                              firstNotificationDate.year,
+                              widget.language);
 
                           // suBildiriminiOlustur();
                         } else {
@@ -1340,7 +1350,8 @@ class _RotatingHalfWheelState extends State<RotatingHalfWheel> {
                                       firstNotificationDate.minute,
                                       firstNotificationDate.day,
                                       firstNotificationDate.month,
-                                      firstNotificationDate.year);
+                                      firstNotificationDate.year,
+                                      widget.language);
 
                                   // DateTime date = DateTime.now();
 

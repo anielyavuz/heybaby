@@ -170,8 +170,8 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
           int _id = int.parse("${date.year}${_ay}${_gun}");
           // print('${date.year}${date.month}${date.day}');
 
-          await BildirimTakip.gunlukSuIc(
-              _id, 19, 00, date.day, date.month, date.year);
+          await BildirimTakip.gunlukSuIc(_id, 19, 00, date.day, date.month,
+              date.year, AppLocalizations.of(context)!.language);
           await Future.delayed(Duration(milliseconds: 350));
         }
       } else {
@@ -234,7 +234,8 @@ class _TrimesterProgressWidgetState extends State<TrimesterProgressWidget> {
                 .month,
             _currentDay
                 .add(Duration(days: (8 - _currentDay.weekday) + sayac))
-                .year);
+                .year,
+            AppLocalizations.of(context)!.language);
 
         // print("Ana sayfa boyut bildirimleri yok, yazılıyor. -- " +
         //     (i + 1000).toString());

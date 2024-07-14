@@ -716,7 +716,8 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                 'ilac',
                 widget.bildirimID,
                 _ilacAdiController.text + "%%" + (tokMu ? "Tok" : "Aç"),
-                '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+                '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil',
+                AppLocalizations.of(context)!.language);
 
             setState(() {
               widget.bildirimID = (widget.bildirimID! + 1);
@@ -733,7 +734,8 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
                   'ilac',
                   widget.bildirimID,
                   _ilacAdiController.text + "%%" + (tokMu ? "Tok" : "Aç"),
-                  '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+                  '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil',
+                  AppLocalizations.of(context)!.language);
 
               setState(() {
                 widget.bildirimID = (widget.bildirimID! + 1);
@@ -757,7 +759,8 @@ class _IlacEkleScreenState extends State<IlacEkleScreen> {
               'ilac',
               widget.bildirimID,
               _ilacAdiController.text + "%%" + (tokMu ? "Tok" : "Aç"),
-              '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil');
+              '${_ilacSaat.hour}:${_ilacSaat.minute.toString().padLeft(2, '0')}-$_simdiGun.$_simdiAy.$_simdiYil',
+              AppLocalizations.of(context)!.language);
 
           setState(() {
             widget.bildirimID = (widget.bildirimID! + 1);

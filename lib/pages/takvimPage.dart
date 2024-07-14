@@ -129,7 +129,8 @@ class _CalendarState extends State<Calendar> {
           selectedDay.day,
           selectedDay.month,
           selectedDay.year,
-          a);
+          a,
+          AppLocalizations.of(context)!.language);
     }
 
     var _tempIcon = "";
@@ -253,7 +254,8 @@ class _CalendarState extends State<Calendar> {
                 selectedDay.day,
                 selectedDay.month,
                 selectedDay.year,
-                editTitle);
+                editTitle,
+                AppLocalizations.of(context)!.language);
           } else {
             AwesomeNotifications().cancel(_bildirimsNumarasi);
           }

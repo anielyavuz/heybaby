@@ -71,15 +71,24 @@ class BildirimTakip {
   }
 
   ilacBildirim(int _id, String _ilacAdi, int _hour, int _minute, int _day,
-      int _month, int _year, String _tok) async {
+      int _month, int _year, String _tok, String _language) async {
+    String _header = "";
+    String _body = "";
+    if (_language == "Türkçe") {
+      _header = "İlaç Hatırlatması🔔";
+      _body = "$_ilacAdi ilacını içme vakti. ($_tok)";
+    } else {
+      _header = "Medicine Reminder🔔";
+      _body = "Time to get $_ilacAdi";
+    }
     String utcTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: _id,
         channelKey: "basic_channel",
-        title: "İlaç Hatırlatması",
-        body: "$_ilacAdi ilacını içme vakti. ($_tok)",
+        title: _header,
+        body: _body,
         wakeUpScreen: true,
         // notificationLayout:
         //     NotificationLayout.BigPicture,
@@ -101,17 +110,28 @@ class BildirimTakip {
   }
 
   static Future<void> haftalikBoyutBilgisi(
-    int _id,
-    String meyve,
-    String _firebaseLink,
-    int _hour,
-    int _minute,
-    int _day,
-    int _month,
-    int _year,
-  ) async {
+      int _id,
+      String meyve,
+      String _firebaseLink,
+      int _hour,
+      int _minute,
+      int _day,
+      int _month,
+      int _year,
+      String _language) async {
     String utcTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    String _header = "";
+    String _body = "";
+    if (_language == "Türkçe") {
+      _header = "Merhaba Annecim";
+      _body =
+          "Bu hafta bir $meyve boyutundayım. Resmime bakıp haftalık ipuçlarını okumak için tıkla ☺️";
+    } else {
+      _header = "Hello Mommy";
+      _body =
+          "This week I am the size of a $meyve. Click to see my picture and read the weekly tips ☺️";
+    }
     // print(
     //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
     await AwesomeNotifications()
@@ -119,9 +139,8 @@ class BildirimTakip {
       content: NotificationContent(
           id: _id,
           channelKey: "basic_channel",
-          title: "Merhaba Annecim",
-          body:
-              "Bu hafta bir $meyve boyutundayım. Resmime bakıp haftalık ipuçlarını okumak için tıkla ☺️",
+          title: _header,
+          body: _body,
           wakeUpScreen: true,
           notificationLayout: NotificationLayout.BigPicture,
           bigPicture: _firebaseLink),
@@ -147,16 +166,23 @@ class BildirimTakip {
     // }
   }
 
-  static Future<void> gunlukSuIc(
-    int _id,
-    int _hour,
-    int _minute,
-    int _day,
-    int _month,
-    int _year,
-  ) async {
+  static Future<void> gunlukSuIc(int _id, int _hour, int _minute, int _day,
+      int _month, int _year, String _language) async {
     String utcTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+    String _header = "";
+    String _body = "";
+    if (_language == "Türkçe") {
+      _header = "Günlük Su Özetin Annecim 🐳";
+      _body =
+          "Bugünkü su hedefini doldurmamış görünüyorsun annecim. 🥲 Hadi biraz su iç ve listene kaydet.😊";
+    } else {
+      _header = "Daily Water Summary Mommy 🐳";
+      _body =
+          "You don't seem to have met your water goal for today, mom. 🥲 Come on, drink some water and save it to your list 😊";
+    }
+
     // print(
     //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
     await AwesomeNotifications()
@@ -164,9 +190,8 @@ class BildirimTakip {
       content: NotificationContent(
         id: _id,
         channelKey: "basic_channel",
-        title: "Günlük Su Özetin Annecim 🐳",
-        body:
-            "Bugünkü su hedefini doldurmamış görünüyorsun annecim. 🥲 Hadi biraz su iç ve listene kaydet.😊",
+        title: _header,
+        body: _body,
         wakeUpScreen: true,
       ),
       schedule: NotificationCalendar(
@@ -191,27 +216,33 @@ class BildirimTakip {
     // }
   }
 
-  static Future<void> gunIciSuHatirlatici(
-    int _id,
-    int _hour,
-    int _minute,
-    int _day,
-    int _month,
-    int _year,
-  ) async {
+  static Future<void> gunIciSuHatirlatici(int _id, int _hour, int _minute,
+      int _day, int _month, int _year, String _language) async {
     String utcTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
     // print(
     //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
+
+    String _header = "";
+    String _body = "";
+    if (_language == "Türkçe") {
+      _header = "Su İçme Vakti Annecim 🐳";
+      _body =
+          "Ben biraz susadım da... 😇 Hadi bir bardak su iç ve listene kaydet. 🥤";
+    } else {
+      _header = "Time to drink water, Mommy 🐳";
+      _body =
+          "I'm a little thirsty... 😇 Drink a glass of water and put it on your list. 🥤";
+    }
+
     try {
       await AwesomeNotifications()
           .createNotification(
         content: NotificationContent(
             id: _id,
             channelKey: "basic_channel",
-            title: "Su İçme Vakti Annecim 🐳",
-            body:
-                "Ben biraz susadım da... 😇 Hadi bir bardak su iç ve listene kaydet. 🥤",
+            title: _header,
+            body: _body,
             wakeUpScreen: true,
             payload: {'page': 'suTakip'}),
         schedule: NotificationCalendar(
@@ -241,26 +272,32 @@ class BildirimTakip {
     // }
   }
 
-  static Future<void> gunlukSuIcYeni(
-    int _hour,
-    int _minute,
-    int _day,
-    int _month,
-    int _year,
-  ) async {
+  static Future<void> gunlukSuIcYeni(int _hour, int _minute, int _day,
+      int _month, int _year, String _language) async {
     String utcTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
     // print(
     //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
+    String _header = "";
+    String _body = "";
+    if (_language == "Türkçe") {
+      _header = "Günlük Su Özetin🐳";
+      _body =
+          "Bugünkü su hedefini doldurmamış görünüyorsun annecim. 🥲 Hadi biraz su iç ve listene kaydet.😊";
+    } else {
+      _header = "Your Daily Water Summary🐳";
+      _body =
+          "You don't seem to have met your water goal for today, mom. 🥲 Come on, drink some water and save it to your list 😊";
+    }
+
     try {
       await AwesomeNotifications()
           .createNotification(
         content: NotificationContent(
             id: 3,
             channelKey: "basic_channel",
-            title: "Günlük Su Özetin🐳",
-            body:
-                "Bugünkü su hedefini doldurmamış görünüyorsun annecim. 🥲 Hadi biraz su iç ve listene kaydet.😊",
+            title: _header,
+            body: _body,
             wakeUpScreen: true,
             payload: {'page': 'suTakip'}),
         schedule: NotificationCalendar(
@@ -290,19 +327,30 @@ class BildirimTakip {
   }
 
   static Future<void> aktiviteAlarm(int _id, int _hour, int _minute, int _day,
-      int _month, int _year, String _aktivite) async {
+      int _month, int _year, String _aktivite, String _language) async {
     String utcTimeZone =
         await AwesomeNotifications().getLocalTimeZoneIdentifier();
     // print(
     //     "AAA  $_id - $meyve - $_firebaseLink, $_minute :$_hour $_day $_month $_year");
+
+    String _header = "";
+    String _body = "";
+    if (_language == "Türkçe") {
+      _header = "Aktivite Vakti 🗓️";
+      _body = "$_aktivite aktivitesi için planladığın zaman geldi. 😇";
+    } else {
+      _header = "Activity Time 🗓️";
+      _body = "It's time for your planned $_aktivite activity. 😇";
+    }
+
     try {
       await AwesomeNotifications()
           .createNotification(
         content: NotificationContent(
             id: _id,
             channelKey: "basic_channel",
-            title: "Aktivite Vakti 🗓️",
-            body: "$_aktivite aktivitesi için planladığın zaman geldi. 😇",
+            title: _header,
+            body: _body,
             wakeUpScreen: true,
             payload: {'page': 'suTakip'}),
         schedule: NotificationCalendar(

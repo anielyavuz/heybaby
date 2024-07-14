@@ -149,7 +149,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
             00,
             sonrakiTarih.day,
             sonrakiTarih.month,
-            sonrakiTarih.year);
+            sonrakiTarih.year,
+            AppLocalizations.of(context)!.language);
 
         await Future.delayed(Duration(milliseconds: 200));
 
@@ -888,6 +889,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                               .suTakipgunlukSuHedefi,
                           kaydet: AppLocalizations.of(context)!.gunlukKaydet,
                           saat: AppLocalizations.of(context)!.takvimSaat,
+                          language: AppLocalizations.of(context)!.language,
                         );
                       })).then((value) {
                         _fetchUserData();

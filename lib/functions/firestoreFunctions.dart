@@ -92,7 +92,8 @@ class FirestoreFunctions {
     }
   }
 
-  static Future<void> bildirimEkleme(_kategori, _id, _isim, _zaman) async {
+  static Future<void> bildirimEkleme(
+      _kategori, _id, _isim, _zaman, _language) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -113,7 +114,8 @@ class FirestoreFunctions {
             int.parse(_zaman.toString().split('-')[1].split('.')[0]),
             int.parse(_zaman.toString().split('-')[1].split('.')[1]),
             int.parse(_zaman.toString().split('-')[1].split('.')[2]),
-            _isim.toString().split("%%")[1]);
+            _isim.toString().split("%%")[1],
+            _language);
         print('Veri başarıyla güncellendi. Bildirimler...');
       } catch (e) {
         // Firestore'a veri güncelleme sırasında bir hata oluştu
