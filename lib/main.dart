@@ -43,7 +43,16 @@ void main() async {
     // print("Bildirim yetkisi var");
   }
 
-  runApp(const MyApp());
+  // Telefonun varsayılan dilini al ve kontrol et
+  Locale deviceLocale = ui.window.locale;
+  Locale appLocale;
+  if (deviceLocale.languageCode == 'tr') {
+    appLocale = Locale('tr');
+  } else {
+    appLocale = Locale('en');
+  }
+
+  runApp(MyApp(appLocale: appLocale));
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -52,15 +61,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Locale appLocale;
+
+  const MyApp({super.key, required this.appLocale});
 
   @override
   Widget build(BuildContext context) {
-    // Telefonun varsayılan dilini al
-    Locale deviceLocale = ui.window.locale;
-
     return ChangeNotifierProvider(
-      create: (_) => LocaleNotifier(deviceLocale),
+      create: (_) => LocaleNotifier(appLocale),
       child: Consumer<LocaleNotifier>(
         builder: (context, localeNotifier, child) {
           return MaterialApp(
