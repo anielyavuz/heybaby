@@ -1218,11 +1218,42 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
                                             InkWell(
                                               onTap: () {
-                                                boxPersons.put(
-                                                    'currentToken',
-                                                    Person(
-                                                        token: 50,
-                                                        subnName: 'myToken'));
+                                                final RenderBox button =
+                                                    context.findRenderObject()
+                                                        as RenderBox;
+                                                final RenderBox overlay =
+                                                    Overlay.of(context)
+                                                            .context
+                                                            .findRenderObject()
+                                                        as RenderBox;
+                                                final RelativeRect position =
+                                                    RelativeRect.fromRect(
+                                                  Rect.fromPoints(
+                                                    button.localToGlobal(
+                                                        Offset.zero,
+                                                        ancestor: overlay),
+                                                    button.localToGlobal(
+                                                        button.size.bottomRight(
+                                                            Offset.zero),
+                                                        ancestor: overlay),
+                                                  ),
+                                                  Offset.zero & overlay.size,
+                                                );
+
+                                                showMenu(
+                                                  context: context,
+                                                  position: position.shift(Offset(
+                                                      button.size.width,
+                                                      0)), // Sağ üst köşeye pozisyonu ayarla
+                                                  items: [
+                                                    PopupMenuItem<String>(
+                                                      child: Text(
+                                                          AppLocalizations.of(
+                                                                  context)!
+                                                              .anasayfaToken),
+                                                    ),
+                                                  ],
+                                                );
                                               },
                                               child: Icon(
                                                 Icons.diamond,
@@ -1230,7 +1261,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                 color: Color.fromARGB(
                                                     255, 119, 46, 141),
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       )

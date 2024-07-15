@@ -126,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _AIStatus = false;
   late int selectedWeek = -1;
   int _mainScreenStoryCount = 5;
-
+  bool _premiumMode = false;
   String _response = "";
   String dropdownValue = "One";
   int _tokenLost = 10;
@@ -467,6 +467,7 @@ class _MyHomePageState extends State<MyHomePage> {
         storyImages = data['Stories'];
         storyImagesKesfet = data['Stories'];
         _mainScreenStoryCount = data['GeneralConfig']['mainScreenStoryCount'];
+        _premiumMode = data['GeneralConfig']['premiumMode'];
         // Listeyi id'ye göre sıralama
         storyImages.sort((a, b) => a['id'].compareTo(b['id']));
 
@@ -718,29 +719,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.homeToken1,
-                                      style: TextStyle(
-                                          fontSize: 13.0, color: Colors.black),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        print("premium login");
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context)!
-                                            .homeToken2,
-                                        style: TextStyle(
-                                            fontSize: 13.0,
-                                            color: Colors.black),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                _premiumMode
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            AppLocalizations.of(context)!
+                                                .homeToken1,
+                                            style: TextStyle(
+                                                fontSize: 13.0,
+                                                color: Colors.black),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              print("premium login");
+                                            },
+                                            child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .homeToken2,
+                                              style: TextStyle(
+                                                  fontSize: 13.0,
+                                                  color: Colors.black),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : SizedBox()
                               ],
                             )
                           : SizedBox(),

@@ -104,7 +104,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundImage: NetworkImage(widget.userData?['photoURL'] ??
-                    'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/story0.png?alt=media&token=2025fa1c-755d-423a-9ea9-7e63e2887b9f'),
+                    'https://firebasestorage.googleapis.com/v0/b/heybaby-d341f.appspot.com/o/Leonardo_Diffusion_XL_A_baby_cartoon_in_the_womb_make_its_age_2.jpg?alt=media&token=f1a7f0dc-b9b5-46e7-891f-ca4a76c78712'),
               ),
             ),
             SizedBox(height: 16),
