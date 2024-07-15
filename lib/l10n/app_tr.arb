@@ -89,6 +89,28 @@
        "yapilacaklarYapilacakEkle":"Ekle",
                "yapilacaklarYapilacaklar":"Yapılacaklar",
        "yapilacaklarOneriler":"Öneriler",
-       "yapilacaklarYapilacakEkle":"Yapılacak Ekle"
+       "yapilacaklarYapilacakEkle":"Yapılacak Ekle",
+       "hosgeldinizIleri":"İleri",
+       "hosgeldinizGeri":"Geri",
+       "hosgeldinizHeyBabyHesabimvar":"HeyBaby hesabım var",
+       "hosgeldinizGiris":"Giriş",
+       "hosgeldinizyolculukbaslasn":"O zaman yolculuğumuz başlasın. 😇",
+       "hosgelnizGirisYap": "Giriş Yap",
+       "hosgeldinizEposta": "E-posta",
+       "hosgeldinizSifre": "Şifre",
+       "hosgeldinizParolaUnuttum": "Parolamı Unuttum",
+       "hosgeldinizGirisYap": "Giriş Yap",
+       "hosgeldinizHesabinizYokMu": "Hesabınız yok mu? İlk defa giriş yapın.",
+       "hosgeldinizUyari1":"Email alanı boş olamaz!",
+       "hosgeldinizUyari2":"Şifre alanı boş olamaz!",
+       "hosgeldinizGonder":"Gönder",
+
+
+       "hosgeldinizHamileyim": "Hamileyim",
+        "hosgeldinizBebegimVar": "Bebeğim var",
+       "hosgeldinizReferansKod": "Referans Kodu (Opsiyonel)",
+
+       "hosgeldinizBebekDogumGunu":"Bebeğiniz doğum günü",
+       "hosgeldinizBebekDogumModu":"Doğum sonrası modu henüz geliştirme adımındadır."
     
 }

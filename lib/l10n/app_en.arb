@@ -85,7 +85,26 @@
        "ilacTakipEnAzbirSaat":"Add at least one medication time.",
         "yapilacaklarYapilacaklar":"Things to Do",
        "yapilacaklarOneriler":"Recommendations",
-       "yapilacaklarYapilacakEkle":"Add to Do"
+       "yapilacaklarYapilacakEkle":"Add to Do",
+           "hosgeldinizIleri": "Next",
+    "hosgeldinizGeri": "Back",
+    "hosgeldinizHeyBabyHesabimvar": "I have a HeyBaby account",
+    "hosgeldinizGiris": "Login",
+    "hosgeldinizyolculukbaslasn": "Then let our journey begin. 😇",
+    "hosgelnizGirisYap": "Login",
+    "hosgeldinizEposta": "Email",
+    "hosgeldinizSifre": "Password",
+    "hosgeldinizParolaUnuttum": "I forgot my password",
+    "hosgeldinizGirisYap": "Login",
+    "hosgeldinizHesabinizYokMu": "Don't have an account? Sign up for the first time.",
+    "hosgeldinizUyari1": "The email field can not be empty!",
+    "hosgeldinizUyari2": "The password field can not be empty!",
+    "hosgeldinizGonder": "Submit",
+        "hosgeldinizHamileyim": "I am pregnant",
+    "hosgeldinizBebegimVar": "I have a baby",
+    "hosgeldinizReferansKod": "Referral Code (Optional)",
+    "hosgeldinizBebekDogumGunu": "Your baby's birthday",
+    "hosgeldinizBebekDogumModu": "Postpartum mode is still in the development stage."
   
 
 }

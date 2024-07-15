@@ -7,15 +7,23 @@ import 'package:heybaby/functions/jsonFiles.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(IntroPage());
 }
 
-class IntroPage extends StatelessWidget {
+class IntroPage extends StatefulWidget {
+  @override
+  State<IntroPage> createState() => _IntroPageState();
+}
+
+class _IntroPageState extends State<IntroPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: OnboardingScreen(),
       routes: {
         '/login': (context) => LoginScreen(),
@@ -35,6 +43,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (AppLocalizations.of(context)!.language == "English") {
+      setState(() {
+        onboardingPages[0] = _loginPages(
+            "Welcome",
+            "HeyBaby is a baby care app powered by artificial intelligence. It offers many features to support your child's development and your health, starting from your pregnancy. Let's start exploring this unique experience!",
+            "welcomeMessage");
+
+        onboardingPages[1] = _loginPages(
+            "A journey full of information from pregnancy to baby development begins!",
+            "Are you ready for an exciting journey? Starting from your pregnancy, follow your baby's development closely and discover new things about yourself! Thanks to our vast pool of knowledge, you will feel safe every step of the way. Come on, explore and enjoy a knowledge-filled experience!",
+            'doctorWelcome');
+        onboardingPages[2] = _loginPages(
+            'Let your health journey begin! Your personal health assistant is here!',
+            "With HeyBaby AI, your personal health assistant specially developed for you with artificial intelligence support, all the information you have in mind or want to learn is always with you!",
+            'robotWelcome');
+        onboardingPages[3] = _loginPages(
+            "Stay in the moment with notifications!",
+            "Track your daily water intake, monitor your mother and baby's development, organize your medications and create your weekly plans. We help you shape your healthy life with an app designed just for you!",
+            'welcomeNotification');
+        onboardingPages[4] = Stack(
+          children: [
+            _loginPages("Then let our journey begin 😇", '', "letsGo"),
+          ],
+        );
+      });
+    }
+    print(AppLocalizations.of(context)!.language);
     return Scaffold(
       body: Stack(
         children: [
@@ -66,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           );
                         },
                         child: Text(
-                          "Geri",
+                          AppLocalizations.of(context)!.hosgeldinizGeri,
                           style: TextStyle(
                             color: Color.fromARGB(255, 56, 0, 140),
                             fontSize: 14.0,
@@ -154,7 +189,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           );
                         },
                         child: Text(
-                          "İleri",
+                          AppLocalizations.of(context)!.hosgeldinizIleri,
                           style: TextStyle(
                             color: Color.fromARGB(255, 56, 0, 140),
                             fontSize: 14.0,
@@ -252,7 +287,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     onTap: () {
                       Navigator.pushNamed(context, '/login');
                     },
-                    child: Text("HeyBaby hesabım var",
+                    child: Text(
+                        AppLocalizations.of(context)!
+                            .hosgeldinizHeyBabyHesabimvar,
                         style: TextStyle(
                           color: Color.fromARGB(255, 92, 0, 197),
                           fontSize: 14.0,
@@ -295,7 +332,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
                       child: Text(
-                        'Giriş',
+                        AppLocalizations.of(context)!.hosgeldinizGiris,
                         style: TextStyle(
                           fontSize: 20,
                           color: Color.fromARGB(255, 92, 0, 197),
@@ -378,7 +415,7 @@ final List onboardingPages = [
   // Ekleyeceğiniz diğer sayfalar buraya eklenebilir
 ];
 
-class OnboardingPage extends StatelessWidget {
+class OnboardingPage extends StatefulWidget {
   final String title;
   final String description;
   final String imagePath;
@@ -390,36 +427,54 @@ class OnboardingPage extends StatelessWidget {
   });
 
   @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  @override
+  void initState() {
+    print("ASdasdasd");
+    Future.delayed(const Duration(milliseconds: 500), () {
+      print(AppLocalizations.of(context)!.language);
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold,
+    print(AppLocalizations.of(context)!.language);
+    return onboardingPages.length > 0
+        ? Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  widget.description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Image.asset(
+                  widget.imagePath,
+                  height: 200,
+                  width: 200,
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 16.0),
-          Text(
-            description,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16.0,
-            ),
-          ),
-          SizedBox(height: 16.0),
-          Image.asset(
-            imagePath,
-            height: 200,
-            width: 200,
-          ),
-        ],
-      ),
-    );
+          )
+        : CircularProgressIndicator();
   }
 }
 
@@ -457,7 +512,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Giriş Yap'),
+        title: Text(AppLocalizations.of(context)!.hosgeldinizGirisYap),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -468,9 +523,11 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               controller: emailController,
               decoration: InputDecoration(
-                labelText: 'E-posta',
+                labelText: AppLocalizations.of(context)!.hosgeldinizEposta,
                 // Hata varsa altını kırmızı çizgiyle vurgula
-                errorText: emailValid ? null : 'E-posta alanı boş olamaz',
+                errorText: emailValid
+                    ? null
+                    : AppLocalizations.of(context)!.hosgeldinizUyari1,
                 // Eğer hata varsa kırmızı çerçeve ekle
                 errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.red, width: 2.0),
@@ -482,9 +539,11 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               controller: passwordController,
               decoration: InputDecoration(
-                labelText: 'Şifre',
+                labelText: AppLocalizations.of(context)!.hosgeldinizSifre,
                 // Hata varsa altını kırmızı çizgiyle vurgula
-                errorText: passwordValid ? null : 'Şifre alanı boş olamaz',
+                errorText: passwordValid
+                    ? null
+                    : AppLocalizations.of(context)!.hosgeldinizUyari2,
                 // Eğer hata varsa kırmızı çerçeve ekle
                 errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.red, width: 2.0),
@@ -510,7 +569,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Burada parolayı unuttum işlemlerini gerçekleştirebilirsiniz.
                 // Örneğin, kullanıcının e-postasına şifre sıfırlama bağlantısı gönderme işlemi yapabilirsiniz.
               },
-              child: Text('Parolamı Unuttum'),
+              child:
+                  Text(AppLocalizations.of(context)!.hosgeldinizParolaUnuttum),
             ),
             SizedBox(height: 24.0),
             ElevatedButton(
@@ -552,7 +612,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Kullanıcı adı alanı boş olamaz!',
+                        AppLocalizations.of(context)!.hosgeldinizUyari1,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -579,7 +639,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Password alanı boş olamaz!',
+                        AppLocalizations.of(context)!.hosgeldinizUyari2,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -605,7 +665,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Örneğin, emailController.text ve passwordController.text'i kullanarak kontrol yapabilirsiniz.
                 // Eğer giriş başarılıysa başka bir ekran açabilir veya işlemleri gerçekleştirebilirsiniz.
               },
-              child: Text('Giriş Yap'),
+              child: Text(AppLocalizations.of(context)!.hosgeldinizGirisYap),
             ),
             SizedBox(height: 12.0),
             // ElevatedButton(
@@ -623,7 +683,8 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 _showGuestLoginModal(context);
               },
-              child: Text('Hesabınız yok mu? İlk defa giriş yapın.'),
+              child:
+                  Text(AppLocalizations.of(context)!.hosgeldinizHesabinizYokMu),
             ),
           ],
         ),
@@ -688,7 +749,7 @@ class _GuestLoginModalContentState extends State<GuestLoginModalContent>
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Giriş Yap',
+              AppLocalizations.of(context)!.hosgeldinizGirisYap,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color.fromARGB(255, 0, 0, 0),
@@ -740,13 +801,13 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
           Divider(),
           SwitchListTile(
             title: isPregnant
-                ? Text('Hamileyim',
+                ? Text(AppLocalizations.of(context)!.hosgeldinizHamileyim,
                     style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 0),
                       fontSize: 17.0,
                       fontWeight: FontWeight.normal,
                     ))
-                : Text("Bebeğim var"),
+                : Text(AppLocalizations.of(context)!.hosgeldinizBebegimVar),
             value: isPregnant,
             onChanged: (bool value) async {
               setState(() {
@@ -761,8 +822,8 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                 });
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(
-                          'Doğum sonrası modu henüz geliştirme adımındadır.')),
+                      content: Text(AppLocalizations.of(context)!
+                          .hosgeldinizBebekDogumModu)),
                 );
               }
             },
@@ -774,13 +835,14 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 isPregnant
-                    ? Text('Son regl tarihiniz:',
+                    ? Text(AppLocalizations.of(context)!.hesapSonReglTarihi,
                         style: TextStyle(
                           color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 17.0,
                           fontWeight: FontWeight.normal,
                         ))
-                    : Text('Bebeğiniz doğum günü:',
+                    : Text(
+                        AppLocalizations.of(context)!.hosgeldinizBebekDogumGunu,
                         style: TextStyle(
                           color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 17.0,
@@ -842,7 +904,7 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
           TextField(
             controller: _referansController,
             decoration: InputDecoration(
-              hintText: 'Referans Kodu (Opsiyonel)',
+              hintText: AppLocalizations.of(context)!.hosgeldinizReferansKod,
             ),
           ),
           SizedBox(height: 16.0),
@@ -852,7 +914,7 @@ class _GuestLoginContentState extends State<GuestLoginContent> {
                 var a = await _authService.anonymSignIn(
                     isPregnant, lastPeriodDate, _referansController.text);
               },
-              child: Text('Giriş Yap'))
+              child: Text(AppLocalizations.of(context)!.hosgelnizGirisYap))
         ],
       ),
     );
@@ -864,7 +926,7 @@ void _showForgotPasswordDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return SimpleDialog(
-        title: Text('Şifremi Unuttum'),
+        title: Text(AppLocalizations.of(context)!.hosgeldinizParolaUnuttum),
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -872,7 +934,9 @@ void _showForgotPasswordDialog(BuildContext context) {
               children: [
                 TextField(
                   controller: TextEditingController(),
-                  decoration: InputDecoration(labelText: 'E-posta'),
+                  decoration: InputDecoration(
+                      labelText:
+                          AppLocalizations.of(context)!.hosgeldinizEposta),
                 ),
                 SizedBox(height: 16.0),
                 ElevatedButton(
@@ -887,7 +951,7 @@ void _showForgotPasswordDialog(BuildContext context) {
                     // );
                     Navigator.pop(context); // Dialog kapatılır
                   },
-                  child: Text('Gönder'),
+                  child: Text(AppLocalizations.of(context)!.hosgeldinizGonder),
                 ),
               ],
             ),
