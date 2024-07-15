@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KesfetMakaleWidget extends StatefulWidget {
   final List stories;
@@ -246,7 +247,7 @@ class MakaleDetay extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "Bu makaleyi beğendiniz mi?",
+                      AppLocalizations.of(context)!.makaleBegendinizmi,
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.bold),
                     ),
@@ -267,7 +268,8 @@ class MakaleDetay extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Geri bildirim başarılı olarak iletildi.',
+                                    AppLocalizations.of(context)!
+                                        .hesapGeriBildirimBasarili,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -308,7 +310,8 @@ class MakaleDetay extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Geri bildirim başarılı olarak iletildi.',
+                                    AppLocalizations.of(context)!
+                                        .hesapGeriBildirimBasarili,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -347,12 +350,12 @@ class MakaleDetay extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Sorumluluk reddi",
+                      AppLocalizations.of(context)!.makaleSorumlulukReddi,
                       style: TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "HeyBaby uygulaması, burada sunulan bilgiler ile eğitimli bir tıp doktorunun sağlayacağı tavsiyelerin yerini almayı hedeflemez. Bu bilgiler yalnızca genel bir temele dayanarak sunulmuştur. HeyBaby uygulaması ve sahibi olan Turn Eight bu uygulamadaki bilgilere dayanarak verdiğiniz kararlar için sorumluluk üstlenmez. Ayrıca, bu bilgiler kişiselleştirilmiş bir tıbbi tavsiyenin yerini tutmaz. Lütfen en doğru bilgiler için doktorunuza danışınız.",
+                      AppLocalizations.of(context)!.makaleSorumlulukMetin,
                       style: TextStyle(fontSize: 14),
                     ),
                   ],

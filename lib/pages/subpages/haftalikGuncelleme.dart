@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HaftalikGuncellemeWidget extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -170,12 +171,12 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Sorumluluk reddi",
+                          AppLocalizations.of(context)!.makaleSorumlulukReddi,
                           style: TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          "HeyBaby uygulaması, burada sunulan bilgiler ile eğitimli bir tıp doktorunun sağlayacağı tavsiyelerin yerini almayı hedeflemez. Bu bilgiler yalnızca genel bir temele dayanarak sunulmuştur. HeyBaby uygulaması ve sahibi olan Turn Eight bu uygulamadaki bilgilere dayanarak verdiğiniz kararlar için sorumluluk üstlenmez. Ayrıca, bu bilgiler kişiselleştirilmiş bir tıbbi tavsiyenin yerini tutmaz. Lütfen en doğru bilgiler için doktorunuza danışınız.",
+                          AppLocalizations.of(context)!.makaleSorumlulukMetin,
                           style: TextStyle(fontSize: 14),
                         ),
                       ],

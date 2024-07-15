@@ -475,8 +475,20 @@ class _MyHomePageState extends State<MyHomePage> {
             storyImages.length > _mainScreenStoryCount
                 ? storyImages.length - _mainScreenStoryCount
                 : 0);
+        var _tempStoryImages;
+        if (AppLocalizations.of(context) != null) {
+          if (AppLocalizations.of(context)!.language == "Türkçe") {
+            _tempStoryImages = data['weeklyStories'];
+          } else {
+            _tempStoryImages = data['weeklyStories_en'];
+            storyImages = data['Stories_en'];
+            storyImagesKesfet = data['Stories_en'];
+          }
+        } else {
+          print("Dil null geldi weeklystories default Tükrçe gelecek.");
+          _tempStoryImages = data['weeklyStories'];
+        }
 
-        var _tempStoryImages = data['weeklyStories'];
         print("selectedWeek değeri şuanda $selectedWeek");
         for (var _tempStoryImage in _tempStoryImages) {
           // print("hafta değeri şuanda ${_tempStoryImage['hafta']}");

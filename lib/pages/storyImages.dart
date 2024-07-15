@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StoryScreen extends StatefulWidget {
   final List storyies;
@@ -229,7 +230,7 @@ class _StoryScreenState extends State<StoryScreen>
                                 width: 5,
                               ),
                               Text(
-                                "DETAYLI BİLGİ",
+                                AppLocalizations.of(context)!.storyDetayliBilgi,
                                 style: TextStyle(
                                     fontSize: 13,
                                     color: Color.fromARGB(255, 54, 9, 75)),

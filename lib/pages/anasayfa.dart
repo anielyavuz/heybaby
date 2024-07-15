@@ -57,6 +57,484 @@ class _AnaSayfaState extends State<AnaSayfa> {
   bool _aktivitelerAcik = false;
   final GlobalKey expansionTileKey = GlobalKey();
   bool _isVisibleYaklasanAktiviteler = true;
+  Map<int, List<String>> hamilelikYapilacaklar = {
+    1: [
+      "Doktor randevusuna git ve ultrason yaptır",
+      "Hamilelik günlüğüne başla ve duygularını kaydet",
+      "Yeni anne hakkında bloglar ve makaleler oku"
+          "Sağlıklı atıştırmalıklar hazırla",
+      "Meditasyon yaparak rahatla",
+      "Hamilelik resimleri çek ve hatıra oluştur"
+    ],
+    2: [
+      "Doktor randevusuna git ve ultrason yaptır",
+      "Hamilelik günlüğüne başla ve duygularını kaydet",
+      "Yeni anne hakkında bloglar ve makaleler oku"
+          "Sağlıklı atıştırmalıklar hazırla",
+      "Meditasyon yaparak rahatla",
+      "Hamilelik resimleri çek ve hatıra oluştur"
+    ],
+    3: [
+      "Doktor randevusuna git ve ultrason yaptır",
+      "Hamilelik günlüğüne başla ve duygularını kaydet",
+      "Yeni anne hakkında bloglar ve makaleler oku"
+          "Sağlıklı atıştırmalıklar hazırla",
+      "Meditasyon yaparak rahatla",
+      "Hamilelik resimleri çek ve hatıra oluştur"
+    ],
+    4: [
+      "Doktor randevusuna git ve ultrason yaptır",
+      "Hamilelik günlüğüne başla ve duygularını kaydet",
+      "Yeni anne hakkında bloglar ve makaleler oku"
+          "Sağlıklı atıştırmalıklar hazırla",
+      "Meditasyon yaparak rahatla",
+      "Hamilelik resimleri çek ve hatıra oluştur"
+    ],
+    5: [
+      "Günlük yürüyüşler yaparak aktif kal",
+      "Hamilelikle ilgili kitaplar oku ve bilgi edin",
+      "Eşinle birlikte romantik bir kaçamak yap",
+      "Sağlıklı smoothie tarifleri dene",
+      "Kalsiyum ve demir açısından zengin besinler tüket",
+    ],
+    6: [
+      "Dengeli beslenmeye özen göster",
+      "Bebek odasını için plan yapmaya başla",
+      "Hamilelik fotoğraf albümü oluştur",
+      "Hafif yoga ve nefes egzersizleri yap",
+      "Yeni annelerle tanışmak için gruplara katıl"
+    ],
+    7: [
+      "Hamilelik cilt bakım ürünleri al",
+      "Anne-bebek yoga dersine katıl"
+          "Yüzme havuzunda gevşeme seansı al"
+          "Yüksek protein içeren diyeti benimse",
+      "Yüzme veya su aerobiği yaparak rahatla",
+      "Anne olmanın getirdiği değişiklikleri kabul etmeye hazırlan"
+    ],
+    8: [
+      "Doktor randevusuna git ve doğum planını tartış",
+      "Evinde bebek odası için plan yap",
+      "Pilates veya doğum topu egzersizleri yap",
+      "Gebelikte cilt bakım rutini oluştur",
+      "Hamilelik günce yazarak duygularını ifade et",
+      "Ebeveynlikle ilgili kitaplar oku ve bilgi edin"
+    ],
+    9: [
+      "Bebeğin ilk giysileri için alışveriş yap",
+      "Masaj yaptırarak rahatla",
+      "Rahat uyumanı sağlayacak pozisyonları dene",
+      "Hamilelik yoga dersine katıl",
+      "Bebeğin ilk aşıları hakkında bilgi edin"
+    ],
+    10: [
+      "Hamilelik egzersiz programını sürdür",
+      "Gebelik modasına uygun kıyafetler al",
+      "Doğum için hazırlık kursuna katıl",
+      "Hamilelikte doğal doğum yöntemlerini araştır",
+      "Bebekle iletişim kurmayı öğren"
+    ],
+    11: [
+      "Bebeğin ilk hediyelerini satın al",
+      "Hamilelik masajı yaptır",
+      "Hafif egzersizlerle aktiviteyi sürdür",
+      "Doğum ekipmanlarını düzenle",
+      "Bebeğin odasını hazırla",
+    ],
+    12: [
+      "Bebek bakım kursuna katıl",
+      "Rahat giysiler al",
+      "Masaj yaptırarak rahatla",
+      "Bebeğin adını araştırmaya başla",
+      "Hamileliğin hakkında bebeğine mektup yaz"
+    ],
+    13: [
+      "Bebeğin bakımı için alışveriş yap",
+      "Doğum öncesi kursları araştır",
+      "Sağlıklı beslenmeye devam et",
+      "Yumuşak ve destekleyici yatak al",
+    ],
+    14: [
+      "Bebeğin aşı takvimini oluştur",
+      "Rahatlatıcı banyo yap",
+      "Hamilelikte giymek için rahat ve emzirme dostu kıyafetler al"
+          "Hamilelik egzersiz videoları izle"
+    ],
+    15: [
+      "Doğum için meditasyon uygula",
+      "Doğum hikayesi yaz",
+      "Bebeğin güvenliği için evi düzenle",
+      "Dinlenmek için rahat bir köşe oluştur"
+    ],
+    16: [
+      "Bebeğin uyku düzenini oluştur",
+      "Bebek bakımı kurslarına katıl",
+      "Doğum sonrası yoga dersine katıl",
+      "Doğum öncesi fotoğraf çekimi ayarla"
+    ],
+    17: [
+      "Doğum öncesi arkadaşlarla buluş",
+      "Hamilelikte doğal doğum yöntemlerini öğren",
+      "Bebeğinizi emzirmeye hazırlık yapın"
+          "Bebeğin uyku düzenini oluştur",
+    ],
+    18: [
+      "Doğum sonrası yardım için destek sistemini oluştur",
+      "Emzirme desteği al",
+      "Doğum öncesi masajı yaptır"
+          "Bebeğin ilerideki eğitim planını düşün",
+    ],
+    19: [
+      "Bebeğin ilk günlük alışkanlıklarını öğren",
+      "Anne sütü arttırmak için diyeti düzenle",
+      "Doğum sonrası yoga derslerine katıl",
+      "Yumuşak müzikler dinleyerek rahatla",
+    ],
+    20: [
+      "Bebeğin sağlık sigortası için araştırma yap",
+      "Düzenli olarak pelvik taban egzersizleri yap",
+    ],
+    21: [
+      "Bebeğin gelişimini takip et",
+      "Anne sütünü artırmak için beslenme planını düzenle",
+      "Anne sütü sağma yöntemlerini öğren",
+    ],
+    22: [
+      "Yeterli kalsiyum ve demir aldığından emin ol",
+      "Pelvik taban egzersizlerine başla",
+      "Uyku pozisyonuna dikkat et, sol yanına yatmaya çalış"
+    ],
+    23: [
+      "Doğum öncesi eğitim sınıflarını araştır",
+      "Daha rahat ayakkabılar giymeye başla",
+      "Cilt değişikliklerine karşı nemlendirici kullan"
+    ],
+    24: [
+      "Düzenli olarak kilo kontrolü yap",
+      "Bol sıvı tüketimine dikkat et",
+      "Sağlıklı atıştırmalıklar hazırla"
+    ],
+    25: [
+      "Yorgunlukla başa çıkmak için dinlenme molaları ver",
+      "Doğum planını gözden geçir",
+      "Duruşunu düzeltmek için esneme hareketleri yap"
+    ],
+    26: [
+      "Gestasyonel diyabet testi için doktorunla görüş",
+      "Yoga veya prenatal egzersiz sınıflarına katıl",
+      "Doğum sonrası bakım planını düşün"
+    ],
+    27: [
+      "Bebeğin hareketlerini takip et",
+      "Rahat kıyafetler giymeye özen göster",
+      "Eşinle birlikte doğum sonrası görev paylaşımını planla"
+    ],
+    28: [
+      "Düzenli doktor kontrollerini aksatma",
+      "Bebek odasını hazırlamaya başla",
+      "Doğum çantanı hazırlamayı düşün"
+    ],
+    29: [
+      "Hafif yürüyüşler yaparak aktif kal",
+      "Dinlenirken bacaklarını yukarı kaldır",
+      "Sağlıklı ve dengeli beslenmeye devam et"
+    ],
+    30: [
+      "Yenidoğan bakımı hakkında bilgi edin",
+      "Uyku düzenine dikkat et",
+      "Yorgun hissettiğinde yardım iste"
+    ],
+    31: [
+      "Bebek alışverişini tamamla",
+      "Doğum süreci hakkında daha fazla bilgi edin",
+      "Eşinle birlikte doğum ve sonrası için plan yap"
+    ],
+    32: [
+      "Daha sık dinlenme molaları ver",
+      "Rahat uyku pozisyonları bul",
+      "Ciltteki kaşıntılar için doktoruna danış"
+    ],
+    33: [
+      "Sıvı tüketimini artır",
+      "Eğilme ve kaldırma hareketlerinde dikkatli ol",
+      "Rahatlatıcı aktiviteler yap"
+    ],
+    34: [
+      "Bebek hareketlerini düzenli olarak kontrol et",
+      "Doğum belirtilerini öğren",
+      "Eşinle doğum planını tekrar gözden geçir"
+    ],
+    35: [
+      "Hafif egzersizlere devam et",
+      "Yeterli dinlenme yap",
+      "Doktor kontrollerini aksatma"
+    ],
+    36: [
+      "Doğum çantanı hazırla",
+      "Rahat nefes alma teknikleri öğren",
+      "Doğum sonrası bakım planını gözden geçir"
+    ],
+    37: [
+      "Bebek için ihtiyaç listesi oluştur",
+      "Yorgun hissettiğinde dinlen",
+      "Sık idrara çıkma durumuna hazırlıklı ol"
+    ],
+    38: [
+      "Doğum belirtilerini tekrar gözden geçir",
+      "Eşinle doğuma hazırlık yap",
+      "Sağlıklı beslenmeye devam et"
+    ],
+    39: [
+      "Doğum çantanı kontrol et",
+      "Rahatlamaya çalış ve stres yapma",
+      "Doğum sonrası için yardım planları yap"
+    ],
+    40: [
+      "Doktor kontrollerine düzenli git",
+      "Doğum belirtilerini takip et",
+      "Bol bol dinlen"
+    ]
+  };
+
+  Map<int, List<String>> hamilelikYapilacaklar_en = {
+    1: [
+      "Go to the doctor appointment and get an ultrasound",
+      "Start a pregnancy journal and record your feelings",
+      "Read blogs and articles about new moms",
+      "Prepare healthy snacks",
+      "Relax with meditation",
+      "Take pregnancy photos and create memories"
+    ],
+    2: [
+      "Go to the doctor appointment and get an ultrasound",
+      "Start a pregnancy journal and record your feelings",
+      "Read blogs and articles about new moms",
+      "Prepare healthy snacks",
+      "Relax with meditation",
+      "Take pregnancy photos and create memories"
+    ],
+    3: [
+      "Go to the doctor appointment and get an ultrasound",
+      "Start a pregnancy journal and record your feelings",
+      "Read blogs and articles about new moms",
+      "Prepare healthy snacks",
+      "Relax with meditation",
+      "Take pregnancy photos and create memories"
+    ],
+    4: [
+      "Go to the doctor appointment and get an ultrasound",
+      "Start a pregnancy journal and record your feelings",
+      "Read blogs and articles about new moms",
+      "Prepare healthy snacks",
+      "Relax with meditation",
+      "Take pregnancy photos and create memories"
+    ],
+    5: [
+      "Stay active with daily walks",
+      "Read books about pregnancy and gain knowledge",
+      "Plan a romantic getaway with your partner",
+      "Try healthy smoothie recipes",
+      "Consume foods rich in calcium and iron"
+    ],
+    6: [
+      "Pay attention to a balanced diet",
+      "Start planning for the baby’s room",
+      "Create a pregnancy photo album",
+      "Do light yoga and breathing exercises",
+      "Join groups to meet new moms"
+    ],
+    7: [
+      "Get pregnancy skincare products",
+      "Join a mom-baby yoga class",
+      "Relax with a swimming session",
+      "Adopt a high-protein diet",
+      "Relax with swimming or water aerobics",
+      "Prepare to embrace the changes of motherhood"
+    ],
+    8: [
+      "Go to the doctor appointment and discuss the birth plan",
+      "Plan for the baby’s room at home",
+      "Do pilates or birthing ball exercises",
+      "Create a pregnancy skincare routine",
+      "Express your feelings by writing a pregnancy journal",
+      "Read books and gain knowledge about parenting"
+    ],
+    9: [
+      "Shop for baby’s first clothes",
+      "Relax with a massage",
+      "Try sleeping positions that help you sleep comfortably",
+      "Join a pregnancy yoga class",
+      "Learn about the baby’s first vaccinations"
+    ],
+    10: [
+      "Continue the pregnancy exercise program",
+      "Buy clothes suitable for pregnancy fashion",
+      "Attend a preparation course for birth",
+      "Research natural birth methods during pregnancy",
+      "Learn how to communicate with the baby"
+    ],
+    11: [
+      "Buy the baby’s first gifts",
+      "Get a pregnancy massage",
+      "Maintain activity with light exercises",
+      "Organize birth equipment",
+      "Prepare the baby’s room"
+    ],
+    12: [
+      "Attend a baby care course",
+      "Buy comfortable clothes",
+      "Relax with a massage",
+      "Start researching baby names",
+      "Write a letter to your baby about your pregnancy"
+    ],
+    13: [
+      "Shop for baby care",
+      "Research prenatal classes",
+      "Continue healthy eating",
+      "Buy a soft and supportive mattress"
+    ],
+    14: [
+      "Create a baby vaccination schedule",
+      "Take a relaxing bath",
+      "Buy comfortable and nursing-friendly clothes for pregnancy",
+      "Watch pregnancy exercise videos"
+    ],
+    15: [
+      "Practice meditation for birth",
+      "Write a birth story",
+      "Organize the house for the baby’s safety",
+      "Create a comfortable corner to rest"
+    ],
+    16: [
+      "Establish a sleep routine for the baby",
+      "Attend baby care courses",
+      "Join a postpartum yoga class",
+      "Schedule a prenatal photoshoot"
+    ],
+    17: [
+      "Meet friends before birth",
+      "Learn natural birth methods during pregnancy",
+      "Prepare for breastfeeding your baby",
+      "Establish a sleep routine for the baby"
+    ],
+    18: [
+      "Create a support system for postpartum help",
+      "Get breastfeeding support",
+      "Get a prenatal massage",
+      "Think about the baby’s future education plan"
+    ],
+    19: [
+      "Learn the baby’s first daily habits",
+      "Adjust the diet to increase breast milk",
+      "Join postpartum yoga classes",
+      "Relax by listening to soft music"
+    ],
+    20: [
+      "Research health insurance for the baby",
+      "Regularly perform pelvic floor exercises"
+    ],
+    21: [
+      "Track the baby’s development",
+      "Adjust your diet to increase breast milk",
+      "Learn methods for expressing breast milk"
+    ],
+    22: [
+      "Ensure you get enough calcium and iron",
+      "Start pelvic floor exercises",
+      "Pay attention to sleep position, try to sleep on your left side"
+    ],
+    23: [
+      "Research prenatal classes",
+      "Start wearing more comfortable shoes",
+      "Use moisturizer for skin changes"
+    ],
+    24: [
+      "Regularly monitor weight",
+      "Pay attention to consuming plenty of fluids",
+      "Prepare healthy snacks"
+    ],
+    25: [
+      "Take breaks to cope with fatigue",
+      "Review your birth plan",
+      "Do stretching exercises to correct posture"
+    ],
+    26: [
+      "Consult your doctor for a gestational diabetes test",
+      "Join yoga or prenatal exercise classes",
+      "Think about your postpartum care plan"
+    ],
+    27: [
+      "Track the baby’s movements",
+      "Pay attention to wearing comfortable clothes",
+      "Plan post-birth task sharing with your partner"
+    ],
+    28: [
+      "Don’t miss regular doctor check-ups",
+      "Start preparing the baby’s room",
+      "Consider preparing your birth bag"
+    ],
+    29: [
+      "Stay active with light walks",
+      "Lift your legs up while resting",
+      "Continue to eat healthily and balanced"
+    ],
+    30: [
+      "Learn about newborn care",
+      "Pay attention to the sleep schedule",
+      "Ask for help when you feel tired"
+    ],
+    31: [
+      "Complete baby shopping",
+      "Learn more about the birth process",
+      "Plan for birth and afterwards with your partner"
+    ],
+    32: [
+      "Take more frequent rest breaks",
+      "Find comfortable sleeping positions",
+      "Consult your doctor for itchy skin"
+    ],
+    33: [
+      "Increase fluid intake",
+      "Be careful with bending and lifting movements",
+      "Do relaxing activities"
+    ],
+    34: [
+      "Regularly check baby movements",
+      "Learn the signs of labor",
+      "Review the birth plan with your partner"
+    ],
+    35: [
+      "Continue with light exercises",
+      "Get enough rest",
+      "Don’t miss doctor check-ups"
+    ],
+    36: [
+      "Prepare your birth bag",
+      "Learn comfortable breathing techniques",
+      "Review your postpartum care plan"
+    ],
+    37: [
+      "Create a needs list for the baby",
+      "Rest when you feel tired",
+      "Be prepared for frequent urination"
+    ],
+    38: [
+      "Review the signs of labor",
+      "Prepare for birth with your partner",
+      "Continue to eat healthily"
+    ],
+    39: [
+      "Check your birth bag",
+      "Try to relax and not stress",
+      "Make plans for postpartum help"
+    ],
+    40: [
+      "Regularly go to doctor check-ups",
+      "Track the signs of labor",
+      "Rest a lot"
+    ]
+  };
+
   orderSoonEvents(calendarListEventsSoon) {
     String _tempKey = "";
     String _tempValue = "";
@@ -927,15 +1405,31 @@ class _AnaSayfaState extends State<AnaSayfa> {
                       });
                     },
                     onFunction4Pressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => YapilacaklarPage(
-                                  userData: widget.userData,
-                                )),
-                      ).then((value) {
-                        _fetchUserData();
-                      });
+                      if (AppLocalizations.of(context)!.language == "Türkçe") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => YapilacaklarPage(
+                                    userData: widget.userData,
+                                    hamilelikYapilacaklar:
+                                        hamilelikYapilacaklar,
+                                  )),
+                        ).then((value) {
+                          _fetchUserData();
+                        });
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => YapilacaklarPage(
+                                    userData: widget.userData,
+                                    hamilelikYapilacaklar:
+                                        hamilelikYapilacaklar_en,
+                                  )),
+                        ).then((value) {
+                          _fetchUserData();
+                        });
+                      }
 
                       print("Test1");
                     },
