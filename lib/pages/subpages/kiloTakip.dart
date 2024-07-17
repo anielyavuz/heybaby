@@ -428,7 +428,7 @@ class _KiloTakipPageState extends State<KiloTakipPage> {
                                                       .inDays) ~/
                                                   7)
                                               .toString() +
-                                          ". Hafta",
+                                          ". ${AppLocalizations.of(context)!.hafta}",
                                       style: TextStyle(
                                         color: Colors
                                             .black, // Metnin rengini ayarlayabilirsiniz.

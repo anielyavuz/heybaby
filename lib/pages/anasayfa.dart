@@ -29,12 +29,16 @@ class AnaSayfa extends StatefulWidget {
   final List storyImages;
   final List newstoryImages;
   Map<String, dynamic>? userData;
+  final bool referansAktif;
+  final List referansList;
 
   AnaSayfa(
       {Key? key,
       this.userData,
       required this.newstoryImages,
-      required this.storyImages})
+      required this.storyImages,
+      required this.referansAktif,
+      required this.referansList})
       : super(key: key);
 
   @override
@@ -1287,6 +1291,9 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                               storyies: widget.newstoryImages,
                                               // storyImages: _storyImagesLink,
                                               startingPage: index,
+                                              referansAktif:
+                                                  widget.referansAktif,
+                                              referansList: widget.referansList,
                                             ),
                                           ),
                                         );
@@ -1481,7 +1488,11 @@ class _AnaSayfaState extends State<AnaSayfa> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => HaftalikGuncellemeWidget(
-                              userData: widget.userData),
+                            userData: widget.userData,
+                            language: AppLocalizations.of(context)!.language,
+                            referansAktif: widget.referansAktif,
+                            referansList: widget.referansList,
+                          ),
                         ),
                       );
                     },
@@ -1601,17 +1612,20 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => MakaleDetay(
-                                              baslik: widget
-                                                      .storyImages[reverseIndex]
-                                                  ['baslik'],
-                                              icerik: widget
-                                                  .storyImages[reverseIndex]
-                                                      ['icerik']
-                                                  .toString()
-                                                  .replaceAll('%', '\n'),
-                                              resimURL: widget
-                                                      .storyImages[reverseIndex]
-                                                  ['imageLink'])),
+                                                baslik: widget.storyImages[
+                                                    reverseIndex]['baslik'],
+                                                icerik: widget
+                                                    .storyImages[reverseIndex]
+                                                        ['icerik']
+                                                    .toString()
+                                                    .replaceAll('%', '\n'),
+                                                resimURL: widget.storyImages[
+                                                    reverseIndex]['imageLink'],
+                                                referansAktif:
+                                                    widget.referansAktif,
+                                                referansList:
+                                                    widget.referansList,
+                                              )),
                                     );
                                   },
                                   child: Text(
@@ -1811,6 +1825,8 @@ void main() {
           // Story Images'larınızı ekleyin
         ],
         newstoryImages: [],
+        referansAktif: true,
+        referansList: [],
       ),
     ));
   }, (error, stackTrace) {

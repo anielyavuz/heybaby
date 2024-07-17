@@ -116,5 +116,8 @@
     "makaleBegendinizmi":"Bu makaleyi beğendiniz mi?",
     "makaleSorumlulukReddi":"Sorumluluk Reddi",
     "makaleSorumlulukMetin":"HeyBaby uygulaması, burada sunulan bilgiler ile eğitimli bir tıp doktorunun sağlayacağı tavsiyelerin yerini almayı hedeflemez. Bu bilgiler yalnızca genel bir temele dayanarak sunulmuştur. HeyBaby uygulaması ve sahibi olan Turn Eight bu uygulamadaki bilgilere dayanarak verdiğiniz kararlar için sorumluluk üstlenmez. Ayrıca, bu bilgiler kişiselleştirilmiş bir tıbbi tavsiyenin yerini tutmaz. Lütfen en doğru bilgiler için doktorunuza danışınız.",
-    "anasayfaToken":"💎 ikonu toplam token hakkınızı göstermektedir. Token hakkınız bittiğinde reklam izleyerek tekrardan token kazanabilirsiniz."
+    "anasayfaToken":"💎 ikonu toplam token hakkınızı göstermektedir. Token hakkınız bittiğinde reklam izleyerek tekrardan token kazanabilirsiniz.",
+    "makaleReferans":"Referanslar",
+    "haftalikBilgiAnne":"Anne",
+    "haftalikBilgiBebek":"Bebek"
 }

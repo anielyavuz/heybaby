@@ -11,12 +11,15 @@ class KesfetMakaleWidget extends StatefulWidget {
   final String baslik;
   final String resimUrl;
   final String language;
-
+  final bool referansAktif;
+  final List referansList;
   KesfetMakaleWidget(
       {required this.stories,
       required this.baslik,
       required this.resimUrl,
-      required this.language});
+      required this.language,
+      required this.referansAktif,
+      required this.referansList});
 
   @override
   _KesfetMakaleWidgetState createState() => _KesfetMakaleWidgetState();
@@ -26,6 +29,7 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
   late Map<String, dynamic> _data = {};
   late List makaleler = [];
   String data = "";
+
   @override
   void initState() {
     // print(widget.stories);
@@ -90,6 +94,8 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
                                               makale.containsKey('imageLink')
                                                   ? makale['imageLink']
                                                   : widget.resimUrl,
+                                          referansAktif: widget.referansAktif,
+                                          referansList: widget.referansList,
                                         ),
                                       ),
                                     );
@@ -193,15 +199,22 @@ class MakaleDetay extends StatelessWidget {
   final String baslik;
   final String icerik;
   final String resimURL; // Burada parametrenin adı düzeltildi
-
-  MakaleDetay({
-    required this.baslik,
-    required this.icerik,
-    required this.resimURL,
-  });
+  final bool referansAktif;
+  final List referansList;
+  MakaleDetay(
+      {required this.baslik,
+      required this.icerik,
+      required this.resimURL,
+      required this.referansAktif,
+      required this.referansList});
 
   @override
   Widget build(BuildContext context) {
+    final List<String> links = [
+      'https://www.example.com',
+      'https://www.anotherexample.com',
+      'https://www.yetanotherexample.com'
+    ];
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -347,6 +360,7 @@ class MakaleDetay extends StatelessWidget {
               Container(
                 color: Colors.grey[200],
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -354,9 +368,52 @@ class MakaleDetay extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      AppLocalizations.of(context)!.makaleSorumlulukMetin,
-                      style: TextStyle(fontSize: 14),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: const Color.fromRGBO(158, 158, 158, 1)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.makaleSorumlulukMetin,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.makaleReferans,
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          height: referansList.length * 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color.fromRGBO(158, 158, 158, 1)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ListView.builder(
+                            itemCount: referansList.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(
+                                  "* " + referansList[index],
+                                  style: TextStyle(
+                                      color:
+                                          const Color.fromARGB(255, 0, 0, 0)),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

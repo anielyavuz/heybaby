@@ -2,13 +2,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HaftalikGuncellemeWidget extends StatefulWidget {
   final Map<String, dynamic>? userData;
+  final String language;
+  final bool referansAktif;
+  final List referansList;
 
-  HaftalikGuncellemeWidget({
-    required this.userData,
-  });
+  HaftalikGuncellemeWidget(
+      {required this.userData,
+      required this.language,
+      required this.referansAktif,
+      required this.referansList});
 
   @override
   _HaftalikGuncellemeWidgetState createState() =>
@@ -33,8 +39,14 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
   }
 
   Future<void> _getData() async {
-    String data =
-        await rootBundle.loadString('assets/haftalikGuncellemeler.json');
+    String data = "";
+    if (widget.language == "Türkçe") {
+      data = await rootBundle.loadString('assets/haftalikGuncellemeler.json');
+    } else {
+      data =
+          await rootBundle.loadString('assets/haftalikGuncellemeler_en.json');
+    }
+
     var jsonResult = json.decode(data);
     setState(() {
       _data = jsonResult;
@@ -90,7 +102,8 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                   ),
 
                   Center(
-                    child: Text("$selectedNumber. Hafta",
+                    child: Text(
+                        "$selectedNumber. ${AppLocalizations.of(context)!.hafta}",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 19)),
                   ),
@@ -100,16 +113,18 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("Kilo: ${_data[selectedNumber.toString()]['kilo']}",
+                      Text(
+                          "${AppLocalizations.of(context)!.kilosu}: ${_data[selectedNumber.toString()]['kilo']}",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(height: 8.0),
-                      Text("Boy: ${_data[selectedNumber.toString()]['boy']}",
+                      Text(
+                          "${AppLocalizations.of(context)!.boyu}: ${_data[selectedNumber.toString()]['boy']}",
                           style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                   // Buraya kilo ve boy bilgilerinin girileceği alanlar eklenebilir.
                   SizedBox(height: 16.0),
-                  Text("Anne",
+                  Text("${AppLocalizations.of(context)!.haftalikBilgiAnne}",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 8.0),
@@ -119,7 +134,7 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
 
                   // Buraya anneyle ilgili metin içeriği girilecek alan eklenebilir.
                   SizedBox(height: 16.0),
-                  Text("Bebek",
+                  Text("${AppLocalizations.of(context)!.haftalikBilgiBebek}",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 8.0),
@@ -168,6 +183,7 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                   Container(
                     color: Colors.grey[200],
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -175,10 +191,53 @@ class _HaftalikGuncellemeWidgetState extends State<HaftalikGuncellemeWidget> {
                           style: TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          AppLocalizations.of(context)!.makaleSorumlulukMetin,
-                          style: TextStyle(fontSize: 14),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color.fromRGBO(158, 158, 158, 1)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              AppLocalizations.of(context)!
+                                  .makaleSorumlulukMetin,
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
                         ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.makaleReferans,
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                        ),
+                        widget.referansAktif
+                            ? Container(
+                                height: widget.referansList.length * 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color.fromRGBO(
+                                          158, 158, 158, 1)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ListView.builder(
+                                  itemCount: widget.referansList.length,
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      title: Text(
+                                        "* " + widget.referansList[index],
+                                        style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 0, 0, 0)),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            : SizedBox()
                       ],
                     ),
                   )

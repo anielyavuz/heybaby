@@ -10,11 +10,15 @@ class KesfetPage extends StatefulWidget {
   final List storiesWeekly;
   final String language;
   Map<String, dynamic>? userData;
+  final bool referansAktif;
+  final List referansList;
   KesfetPage(
       {required this.stories,
       required this.storiesWeekly,
       required this.userData,
-      required this.language});
+      required this.language,
+      required this.referansAktif,
+      required this.referansList});
   @override
   _KesfetPageState createState() => _KesfetPageState();
 }
@@ -296,10 +300,13 @@ class _KesfetPageState extends State<KesfetPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => KesfetMakaleWidget(
-                            baslik: _kartlar[index]['baslik']!,
-                            resimUrl: _kartlar[index]['resimUrl']!,
-                            stories: widget.stories,
-                            language: AppLocalizations.of(context)!.language),
+                          baslik: _kartlar[index]['baslik']!,
+                          resimUrl: _kartlar[index]['resimUrl']!,
+                          stories: widget.stories,
+                          language: AppLocalizations.of(context)!.language,
+                          referansAktif: widget.referansAktif,
+                          referansList: widget.referansList,
+                        ),
                       ),
                     );
                   } else {

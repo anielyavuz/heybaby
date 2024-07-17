@@ -9,11 +9,15 @@ class StoryScreen extends StatefulWidget {
   final List storyies;
   // final List storyImages;
   final int startingPage;
+  final bool referansAktif;
+  final List referansList;
 
   StoryScreen(
       {required this.storyies,
       // required this.storyImages,
-      required this.startingPage});
+      required this.startingPage,
+      required this.referansAktif,
+      required this.referansList});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -195,12 +199,15 @@ class _StoryScreenState extends State<StoryScreen>
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MakaleDetay(
-                                    baslik: widget.storyies[index]['baslik'],
-                                    icerik: widget.storyies[index]['icerik']
-                                        .toString()
-                                        .replaceAll('%', '\n'),
-                                    resimURL: widget.storyies[index]
-                                        ['imageLink'])),
+                                      baslik: widget.storyies[index]['baslik'],
+                                      icerik: widget.storyies[index]['icerik']
+                                          .toString()
+                                          .replaceAll('%', '\n'),
+                                      resimURL: widget.storyies[index]
+                                          ['imageLink'],
+                                      referansAktif: widget.referansAktif,
+                                      referansList: widget.referansList,
+                                    )),
                           ).then((value) {
                             // Timer'ı iptal et
                           });

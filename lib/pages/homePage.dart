@@ -157,6 +157,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String _systemInstruction = "";
   double modalHeight = 0.85;
+  bool referansAktif = true;
+  List referansList = [
+    "https://www.anneysen.com/hamilelik",
+    "https://www.whattoexpect.com/pregnancy/",
+    "https://www.tommys.org/pregnancy-information/im-pregnant/pregnancy-week-by-week/7-weeks-pregnant",
+    "https://www.prima.com.tr/gebelik"
+        "https://www.healthline.com/health/pregnancy/"
+  ];
+
   @override
   Widget build(BuildContext context) {
     if (userData == null || _shouldFetchUserData) {
@@ -379,17 +388,23 @@ class _MyHomePageState extends State<MyHomePage> {
             : AnaSayfa(
                 storyImages: storyImages,
                 newstoryImages: storyImages2,
-                userData: userData);
+                userData: userData,
+                referansAktif: referansAktif,
+                referansList: referansList,
+              );
 
       case 1:
         return Calendar(userData: userData);
 
       case 2:
         return KesfetPage(
-            stories: storyImagesKesfet,
-            storiesWeekly: storyImages3,
-            userData: userData,
-            language: AppLocalizations.of(context)!.language);
+          stories: storyImagesKesfet,
+          storiesWeekly: storyImages3,
+          userData: userData,
+          language: AppLocalizations.of(context)!.language,
+          referansAktif: referansAktif,
+          referansList: referansList,
+        );
 
       case 3:
         return NotlarPage(userData: userData);
@@ -466,6 +481,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _tokenLost = data['Token']['AIBotToken'];
         storyImages = data['Stories'];
         storyImagesKesfet = data['Stories'];
+        referansAktif = data['GeneralConfig']['referansAktif'];
+        referansList = data['GeneralConfig']['referansList'];
         _mainScreenStoryCount = data['GeneralConfig']['mainScreenStoryCount'];
         _premiumMode = data['GeneralConfig']['premiumMode'];
         // Listeyi id'ye göre sıralama

@@ -72,6 +72,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<LocaleNotifier>(
         builder: (context, localeNotifier, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: '',
             supportedLocales: L10n.all,
             locale: localeNotifier.currentLocale,

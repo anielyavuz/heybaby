@@ -354,13 +354,16 @@ Widget _loginPages(String header, String body, String lottie) {
     padding: const EdgeInsets.all(12.0),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          textAlign: TextAlign.center,
-          header,
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
+        Center(
+          child: Text(
+            textAlign: TextAlign.center,
+            header,
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Text(
