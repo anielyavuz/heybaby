@@ -13,13 +13,15 @@ class KesfetMakaleWidget extends StatefulWidget {
   final String language;
   final bool referansAktif;
   final List referansList;
+  Map<String, dynamic>? userData;
   KesfetMakaleWidget(
       {required this.stories,
       required this.baslik,
       required this.resimUrl,
       required this.language,
       required this.referansAktif,
-      required this.referansList});
+      required this.referansList,
+      required this.userData});
 
   @override
   _KesfetMakaleWidgetState createState() => _KesfetMakaleWidgetState();
@@ -86,17 +88,17 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) => MakaleDetay(
-                                          baslik: makale['baslik'],
-                                          icerik: makale['icerik']
-                                              .toString()
-                                              .replaceAll('%', '\n'),
-                                          resimURL:
-                                              makale.containsKey('imageLink')
-                                                  ? makale['imageLink']
-                                                  : widget.resimUrl,
-                                          referansAktif: widget.referansAktif,
-                                          referansList: widget.referansList,
-                                        ),
+                                            baslik: makale['baslik'],
+                                            icerik: makale['icerik']
+                                                .toString()
+                                                .replaceAll('%', '\n'),
+                                            resimURL:
+                                                makale.containsKey('imageLink')
+                                                    ? makale['imageLink']
+                                                    : widget.resimUrl,
+                                            referansAktif: widget.referansAktif,
+                                            referansList: widget.referansList,
+                                            userData: widget.userData),
                                       ),
                                     );
                                   },
@@ -201,12 +203,14 @@ class MakaleDetay extends StatelessWidget {
   final String resimURL; // Burada parametrenin adı düzeltildi
   final bool referansAktif;
   final List referansList;
+  Map<String, dynamic>? userData;
   MakaleDetay(
       {required this.baslik,
       required this.icerik,
       required this.resimURL,
       required this.referansAktif,
-      required this.referansList});
+      required this.referansList,
+      required this.userData});
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +276,7 @@ class MakaleDetay extends StatelessWidget {
                           onPressed: () async {
                             var _sonuc =
                                 await FirestoreFunctions.makaleGeriBildirim(
-                                        "Guest",
+                                        userData,
                                         "Beğendi",
                                         DateFormat('hh:mm - dd-MM-yyyy')
                                             .format(DateTime.now()),
@@ -314,7 +318,7 @@ class MakaleDetay extends StatelessWidget {
                           onPressed: () async {
                             var _sonuc =
                                 await FirestoreFunctions.makaleGeriBildirim(
-                                        "Guest",
+                                        userData,
                                         "Beğenmedi",
                                         DateFormat('hh:mm - dd-MM-yyyy')
                                             .format(DateTime.now()),
@@ -385,36 +389,40 @@ class MakaleDetay extends StatelessWidget {
                     SizedBox(
                       height: 15,
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)!.makaleReferans,
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
-                        ),
-                        Container(
-                          height: referansList.length * 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromRGBO(158, 158, 158, 1)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ListView.builder(
-                            itemCount: referansList.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(
-                                  "* " + referansList[index],
-                                  style: TextStyle(
-                                      color:
-                                          const Color.fromARGB(255, 0, 0, 0)),
+                    referansAktif
+                        ? Column(
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.makaleReferans,
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Container(
+                                height: referansList.length * 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color.fromRGBO(
+                                          158, 158, 158, 1)),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                                child: ListView.builder(
+                                  itemCount: referansList.length,
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      title: Text(
+                                        "* " + referansList[index],
+                                        style: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 0, 0, 0)),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        : SizedBox()
                   ],
                 ),
               )
