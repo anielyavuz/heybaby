@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:heybaby/functions/ad_helper.dart';
 import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/boxes.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
@@ -582,6 +584,19 @@ class _AnaSayfaState extends State<AnaSayfa> {
     setState(() {
       jsonList = jsonList0;
     });
+
+    if (_interstitialAd == null) {
+      print(
+          "Home page: Reklam değeri null, yeni reklam oluşabilir. yetkilerine bakılacak");
+
+      if (widget.userData!['userSubscription'] == 'Free') {
+        {
+          print("free user reklam oluşuruluyor");
+          _loadInterstitialAd();
+        }
+      }
+    }
+
     // print(jsonList);
   }
 
@@ -731,6 +746,44 @@ class _AnaSayfaState extends State<AnaSayfa> {
       // }
     }
     soonActivitiesCheck();
+  }
+
+  InterstitialAd? _interstitialAd;
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _loadInterstitialAd(); // Yeni reklam yükleme
+            },
+            onAdFailedToShowFullScreenContent: (ad, err) {
+              ad.dispose();
+              print('Failed to show the ad: ${err.message}');
+            },
+          );
+          setState(() {
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
+  reklamGoster() async {
+    if (_interstitialAd != null) {
+      _interstitialAd!.show();
+    } else {
+      print('Reklam yüklenmedi veya gösterilemedi.');
+      _loadInterstitialAd();
+    }
   }
 
   soonActivitiesCheck() {
@@ -1294,6 +1347,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                               referansAktif:
                                                   widget.referansAktif,
                                               referansList: widget.referansList,
+                                              userData: widget.userData,
                                             ),
                                           ),
                                         );
@@ -1597,7 +1651,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${widget.storyImages[reverseIndex]['icerik'].substring(0, 30)} ... ",
+                                  "${widget.storyImages[reverseIndex]['icerik'].substring(0, 20)} ... ",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.normal,
@@ -1606,49 +1660,137 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MakaleDetay(
-                                                baslik: widget.storyImages[
-                                                    reverseIndex]['baslik'],
-                                                icerik: widget
-                                                    .storyImages[reverseIndex]
-                                                        ['icerik']
-                                                    .toString()
-                                                    .replaceAll('%', '\n'),
-                                                resimURL: widget.storyImages[
-                                                    reverseIndex]['imageLink'],
-                                                referansAktif:
-                                                    widget.referansAktif,
-                                                referansList:
-                                                    widget.referansList,
-                                              )),
-                                    );
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)!.devamEt,
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.none,
-                                      fontWeight: FontWeight.bold,
-                                      background: Paint()
-                                        ..color = Colors.transparent
-                                        ..style = PaintingStyle.stroke
-                                        ..strokeWidth = 1.5
-                                        ..strokeJoin = StrokeJoin.round,
-                                      shadows: [
-                                        Shadow(
-                                          color: Colors.black,
-                                          offset: Offset(0, 0),
-                                          blurRadius: 0,
+                                widget.storyImages[reverseIndex]['premium']
+                                    ? GestureDetector(
+                                        onTap: () async {
+                                          if (widget.userData![
+                                                  'userSubscription'] !=
+                                              "Free") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MakaleDetay(
+                                                  baslik: widget.storyImages[
+                                                      reverseIndex]['baslik'],
+                                                  icerik: widget
+                                                      .storyImages[reverseIndex]
+                                                          ['icerik']
+                                                      .toString()
+                                                      .replaceAll('%', '\n'),
+                                                  resimURL: widget.storyImages[
+                                                          reverseIndex]
+                                                      ['imageLink'],
+                                                  referansAktif:
+                                                      widget.referansAktif,
+                                                  referansList:
+                                                      widget.referansList,
+                                                  userData: widget.userData,
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            await reklamGoster();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MakaleDetay(
+                                                  baslik: widget.storyImages[
+                                                      reverseIndex]['baslik'],
+                                                  icerik: widget
+                                                      .storyImages[reverseIndex]
+                                                          ['icerik']
+                                                      .toString()
+                                                      .replaceAll('%', '\n'),
+                                                  resimURL: widget.storyImages[
+                                                          reverseIndex]
+                                                      ['imageLink'],
+                                                  referansAktif:
+                                                      widget.referansAktif,
+                                                  referansList:
+                                                      widget.referansList,
+                                                  userData: widget.userData,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context)!
+                                                  .devamEt +
+                                              " to Premium Content💎",
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.purple,
+                                            decoration: TextDecoration.none,
+                                            fontWeight: FontWeight.bold,
+                                            background: Paint()
+                                              ..color = Colors.transparent
+                                              ..style = PaintingStyle.stroke
+                                              ..strokeWidth = 1.5
+                                              ..strokeJoin = StrokeJoin.round,
+                                            shadows: [
+                                              Shadow(
+                                                color: Colors.black,
+                                                offset: Offset(0, 0),
+                                                blurRadius: 0,
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MakaleDetay(
+                                                      baslik:
+                                                          widget.storyImages[
+                                                                  reverseIndex]
+                                                              ['baslik'],
+                                                      icerik: widget
+                                                          .storyImages[
+                                                              reverseIndex]
+                                                              ['icerik']
+                                                          .toString()
+                                                          .replaceAll(
+                                                              '%', '\n'),
+                                                      resimURL:
+                                                          widget.storyImages[
+                                                                  reverseIndex]
+                                                              ['imageLink'],
+                                                      referansAktif:
+                                                          widget.referansAktif,
+                                                      referansList:
+                                                          widget.referansList,
+                                                      userData: widget.userData,
+                                                    )),
+                                          );
+                                        },
+                                        child: Text(
+                                          AppLocalizations.of(context)!.devamEt,
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            decoration: TextDecoration.none,
+                                            fontWeight: FontWeight.bold,
+                                            background: Paint()
+                                              ..color = Colors.transparent
+                                              ..style = PaintingStyle.stroke
+                                              ..strokeWidth = 1.5
+                                              ..strokeJoin = StrokeJoin.round,
+                                            shadows: [
+                                              Shadow(
+                                                color: Colors.black,
+                                                offset: Offset(0, 0),
+                                                blurRadius: 0,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                               ],
                             ),
                           ),

@@ -11,13 +11,15 @@ class StoryScreen extends StatefulWidget {
   final int startingPage;
   final bool referansAktif;
   final List referansList;
+  Map<String, dynamic>? userData;
 
   StoryScreen(
       {required this.storyies,
       // required this.storyImages,
       required this.startingPage,
       required this.referansAktif,
-      required this.referansList});
+      required this.referansList,
+      required this.userData});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -207,6 +209,7 @@ class _StoryScreenState extends State<StoryScreen>
                                           ['imageLink'],
                                       referansAktif: widget.referansAktif,
                                       referansList: widget.referansList,
+                                      userData: widget.userData,
                                     )),
                           ).then((value) {
                             // Timer'ı iptal et

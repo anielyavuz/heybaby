@@ -7,10 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KesfetMakaleHaftalikWidget extends StatefulWidget {
   final List stories;
-
-  KesfetMakaleHaftalikWidget({
-    required this.stories,
-  });
+  Map<String, dynamic>? userData;
+  KesfetMakaleHaftalikWidget({required this.stories, required this.userData});
 
   @override
   _KesfetMakaleHaftalikWidgetState createState() =>
@@ -89,6 +87,7 @@ class _KesfetMakaleHaftalikWidgetState
                                             .toString()
                                             .replaceAll('%', '\n'),
                                         resimURL: story['imageLink'],
+                                        userData: widget.userData,
                                       ),
                                     ),
                                   );
@@ -164,12 +163,12 @@ class MakaleDetay extends StatelessWidget {
   final String baslik;
   final String icerik;
   final String resimURL; // Burada parametrenin adı düzeltildi
-
-  MakaleDetay({
-    required this.baslik,
-    required this.icerik,
-    required this.resimURL,
-  });
+  Map<String, dynamic>? userData;
+  MakaleDetay(
+      {required this.baslik,
+      required this.icerik,
+      required this.resimURL,
+      required this.userData});
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +225,7 @@ class MakaleDetay extends StatelessWidget {
                           onPressed: () async {
                             var _sonuc =
                                 await FirestoreFunctions.makaleGeriBildirim(
-                                        "Guest",
+                                        userData,
                                         "Beğendi",
                                         DateFormat('hh:mm - dd-MM-yyyy')
                                             .format(DateTime.now()),
@@ -268,7 +267,7 @@ class MakaleDetay extends StatelessWidget {
                           onPressed: () async {
                             var _sonuc =
                                 await FirestoreFunctions.makaleGeriBildirim(
-                                        "Guest",
+                                        userData,
                                         "Beğenmedi",
                                         DateFormat('hh:mm - dd-MM-yyyy')
                                             .format(DateTime.now()),

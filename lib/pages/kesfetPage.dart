@@ -300,13 +300,13 @@ class _KesfetPageState extends State<KesfetPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => KesfetMakaleWidget(
-                          baslik: _kartlar[index]['baslik']!,
-                          resimUrl: _kartlar[index]['resimUrl']!,
-                          stories: widget.stories,
-                          language: AppLocalizations.of(context)!.language,
-                          referansAktif: widget.referansAktif,
-                          referansList: widget.referansList,
-                        ),
+                            baslik: _kartlar[index]['baslik']!,
+                            resimUrl: _kartlar[index]['resimUrl']!,
+                            stories: widget.stories,
+                            language: AppLocalizations.of(context)!.language,
+                            referansAktif: widget.referansAktif,
+                            referansList: widget.referansList,
+                            userData: widget.userData),
                       ),
                     );
                   } else {
@@ -321,6 +321,7 @@ class _KesfetPageState extends State<KesfetPage> {
                           MaterialPageRoute(
                             builder: (context) => KesfetMakaleHaftalikWidget(
                               stories: widget.storiesWeekly,
+                              userData: widget.userData,
                             ),
                           ),
                         );
@@ -362,6 +363,7 @@ class _KesfetPageState extends State<KesfetPage> {
                         MaterialPageRoute(
                           builder: (context) => KesfetMakaleHaftalikWidget(
                             stories: widget.storiesWeekly,
+                            userData: widget.userData,
                           ),
                         ),
                       );
