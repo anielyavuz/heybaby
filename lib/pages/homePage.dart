@@ -68,15 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _tokenClass = boxPersons.get('currentToken',
         defaultValue: Person(token: 50, subnName: 'myToken'));
 
-    _getToken();
+    // _getToken();
 
     // TODO: implement initState
     super.initState();
-  }
-
-  void _getToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    print('Firebase Messaging Token: $token');
   }
 
   @override
@@ -154,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String _apiKey = "";
   String _model = "";
+  bool _yaklasanAktiviteHome = false;
 
   String _systemInstruction = "";
   double modalHeight = 0.85;
@@ -391,7 +387,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 userData: userData,
                 referansAktif: referansAktif,
                 referansList: referansList,
-              );
+                yaklasanAktiviteHome: _yaklasanAktiviteHome);
 
       case 1:
         return Calendar(userData: userData);
@@ -464,7 +460,27 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         }
       });
+
+      String? token = await FirebaseMessaging.instance.getToken();
+      // print('Firebase Messaging Token: $token');
+
+      if (userData!.containsKey('fcmToken')) {
+        if (userData?['fcmToken'] != token) {
+          print("FCM Token Cloud'da güncel değil....");
+
+          tokenGuncelle(token!);
+        } else {
+          print("FCM Token Cloud'da güncel.");
+        }
+      } else {
+        print("FCM Token Cloud'da yok ekleniyorr....");
+        tokenGuncelle(token!);
+      }
     }
+  }
+
+  tokenGuncelle(String token) async {
+    var _result = await FirestoreFunctions.fcmTokenGuncelle(token);
   }
 
   Future<void> _systemData() async {
@@ -485,6 +501,7 @@ class _MyHomePageState extends State<MyHomePage> {
         referansList = data['GeneralConfig']['referansList'];
         _mainScreenStoryCount = data['GeneralConfig']['mainScreenStoryCount'];
         _premiumMode = data['GeneralConfig']['premiumMode'];
+        _yaklasanAktiviteHome = data['GeneralConfig']['homeAktiviteEnable'];
         // Listeyi id'ye göre sıralama
         storyImages.sort((a, b) => a['id'].compareTo(b['id']));
 

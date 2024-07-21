@@ -29,17 +29,21 @@ class _KesfetPageState extends State<KesfetPage> {
     {
       'baslik': 'Yiyecek & İçecek',
       'resimUrl': 'assets/yiyecek_icicek.jpg',
+      'baslik2': 'Yiyecek & İçecek',
     },
     {
       'baslik': 'Temel Gıdalar',
+      'baslik2': 'Temel Gıdalar',
       'resimUrl': 'assets/temel_gidalar.jpg',
     },
     {
       'baslik': 'Vitamin Mineraller',
+      'baslik2': 'Vitamin Mineraller',
       'resimUrl': 'assets/vitamin_mineraller.jpg',
     },
     {
       'baslik': 'Yapılacak & Yapılmayacak',
+      'baslik2': 'Yapılacak & Yapılmayacak',
       'resimUrl': 'assets/yapilacak_yapilmayacak.jpg',
     },
   ];
@@ -47,18 +51,22 @@ class _KesfetPageState extends State<KesfetPage> {
   final List<Map<String, String>> _kartlarAnneBebek = [
     {
       'baslik': 'Kilo Alımı',
+      'baslik2': 'Kilo Alımı',
       'resimUrl': 'assets/kiloAlimi.jpg',
     },
     {
       'baslik': 'Beden Değişimleri',
+      'baslik2': 'Beden Değişimleri',
       'resimUrl': 'assets/bedenDegisimi.jpg',
     },
     {
       'baslik': 'Bebek Gelişimi',
+      'baslik2': 'Bebek Gelişimi',
       'resimUrl': 'assets/bebekGelisim.jpg',
     },
     {
       'baslik': 'Bebek Güvenliği',
+      'baslik2': 'Bebek Güvenliği',
       'resimUrl': 'assets/bebekGuvenligi.jpg',
     },
   ];
@@ -66,18 +74,22 @@ class _KesfetPageState extends State<KesfetPage> {
   final List<Map<String, String>> _kartlarIyiHissedin = [
     {
       'baslik': 'Huzur ve Mutluluk',
+      'baslik2': 'Huzur ve Mutluluk',
       'resimUrl': 'assets/huzurMutluluk.jpg',
     },
     {
       'baslik': 'Uyku',
+      'baslik2': 'Uyku',
       'resimUrl': 'assets/uyku.jpg',
     },
     {
       'baslik': 'Fiziksel Sağlık',
+      'baslik2': 'Fiziksel Sağlık',
       'resimUrl': 'assets/fizikselSaglik.jpg',
     },
     {
       'baslik': 'Hamilelik Ağrısı',
+      'baslik2': 'Hamilelik Ağrısı',
       'resimUrl': 'assets/hamilelikAgrisi.jpg',
     },
   ];
@@ -85,9 +97,94 @@ class _KesfetPageState extends State<KesfetPage> {
   final List<Map<String, String>> _kartlarHaftalik = [
     {
       'baslik': 'Haftalik Öneriler',
+      'baslik2': 'Haftalik Öneriler',
       'resimUrl': 'assets/kesfet/sizdenGelenler.png',
     },
   ];
+
+/////////////////
+  ///
+  ///
+  final List<Map<String, String>> _kartlarBeslenme_en = [
+    {
+      'baslik': 'Food & Drink',
+      'baslik2': 'Yiyecek & İçecek',
+      'resimUrl': 'assets/yiyecek_icicek.jpg',
+    },
+    {
+      'baslik': 'Basic Foods',
+      'baslik2': 'Temel Gıdalar',
+      'resimUrl': 'assets/temel_gidalar.jpg',
+    },
+    {
+      'baslik': 'Vitamin Minerals',
+      'baslik2': 'Vitamin Mineraller',
+      'resimUrl': 'assets/vitamin_mineraller.jpg',
+    },
+    {
+      'baslik': 'To be done & Not to be done',
+      'baslik2': 'Yapılacak & Yapılmayacak',
+      'resimUrl': 'assets/yapilacak_yapilmayacak.jpg',
+    },
+  ];
+
+  final List<Map<String, String>> _kartlarAnneBebek_en = [
+    {
+      'baslik': 'Weight Gain',
+      'baslik2': 'Kilo Alımı',
+      'resimUrl': 'assets/kiloAlimi.jpg',
+    },
+    {
+      'baslik': 'Body Change',
+      'baslik2': 'Beden Değişimleri',
+      'resimUrl': 'assets/bedenDegisimi.jpg',
+    },
+    {
+      'baslik': 'Baby Development',
+      'baslik2': 'Bebek Gelişimi',
+      'resimUrl': 'assets/bebekGelisim.jpg',
+    },
+    {
+      'baslik': 'Baby Safety',
+      'baslik2': 'Bebek Güvenliği',
+      'resimUrl': 'assets/bebekGuvenligi.jpg',
+    },
+  ];
+
+  final List<Map<String, String>> _kartlarIyiHissedin_en = [
+    {
+      'baslik': 'Peace and Happiness',
+      'baslik2': 'Huzur ve Mutluluk',
+      'resimUrl': 'assets/huzurMutluluk.jpg',
+    },
+    {
+      'baslik': 'Sleep',
+      'baslik2': 'Uyku',
+      'resimUrl': 'assets/uyku.jpg',
+    },
+    {
+      'baslik': 'Pysical Health',
+      'baslik2': 'Fiziksel Sağlık',
+      'resimUrl': 'assets/fizikselSaglik.jpg',
+    },
+    {
+      'baslik': 'Pregnancy Pain',
+      'baslik2': 'Hamilelik Ağrısı',
+      'resimUrl': 'assets/hamilelikAgrisi.jpg',
+    },
+  ];
+
+  final List<Map<String, String>> _kartlarHaftalik_en = [
+    {
+      'baslik': 'Weekly Tips',
+      'baslik2': 'Haftalik Öneriler',
+      'resimUrl': 'assets/kesfet/sizdenGelenler.png',
+    },
+  ];
+
+  ///
+  ///
+////////////////
 
   void baslikDegistir() async {
     if (AppLocalizations.of(context)!.language == "English") {
@@ -132,9 +229,9 @@ class _KesfetPageState extends State<KesfetPage> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 100), () {
-      baslikDegistir();
-    });
+    // Future.delayed(const Duration(milliseconds: 100), () {
+    //   baslikDegistir();
+    // });
 
     if (widget.userData!['userSubscription'] == 'Free') {
       _loadInterstitialAd();
@@ -246,11 +343,11 @@ class _KesfetPageState extends State<KesfetPage> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildKartListesi("Nutrition", _kartlarBeslenme),
-                  _buildKartListesi("Mother & Baby", _kartlarAnneBebek),
-                  _buildKartListesi("Feel Good", _kartlarIyiHissedin),
+                  _buildKartListesi("Nutrition", _kartlarBeslenme_en),
+                  _buildKartListesi("Mother & Baby", _kartlarAnneBebek_en),
+                  _buildKartListesi("Feel Good", _kartlarIyiHissedin_en),
                   _buildKartListesi(
-                      "Tips to Make Life Easier", _kartlarHaftalik),
+                      "Tips to Make Life Easier", _kartlarHaftalik_en),
                   // Buraya ek alt başlıklar ve kartlar eklenebilir.
                 ],
               ),
@@ -300,7 +397,7 @@ class _KesfetPageState extends State<KesfetPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => KesfetMakaleWidget(
-                            baslik: _kartlar[index]['baslik']!,
+                            baslik: _kartlar[index]['baslik2']!,
                             resimUrl: _kartlar[index]['resimUrl']!,
                             stories: widget.stories,
                             language: AppLocalizations.of(context)!.language,

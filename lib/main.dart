@@ -35,6 +35,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessageOpenedApp
+      .listen(_firebaseMessagingOpenedAppHandler);
   bool isAllowedToSendNotification =
       await AwesomeNotifications().isNotificationAllowed();
   if (!isAllowedToSendNotification) {
@@ -58,6 +60,13 @@ void main() async {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   // Bu fonksiyon arka planda gelen mesajları işler
+}
+
+void _firebaseMessagingOpenedAppHandler(RemoteMessage message) {
+  // Bildirime tıklandığında yapılacak işlemler
+
+  print("Bildirime tıklandıııııııı");
+  print(message.data);
 }
 
 class MyApp extends StatelessWidget {

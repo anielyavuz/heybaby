@@ -52,6 +52,8 @@ class _KesfetMakaleWidgetState extends State<KesfetMakaleWidget> {
     Map<String, dynamic> jsonResult = json.decode(data);
     setState(() {
       _data = jsonResult;
+      print("0000000000  ${widget.stories}");
+      print("1111111111  ${widget.baslik}");
       for (var _story in widget.stories) {
         if (_story['kategori'] == widget.baslik) {
           // print(_story);

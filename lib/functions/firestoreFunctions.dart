@@ -586,6 +586,33 @@ class FirestoreFunctions {
     return returnCode;
   }
 
+  static Future<Map> fcmTokenGuncelle(
+    String token,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"fcmToken": token}).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
   static Future<Map> makaleGeriBildirimHaftalik(
       userName, durum, tarih, makaleBaslik) async {
     User? user = FirebaseAuth.instance.currentUser;
