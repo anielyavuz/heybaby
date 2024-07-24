@@ -72,13 +72,23 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   if (message.data['screen'] == 'makaleDetay') {
-    // MyApp'in context'ine erişmek için bir GlobalKey kullanmalısınız
+    bool _isMakalePremium = false;
+    bool _isUserPremium = false;
+    if (message.data['isMakalePremium'] == 'Premium') {
+      _isMakalePremium = true;
+    }
+    if (message.data['isUserPremium'] == 'Premium') {
+      _isUserPremium = true;
+    }
+
     navigatorKey.currentState?.pushNamed(
       '/makaleDetay',
       arguments: {
         'baslik': message.data['baslik'],
         'icerik': message.data['icerik'],
         'resimURL': message.data['resimURL'],
+        'isMakalePremium': _isMakalePremium,
+        'isUserPremium': _isUserPremium,
       },
     );
   }
@@ -90,6 +100,14 @@ void _firebaseMessagingOpenedAppHandler(RemoteMessage message) {
 
   // Örneğin, yönlendirme için mesaj verisini kullanabilirsiniz
   if (message.data['screen'] == 'makaleDetay') {
+    bool _isMakalePremium = false;
+    bool _isUserPremium = false;
+    if (message.data['isMakalePremium'] == 'Premium') {
+      _isMakalePremium = true;
+    }
+    if (message.data['isUserPremium'] == 'Premium') {
+      _isUserPremium = true;
+    }
     // MyApp'in context'ine erişmek için bir GlobalKey kullanmalısınız
     navigatorKey.currentState?.pushNamed(
       '/makaleDetay',
@@ -97,8 +115,8 @@ void _firebaseMessagingOpenedAppHandler(RemoteMessage message) {
         'baslik': message.data['baslik'],
         'icerik': message.data['icerik'],
         'resimURL': message.data['resimURL'],
-        'isMakalePremium': message.data['isMakalePremium'],
-        'isUserPremium': message.data['isUserPremium'],
+        'isMakalePremium': _isMakalePremium,
+        'isUserPremium': _isUserPremium,
       },
     );
   }

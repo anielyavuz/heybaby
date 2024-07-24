@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:heybaby/functions/ad_helper.dart';
@@ -12,6 +13,8 @@ import 'package:heybaby/pages/adminPages/storyPaylas.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/subpages/ayarlar.dart';
+import 'package:heybaby/revenuecat/constant.dart';
+import 'package:heybaby/revenuecat/paywall.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -38,7 +41,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
   String lastPeriodDate = "";
   String dogumOnceSonra = "";
   String _version = 'Unknown';
-
+  bool _isLoading = false;
   String formatDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
     String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
@@ -91,66 +94,75 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
     _loadInterstitialAd();
   }
 
-  void _showPurchaseDialog() async {
-    try {
-      Offerings offerings = await Purchases.getOfferings();
-      if (offerings.current != null &&
-          offerings.current!.availablePackages.isNotEmpty) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Satın Alma Ekranı'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: offerings.current!.availablePackages.map((package) {
-                  return ListTile(
-                    title: Text(package.storeProduct.title),
-                    subtitle: Text(package.storeProduct.description),
-                    trailing: Text(package.storeProduct.priceString),
-                    onTap: () async {
-                      try {
-                        CustomerInfo customerInfo =
-                            await Purchases.purchasePackage(package);
-                        if (customerInfo.entitlements.all['your_entitlement_id']
-                                ?.isActive ==
-                            true) {
-                          // Satın alma başarılı
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Satın alma başarılı!'),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        // Satın alma başarısız
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Satın alma başarısız: $e'),
-                          ),
-                        );
-                      }
-                    },
-                  );
-                }).toList(),
-              ),
-            );
-          },
-        );
-      } else {
+  void perfomMagic() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+
+    if (customerInfo.entitlements.all[entitlementID] != null &&
+        customerInfo.entitlements.all[entitlementID]?.isActive == true) {
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      Offerings? offerings;
+      try {
+        offerings = await Purchases.getOfferings();
+      } on PlatformException catch (e) {
+        print("Errorrrrr     $e");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Satın alınabilir ürün bulunamadı.'),
+            content: Text(
+              e.toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor:
+                Color.fromARGB(255, 126, 52, 253), // Snackbar arka plan rengi
+            duration: Duration(seconds: 3), // Snackbar gösterim süresi
+            behavior: SnackBarBehavior.floating, // Snackbar davranışı
+            shape: RoundedRectangleBorder(
+              // Snackbar şekli
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 4, // Snackbar yükseltilmesi
+            margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
           ),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Ürünler yüklenirken hata oluştu: $e'),
-        ),
-      );
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (offerings == null || offerings.current == null) {
+        // offerings are empty, show a message to your user
+      } else {
+        // current offering is available, show paywall
+        await showModalBottomSheet(
+          useRootNavigator: true,
+          isDismissible: true,
+          isScrollControlled: true,
+          backgroundColor: Colors.amber,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+          ),
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setModalState) {
+              return Paywall(
+                offering: offerings!.current!,
+              );
+            });
+          },
+        );
+      }
     }
   }
 
@@ -353,8 +365,8 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             if (widget.userData!['userSubscription'] == "Admin") ...[
               ElevatedButton(
                 child: Text('Admin Features'),
-                onPressed: () {
-                  _showPurchaseDialog();
+                onPressed: () async {
+                  perfomMagic();
                   // showDialog(
                   //   context: context,
                   //   builder: (BuildContext context) {
