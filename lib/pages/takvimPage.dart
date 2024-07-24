@@ -830,6 +830,7 @@ class _CalendarState extends State<Calendar> {
         },
         label: Text(AppLocalizations.of(context)!.anasayfaAktiviteEkle),
         icon: Icon(Icons.add),
+        heroTag: null,
       ),
     );
   }

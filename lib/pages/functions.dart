@@ -60,6 +60,7 @@ class FunctionsWidget extends StatelessWidget {
     return Column(
       children: [
         FloatingActionButton(
+          heroTag: null,
           onPressed: onPressed,
           backgroundColor: Colors.transparent,
           elevation: 0, // Butonun normal gölgesini kaldır

@@ -160,6 +160,7 @@ class _NotlarPageState extends State<NotlarPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: Color.fromARGB(255, 92, 64, 219),
         foregroundColor: Colors.white,
         onPressed: () {

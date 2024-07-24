@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+</dict>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7873015234955456~5685587585</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -296,6 +301,7 @@
     <key>SKAdNetworkIdentifier</key>
     <string>3qcr597p9d.skadnetwork</string>
 </dict>
+
 </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

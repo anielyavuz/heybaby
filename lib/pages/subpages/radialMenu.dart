@@ -88,6 +88,7 @@ class RadialAnimation extends StatelessWidget {
           ..translate(
               (translation.value) * cos(rad), (translation.value) * sin(rad)),
         child: FloatingActionButton(
+            heroTag: null,
             child: Icon(icon),
             backgroundColor: color,
             onPressed: () {

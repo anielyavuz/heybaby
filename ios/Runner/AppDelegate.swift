@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import Firebase
+import Purchases
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -12,6 +13,9 @@ import Firebase
     
     // Firebase'i konfigüre et
     FirebaseApp.configure()
+    
+    // RevenueCat'i konfigüre et
+    Purchases.configure(withAPIKey: "appl_vFGFjyUkszfdkFPjiszIoVgsvVG")
     
     // Diğer uygulama başlatma işlemleri
     GeneratedPluginRegistrant.register(with: self)

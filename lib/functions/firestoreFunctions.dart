@@ -613,6 +613,60 @@ class FirestoreFunctions {
     return returnCode;
   }
 
+  static Future<Map> languageGuncelle(
+    String _language,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"language": _language}).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
+  static Future<Map> versionGuncelle(
+    String _version,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"appVersion": _version}).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
   static Future<Map> makaleGeriBildirimHaftalik(
       userName, durum, tarih, makaleBaslik) async {
     User? user = FirebaseAuth.instance.currentUser;

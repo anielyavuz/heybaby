@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:heybaby/functions/ad_helper.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:heybaby/pages/subpages/makaleDetay.dart';
 
 class StoryScreen extends StatefulWidget {
   final List storyies;
@@ -56,6 +59,35 @@ class _StoryScreenState extends State<StoryScreen>
     });
   }
 
+  InterstitialAd? _interstitialAd;
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+              ad.dispose();
+              _loadInterstitialAd(); // Yeni reklam yükleme
+            },
+            onAdFailedToShowFullScreenContent: (ad, err) {
+              ad.dispose();
+              print('Failed to show the ad: ${err.message}');
+            },
+          );
+          setState(() {
+            _interstitialAd = ad;
+          });
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+        },
+      ),
+    );
+  }
+
   @override
   void initState() {
     _getData();
@@ -90,6 +122,27 @@ class _StoryScreenState extends State<StoryScreen>
         // print(_animationController.value);
       }
     });
+
+    if (_interstitialAd == null) {
+      print(
+          "Storyimage page: Reklam değeri null, yeni reklam oluşabilir. yetkilerine bakılacak");
+
+      if (widget.userData!['userSubscription'] == 'Free') {
+        {
+          print("free user reklam oluşuruluyor");
+          _loadInterstitialAd();
+        }
+      }
+    }
+  }
+
+  reklamGoster() async {
+    if (_interstitialAd != null) {
+      _interstitialAd!.show();
+    } else {
+      print('Reklam yüklenmedi veya gösterilemedi.');
+      _loadInterstitialAd();
+    }
   }
 
   void _nextImage() {
@@ -193,10 +246,11 @@ class _StoryScreenState extends State<StoryScreen>
                       bottom:
                           25, // İstenilen boşluk miktarını ayarlayabilirsiniz
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           _timer?.cancel();
 
                           Navigator.pop(context);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -209,11 +263,83 @@ class _StoryScreenState extends State<StoryScreen>
                                           ['imageLink'],
                                       referansAktif: widget.referansAktif,
                                       referansList: widget.referansList,
-                                      userData: widget.userData,
+                                      isMakalePremium: widget.storyies[index]
+                                          ['premium'],
+                                      isUserPremium: widget.userData![
+                                                  'userSubscription'] ==
+                                              "Free"
+                                          ? false
+                                          : true,
                                     )),
                           ).then((value) {
                             // Timer'ı iptal et
                           });
+
+                          // if (!widget.storyies[index]['premium']) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => MakaleDetay(
+                          //               baslik: widget.storyies[index]
+                          //                   ['baslik'],
+                          //               icerik: widget.storyies[index]['icerik']
+                          //                   .toString()
+                          //                   .replaceAll('%', '\n'),
+                          //               resimURL: widget.storyies[index]
+                          //                   ['imageLink'],
+                          //               referansAktif: widget.referansAktif,
+                          //               referansList: widget.referansList,
+                          //               userData: widget.userData,
+                          //             )),
+                          //   ).then((value) {
+                          //     // Timer'ı iptal et
+                          //   });
+                          // } else {
+                          //   if (widget.userData!['userSubscription'] !=
+                          //       "Free") {
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => MakaleDetay(
+                          //                 baslik: widget.storyies[index]
+                          //                     ['baslik'],
+                          //                 icerik: widget.storyies[index]
+                          //                         ['icerik']
+                          //                     .toString()
+                          //                     .replaceAll('%', '\n'),
+                          //                 resimURL: widget.storyies[index]
+                          //                     ['imageLink'],
+                          //                 referansAktif: widget.referansAktif,
+                          //                 referansList: widget.referansList,
+                          //                 userData: widget.userData,
+                          //               )),
+                          //     ).then((value) {
+                          //       // Timer'ı iptal et
+                          //     });
+                          //   } else {
+                          //     await reklamGoster();
+
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => MakaleDetay(
+                          //                 baslik: widget.storyies[index]
+                          //                     ['baslik'],
+                          //                 icerik: widget.storyies[index]
+                          //                         ['icerik']
+                          //                     .toString()
+                          //                     .replaceAll('%', '\n'),
+                          //                 resimURL: widget.storyies[index]
+                          //                     ['imageLink'],
+                          //                 referansAktif: widget.referansAktif,
+                          //                 referansList: widget.referansList,
+                          //                 userData: widget.userData,
+                          //               )),
+                          //     ).then((value) {
+                          //       // Timer'ı iptal et
+                          //     });
+                          //   }
+                          // }
                         },
                         child: Container(
                           // alignment: Alignment.center,
@@ -228,25 +354,63 @@ class _StoryScreenState extends State<StoryScreen>
                             borderRadius: BorderRadius.circular(
                                 80), // Butonun kenar yuvarlaklığı
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                size: 35,
-                                Icons.link,
-                                color: Color.fromARGB(255, 167, 0, 244),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                AppLocalizations.of(context)!.storyDetayliBilgi,
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    color: Color.fromARGB(255, 54, 9, 75)),
-                              )
-                            ],
-                          ),
+                          child: !widget.storyies[index]['premium']
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      size: 35,
+                                      Icons.link,
+                                      color: Color.fromARGB(255, 167, 0, 244),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .storyDetayliBilgi,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color:
+                                              Color.fromARGB(255, 54, 9, 75)),
+                                    )
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      size: 35,
+                                      Icons.link,
+                                      color: Color.fromARGB(255, 255, 193,
+                                          7), // Daha sıcak sarı tonu
+                                    ),
+                                    SizedBox(
+                                      width: 9,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          AppLocalizations.of(context)!
+                                              .storyDetayliBilgi,
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: Color.fromARGB(
+                                                  255, 54, 9, 75)),
+                                        ),
+                                        Text(
+                                          "Premium💎",
+                                          style: TextStyle(
+                                              fontSize: 11,
+                                              color: Color.fromARGB(
+                                                  255, 168, 60, 187)),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                         ),
                       ),
                     ),

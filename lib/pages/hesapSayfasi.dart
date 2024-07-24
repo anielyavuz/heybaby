@@ -15,6 +15,7 @@ import 'package:heybaby/pages/subpages/ayarlar.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:purchases_flutter/purchases_flutter.dart'; // RevenueCat paketini ekleyin
 
 class HesapSayfasi extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -88,6 +89,69 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
     dogumOnceSonra = widget.userData?['dogumOnceSonra'];
     _initPackageInfo();
     _loadInterstitialAd();
+  }
+
+  void _showPurchaseDialog() async {
+    try {
+      Offerings offerings = await Purchases.getOfferings();
+      if (offerings.current != null &&
+          offerings.current!.availablePackages.isNotEmpty) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Satın Alma Ekranı'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: offerings.current!.availablePackages.map((package) {
+                  return ListTile(
+                    title: Text(package.storeProduct.title),
+                    subtitle: Text(package.storeProduct.description),
+                    trailing: Text(package.storeProduct.priceString),
+                    onTap: () async {
+                      try {
+                        CustomerInfo customerInfo =
+                            await Purchases.purchasePackage(package);
+                        if (customerInfo.entitlements.all['your_entitlement_id']
+                                ?.isActive ==
+                            true) {
+                          // Satın alma başarılı
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Satın alma başarılı!'),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        // Satın alma başarısız
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Satın alma başarısız: $e'),
+                          ),
+                        );
+                      }
+                    },
+                  );
+                }).toList(),
+              ),
+            );
+          },
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Satın alınabilir ürün bulunamadı.'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Ürünler yüklenirken hata oluştu: $e'),
+        ),
+      );
+    }
   }
 
   @override
@@ -290,43 +354,45 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
               ElevatedButton(
                 child: Text('Admin Features'),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Center(child: Text("Admin Features")),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) {
-                                  return StoryPaylasPage();
-                                }));
-                              },
-                              child: Text("Story Paylaş"),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                // if (_interstitialAd != null) {
-                                //   _interstitialAd!.show();
-                                // } else {
-                                //   print(
-                                //       'Reklam yüklenmedi veya gösterilemedi.');
-                                //   _loadInterstitialAd();
-                                // }
-                                boxPersons.put('currentToken',
-                                    Person(token: 40, subnName: 'myToken'));
-                              },
-                              child: Text("Test Button"),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                  _showPurchaseDialog();
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (BuildContext context) {
+                  //     return AlertDialog(
+                  //       title: Center(child: Text("Admin Features")),
+                  //       content: Column(
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: <Widget>[
+                  //           ElevatedButton(
+                  //             onPressed: () {
+                  //               Navigator.pop(context);
+                  //               Navigator.push(context,
+                  //                   MaterialPageRoute(builder: (_) {
+                  //                 return StoryPaylasPage();
+                  //               }));
+                  //             },
+                  //             child: Text("Story Paylaş"),
+                  //           ),
+                  //           ElevatedButton(
+                  //             onPressed: () {
+                  //               _showPurchaseDialog();
+                  //               // if (_interstitialAd != null) {
+                  //               //   _interstitialAd!.show();
+                  //               // } else {
+                  //               //   print(
+                  //               //       'Reklam yüklenmedi veya gösterilemedi.');
+                  //               //   _loadInterstitialAd();
+                  //               // }
+                  //               boxPersons.put('currentToken',
+                  //                   Person(token: 40, subnName: 'myToken'));
+                  //             },
+                  //             child: Text("Test Button"),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  // );
                 },
               ),
               SizedBox(height: 14),

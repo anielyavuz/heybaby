@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
+import 'package:heybaby/pages/subpages/makaleDetay.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -87,7 +88,14 @@ class _KesfetMakaleHaftalikWidgetState
                                             .toString()
                                             .replaceAll('%', '\n'),
                                         resimURL: story['imageLink'],
-                                        userData: widget.userData,
+                                        referansAktif: false,
+                                        referansList: [],
+                                        isUserPremium: widget.userData![
+                                                    'userSubscription'] ==
+                                                'Free'
+                                            ? false
+                                            : true,
+                                        isMakalePremium: story['premium'],
                                       ),
                                     ),
                                   );
@@ -159,178 +167,178 @@ class _KesfetMakaleHaftalikWidgetState
   }
 }
 
-class MakaleDetay extends StatelessWidget {
-  final String baslik;
-  final String icerik;
-  final String resimURL; // Burada parametrenin adı düzeltildi
-  Map<String, dynamic>? userData;
-  MakaleDetay(
-      {required this.baslik,
-      required this.icerik,
-      required this.resimURL,
-      required this.userData});
+// class MakaleDetay extends StatelessWidget {
+//   final String baslik;
+//   final String icerik;
+//   final String resimURL; // Burada parametrenin adı düzeltildi
+//   Map<String, dynamic>? userData;
+//   MakaleDetay(
+//       {required this.baslik,
+//       required this.icerik,
+//       required this.resimURL,
+//       required this.userData});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              resimURL.startsWith("https")
-                  ? Container(
-                      height: 250,
-                      decoration: new BoxDecoration(
-                          image: new DecorationImage(
-                        fit: BoxFit.fitWidth,
-                        alignment: FractionalOffset.center,
-                        image: new NetworkImage(resimURL),
-                      )),
-                    )
-                  : Image.asset(
-                      resimURL, // Burada widget.resimUrl yerine parametre olan resimURL kullanılıyor
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-              Text(
-                baslik,
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                icerik,
-                style: TextStyle(fontSize: 18.0),
-              ),
-              SizedBox(height: 25.0),
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.makaleBegendinizmi,
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.thumb_up),
-                          onPressed: () async {
-                            var _sonuc =
-                                await FirestoreFunctions.makaleGeriBildirim(
-                                        userData,
-                                        "Beğendi",
-                                        DateFormat('hh:mm - dd-MM-yyyy')
-                                            .format(DateTime.now()),
-                                        baslik)
-                                    .whenComplete(() {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    AppLocalizations.of(context)!
-                                        .hesapGeriBildirimBasarili,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: Color.fromARGB(255, 126, 52,
-                                      253), // Snackbar arka plan rengi
-                                  duration: Duration(
-                                      seconds: 3), // Snackbar gösterim süresi
-                                  behavior: SnackBarBehavior
-                                      .floating, // Snackbar davranışı
-                                  shape: RoundedRectangleBorder(
-                                    // Snackbar şekli
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  elevation: 4, // Snackbar yükseltilmesi
-                                  margin: EdgeInsets.all(
-                                      10), // Snackbar kenar boşlukları
-                                ),
-                              );
-                            });
-                            print("Beğendi");
-                          },
-                        ),
-                        SizedBox(width: 20.0),
-                        IconButton(
-                          icon: Icon(Icons.thumb_down),
-                          onPressed: () async {
-                            var _sonuc =
-                                await FirestoreFunctions.makaleGeriBildirim(
-                                        userData,
-                                        "Beğenmedi",
-                                        DateFormat('hh:mm - dd-MM-yyyy')
-                                            .format(DateTime.now()),
-                                        baslik)
-                                    .whenComplete(() {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    AppLocalizations.of(context)!
-                                        .hesapGeriBildirimBasarili,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  backgroundColor: Color.fromARGB(255, 126, 52,
-                                      253), // Snackbar arka plan rengi
-                                  duration: Duration(
-                                      seconds: 3), // Snackbar gösterim süresi
-                                  behavior: SnackBarBehavior
-                                      .floating, // Snackbar davranışı
-                                  shape: RoundedRectangleBorder(
-                                    // Snackbar şekli
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  elevation: 4, // Snackbar yükseltilmesi
-                                  margin: EdgeInsets.all(
-                                      10), // Snackbar kenar boşlukları
-                                ),
-                              );
-                            });
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(),
+//       body: Padding(
+//         padding: const EdgeInsets.all(10),
+//         child: SingleChildScrollView(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               resimURL.startsWith("https")
+//                   ? Container(
+//                       height: 250,
+//                       decoration: new BoxDecoration(
+//                           image: new DecorationImage(
+//                         fit: BoxFit.fitWidth,
+//                         alignment: FractionalOffset.center,
+//                         image: new NetworkImage(resimURL),
+//                       )),
+//                     )
+//                   : Image.asset(
+//                       resimURL, // Burada widget.resimUrl yerine parametre olan resimURL kullanılıyor
+//                       width: MediaQuery.of(context).size.width,
+//                       height: 200,
+//                       fit: BoxFit.cover,
+//                     ),
+//               Text(
+//                 baslik,
+//                 style: TextStyle(
+//                   fontSize: 24.0,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//               SizedBox(height: 16.0),
+//               Text(
+//                 icerik,
+//                 style: TextStyle(fontSize: 18.0),
+//               ),
+//               SizedBox(height: 25.0),
+//               Center(
+//                 child: Column(
+//                   children: [
+//                     Text(
+//                       AppLocalizations.of(context)!.makaleBegendinizmi,
+//                       style: TextStyle(
+//                           fontSize: 20.0, fontWeight: FontWeight.bold),
+//                     ),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                       children: [
+//                         IconButton(
+//                           icon: Icon(Icons.thumb_up),
+//                           onPressed: () async {
+//                             var _sonuc =
+//                                 await FirestoreFunctions.makaleGeriBildirim(
+//                                         userData,
+//                                         "Beğendi",
+//                                         DateFormat('hh:mm - dd-MM-yyyy')
+//                                             .format(DateTime.now()),
+//                                         baslik)
+//                                     .whenComplete(() {
+//                               ScaffoldMessenger.of(context).showSnackBar(
+//                                 SnackBar(
+//                                   content: Text(
+//                                     AppLocalizations.of(context)!
+//                                         .hesapGeriBildirimBasarili,
+//                                     style: TextStyle(
+//                                       fontWeight: FontWeight.bold,
+//                                       fontSize: 16,
+//                                       color: Colors.white,
+//                                     ),
+//                                   ),
+//                                   backgroundColor: Color.fromARGB(255, 126, 52,
+//                                       253), // Snackbar arka plan rengi
+//                                   duration: Duration(
+//                                       seconds: 3), // Snackbar gösterim süresi
+//                                   behavior: SnackBarBehavior
+//                                       .floating, // Snackbar davranışı
+//                                   shape: RoundedRectangleBorder(
+//                                     // Snackbar şekli
+//                                     borderRadius: BorderRadius.circular(10),
+//                                   ),
+//                                   elevation: 4, // Snackbar yükseltilmesi
+//                                   margin: EdgeInsets.all(
+//                                       10), // Snackbar kenar boşlukları
+//                                 ),
+//                               );
+//                             });
+//                             print("Beğendi");
+//                           },
+//                         ),
+//                         SizedBox(width: 20.0),
+//                         IconButton(
+//                           icon: Icon(Icons.thumb_down),
+//                           onPressed: () async {
+//                             var _sonuc =
+//                                 await FirestoreFunctions.makaleGeriBildirim(
+//                                         userData,
+//                                         "Beğenmedi",
+//                                         DateFormat('hh:mm - dd-MM-yyyy')
+//                                             .format(DateTime.now()),
+//                                         baslik)
+//                                     .whenComplete(() {
+//                               ScaffoldMessenger.of(context).showSnackBar(
+//                                 SnackBar(
+//                                   content: Text(
+//                                     AppLocalizations.of(context)!
+//                                         .hesapGeriBildirimBasarili,
+//                                     style: TextStyle(
+//                                       fontWeight: FontWeight.bold,
+//                                       fontSize: 16,
+//                                       color: Colors.white,
+//                                     ),
+//                                   ),
+//                                   backgroundColor: Color.fromARGB(255, 126, 52,
+//                                       253), // Snackbar arka plan rengi
+//                                   duration: Duration(
+//                                       seconds: 3), // Snackbar gösterim süresi
+//                                   behavior: SnackBarBehavior
+//                                       .floating, // Snackbar davranışı
+//                                   shape: RoundedRectangleBorder(
+//                                     // Snackbar şekli
+//                                     borderRadius: BorderRadius.circular(10),
+//                                   ),
+//                                   elevation: 4, // Snackbar yükseltilmesi
+//                                   margin: EdgeInsets.all(
+//                                       10), // Snackbar kenar boşlukları
+//                                 ),
+//                               );
+//                             });
 
-                            print("Beğenmedi");
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 15.0),
-              Container(
-                color: Colors.grey[200],
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.makaleSorumlulukReddi,
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.makaleSorumlulukMetin,
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+//                             print("Beğenmedi");
+//                           },
+//                         ),
+//                       ],
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               SizedBox(height: 15.0),
+//               Container(
+//                 color: Colors.grey[200],
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(
+//                       AppLocalizations.of(context)!.makaleSorumlulukReddi,
+//                       style: TextStyle(
+//                           fontSize: 18.0, fontWeight: FontWeight.bold),
+//                     ),
+//                     Text(
+//                       AppLocalizations.of(context)!.makaleSorumlulukMetin,
+//                       style: TextStyle(fontSize: 14),
+//                     ),
+//                   ],
+//                 ),
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -268,6 +268,7 @@ class _IlacTakipState extends State<IlacTakip> {
         },
         tooltip: AppLocalizations.of(context)!.ilactakipIlactekle,
         child: Icon(Icons.add),
+        heroTag: null,
       ),
     );
   }

@@ -20,6 +20,7 @@ import 'package:heybaby/pages/subpages/haftalikGuncelleme.dart';
 import 'package:heybaby/pages/subpages/ilacTakip.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
+import 'package:heybaby/pages/subpages/makaleDetay.dart';
 import 'package:heybaby/pages/subpages/radialMenu.dart';
 import 'package:heybaby/pages/subpages/suTakip.dart';
 import 'package:heybaby/pages/subpages/yapilacaklarPage.dart';
@@ -1265,6 +1266,19 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                         child: Row(
                                           children: [
                                             Text(
+                                              "Free",
+                                              style: TextStyle(
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.w500,
+                                                color: Color.fromARGB(
+                                                    255,
+                                                    119,
+                                                    46,
+                                                    141), // Mat altın sarısı
+                                              ),
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
                                               _token.token.toString(),
                                               style: TextStyle(
                                                 fontSize: 17.0,
@@ -1273,7 +1287,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                             ),
                                             SizedBox(
                                                 width:
-                                                    4), // Icon ile token sayısı arasında boşluk
+                                                    2), // Icon ile token sayısı arasında boşluk
 
                                             InkWell(
                                               onTap: () {
@@ -1320,11 +1334,63 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                 color: Color.fromARGB(
                                                     255, 119, 46, 141),
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       )
-                                    : SizedBox()
+                                    : Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 18, 5),
+                                        child: InkWell(
+                                          onTap: () {
+                                            final RenderBox button =
+                                                context.findRenderObject()
+                                                    as RenderBox;
+                                            final RenderBox overlay =
+                                                Overlay.of(context)
+                                                        .context
+                                                        .findRenderObject()
+                                                    as RenderBox;
+                                            final RelativeRect position =
+                                                RelativeRect.fromRect(
+                                              Rect.fromPoints(
+                                                button.localToGlobal(
+                                                    Offset.zero,
+                                                    ancestor: overlay),
+                                                button.localToGlobal(
+                                                    button.size.bottomRight(
+                                                        Offset.zero),
+                                                    ancestor: overlay),
+                                              ),
+                                              Offset.zero & overlay.size,
+                                            );
+
+                                            showMenu(
+                                              context: context,
+                                              position: position.shift(Offset(
+                                                  button.size.width,
+                                                  0)), // Sağ üst köşeye pozisyonu ayarla
+                                              items: [
+                                                PopupMenuItem<String>(
+                                                  child: Text(
+                                                      AppLocalizations.of(
+                                                              context)!
+                                                          .anasayfaToken),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                          child: Text(
+                                            "Premium",
+                                            style: TextStyle(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color.fromARGB(255, 185,
+                                                  140, 26), // Mat altın sarısı
+                                            ),
+                                          ),
+                                        ),
+                                      )
                               ],
                             ),
                             Padding(
@@ -1338,7 +1404,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                   itemCount: widget.newstoryImages.length,
                                   itemBuilder: (context, index) {
                                     return InkWell(
-                                      onTap: () {
+                                      onTap: () async {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -1362,24 +1428,56 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                             Container(
                                               width: 65.0,
                                               height: 65.0,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                  colors: [
-                                                    Color.fromARGB(
-                                                        255, 55, 105, 245),
-                                                    // Color.fromARGB(255, 50, 200, 255),
-                                                    Color.fromARGB(
-                                                        255, 168, 60, 187),
-                                                  ],
-                                                ),
-                                                border: Border.all(
-                                                  color: Colors.transparent,
-                                                  width: 3.0,
-                                                ), // Halkanın rengi ve genişliği
-                                              ),
+                                              decoration: !widget
+                                                          .newstoryImages[index]
+                                                      ['premium']
+                                                  ? BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      gradient: LinearGradient(
+                                                        begin:
+                                                            Alignment.topLeft,
+                                                        end: Alignment
+                                                            .bottomRight,
+                                                        colors: [
+                                                          Color.fromARGB(255,
+                                                              55, 105, 245),
+                                                          // Color.fromARGB(255, 50, 200, 255),
+                                                          Color.fromARGB(255,
+                                                              168, 60, 187),
+                                                        ],
+                                                      ),
+                                                      border: Border.all(
+                                                        color:
+                                                            Colors.transparent,
+                                                        width: 3.0,
+                                                      ), // Halkanın rengi ve genişliği
+                                                    )
+                                                  : BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      gradient: LinearGradient(
+                                                        begin:
+                                                            Alignment.topLeft,
+                                                        end: Alignment
+                                                            .bottomRight,
+                                                        colors: [
+                                                          Color.fromARGB(
+                                                              255,
+                                                              255,
+                                                              223,
+                                                              0), // Altın sarısı tonu
+                                                          Color.fromARGB(
+                                                              255,
+                                                              255,
+                                                              193,
+                                                              7), // Daha sıcak sarı tonu
+                                                        ],
+                                                      ),
+                                                      border: Border.all(
+                                                        color:
+                                                            Colors.transparent,
+                                                        width: 3.0,
+                                                      ), // Halkanın rengi ve genişliği
+                                                    ),
                                               child: CircleAvatar(
                                                 radius: 30.0,
                                                 backgroundImage: NetworkImage(
@@ -1389,19 +1487,43 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                             ),
                                             Container(
                                               width:
-                                                  75, // Genişliği 40 piksel ile sınırla
-                                              child: Text(
-                                                widget.newstoryImages[index]
-                                                        ['header']
-                                                    .toString(),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 11.0,
-                                                ),
-                                                softWrap:
-                                                    true, // Metni yumuşak bir şekilde sar
-                                                overflow: TextOverflow
-                                                    .visible, // Taşan metni görünür yap
+                                                  80, // Genişliği 75 piksel ile sınırla
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    widget.newstoryImages[index]
+                                                            ['header']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 11.0,
+                                                    ),
+                                                    maxLines:
+                                                        1, // Metni tek satırda tut
+                                                    overflow: TextOverflow
+                                                        .ellipsis, // Sığmayan metni üç nokta ile kısalt
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  if (widget
+                                                          .newstoryImages[index]
+                                                      ['premium'])
+                                                    Text(
+                                                      "Premium💎",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 11.0,
+                                                        color: Color.fromARGB(
+                                                            255,
+                                                            168,
+                                                            60,
+                                                            187), // Mor renk
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                ],
                                               ),
                                             )
                                           ],
@@ -1687,12 +1809,20 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                       widget.referansAktif,
                                                   referansList:
                                                       widget.referansList,
-                                                  userData: widget.userData,
+                                                  isUserPremium: widget
+                                                                  .userData![
+                                                              'userSubscription'] ==
+                                                          "Free"
+                                                      ? false
+                                                      : true,
+                                                  isMakalePremium: widget
+                                                          .storyImages[
+                                                      reverseIndex]['premium'],
                                                 ),
                                               ),
                                             );
                                           } else {
-                                            await reklamGoster();
+                                            // await reklamGoster();
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -1712,7 +1842,15 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                       widget.referansAktif,
                                                   referansList:
                                                       widget.referansList,
-                                                  userData: widget.userData,
+                                                  isMakalePremium: widget
+                                                          .storyImages[
+                                                      reverseIndex]['premium'],
+                                                  isUserPremium: widget
+                                                                  .userData![
+                                                              'userSubscription'] ==
+                                                          "Free"
+                                                      ? false
+                                                      : true,
                                                 ),
                                               ),
                                             );
@@ -1721,7 +1859,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                         child: Text(
                                           AppLocalizations.of(context)!
                                                   .devamEt +
-                                              " to Premium Content💎",
+                                              " - Premium💎",
                                           style: TextStyle(
                                             fontSize: 13,
                                             color: Colors.purple,
@@ -1768,7 +1906,16 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                           widget.referansAktif,
                                                       referansList:
                                                           widget.referansList,
-                                                      userData: widget.userData,
+                                                      isMakalePremium:
+                                                          widget.storyImages[
+                                                                  reverseIndex]
+                                                              ['premium'],
+                                                      isUserPremium: widget
+                                                                      .userData![
+                                                                  'userSubscription'] ==
+                                                              "Free"
+                                                          ? false
+                                                          : true,
                                                     )),
                                           );
                                         },

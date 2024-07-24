@@ -28,6 +28,7 @@ import 'package:heybaby/pages/notlarPage.dart';
 import 'package:heybaby/pages/takvimPage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -273,6 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: 70,
                         height: 70,
                         child: FloatingActionButton(
+                          heroTag: null,
                           onPressed: () {
                             // _aiQuestion("Hava nasıl?");
                             _showChatModalBottomSheet(context);
@@ -476,11 +478,47 @@ class _MyHomePageState extends State<MyHomePage> {
         print("FCM Token Cloud'da yok ekleniyorr....");
         tokenGuncelle(token!);
       }
+
+      if (userData!.containsKey('language')) {
+        if (userData?['language'] != AppLocalizations.of(context)!.language) {
+          print("language Cloud'da güncel değil....");
+
+          languageGuncelle(AppLocalizations.of(context)!.language);
+        } else {
+          print("language Cloud'da güncel.");
+        }
+      } else {
+        print("language Cloud'da yok ekleniyorr....");
+        languageGuncelle(AppLocalizations.of(context)!.language);
+      }
+
+      final info = await PackageInfo.fromPlatform();
+      String _version = '${info.version}+${info.buildNumber}';
+      if (userData!.containsKey('appVersion')) {
+        if (userData?['appVersion'] != _version) {
+          print("_version Cloud'da güncel değil....");
+
+          versionGuncelle(_version);
+        } else {
+          print("_version Cloud'da güncel.");
+        }
+      } else {
+        print("_version Cloud'da yok ekleniyorr....");
+        versionGuncelle(_version);
+      }
     }
   }
 
   tokenGuncelle(String token) async {
     var _result = await FirestoreFunctions.fcmTokenGuncelle(token);
+  }
+
+  languageGuncelle(String _language) async {
+    var _result = await FirestoreFunctions.languageGuncelle(_language);
+  }
+
+  versionGuncelle(String _version) async {
+    var _result = await FirestoreFunctions.versionGuncelle(_version);
   }
 
   Future<void> _systemData() async {
