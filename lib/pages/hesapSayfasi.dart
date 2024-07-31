@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,10 +17,13 @@ import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/subpages/ayarlar.dart';
 import 'package:heybaby/revenuecat/constant.dart';
 import 'package:heybaby/revenuecat/paywall.dart';
+import 'package:heybaby/revenuecat/purchaseApi.dart';
+import 'package:heybaby/revenuecat/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:purchases_flutter/purchases_flutter.dart'; // RevenueCat paketini ekleyin
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart'; // RevenueCat paketini ekleyin
 
 class HesapSayfasi extends StatefulWidget {
   final Map<String, dynamic>? userData;
@@ -94,6 +99,176 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
     _loadInterstitialAd();
   }
 
+  Future<void> _configureSDK() async {
+    await Purchases.setLogLevel(LogLevel.debug);
+    print("Purchases log level set to debug.");
+
+    PurchasesConfiguration? configuration;
+
+    if (Platform.isAndroid) {
+      print("Platform is Android.");
+      // configure for Google play store
+    } else if (Platform.isIOS) {
+      print("Platform is iOS.");
+      configuration =
+          PurchasesConfiguration("appl_vFGFjyUkszfdkFPjiszIoVgsvVG");
+      print("PurchasesConfiguration created for iOS.");
+    }
+
+    if (configuration != null) {
+      try {
+        print("Configuring Purchases...");
+        await Purchases.configure(configuration);
+        print("Purchases configured successfully.");
+        await _paymentUI();
+      } catch (e) {
+        print("Error during Purchases configuration: $e");
+      }
+    } else {
+      print("Ödeme configuration null");
+    }
+  }
+
+  Future<void> _paymentUI() async {
+    try {
+      final paywallResult =
+          await RevenueCatUI.presentPaywallIfNeeded("premium");
+      print('Paywall result: $paywallResult');
+    } catch (e) {
+      print("Error during presenting paywall: $e");
+    }
+  }
+
+  Future fetchOffers() async {
+    final offerings = await PurchaseApi.fetchOffers();
+    print('oferlist: $offerings');
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "No plans found",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor:
+              Color.fromARGB(255, 126, 52, 253), // Snackbar arka plan rengi
+          duration: Duration(seconds: 3), // Snackbar gösterim süresi
+          behavior: SnackBarBehavior.floating, // Snackbar davranışı
+          shape: RoundedRectangleBorder(
+            // Snackbar şekli
+            borderRadius: BorderRadius.circular(10),
+          ),
+          elevation: 4, // Snackbar yükseltilmesi
+          margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+        ),
+      );
+    } else {
+      final packages = offerings
+          .map((offer) => offer.availablePackages)
+          .expand((pair) => pair)
+          .toList();
+
+      Utils.showSheet(
+        context,
+        (context) => PaywallWidget(
+          packages: packages,
+          title: '⭐ Upgrade Your Plan',
+          description: 'Upgrade to a new plan to enjoy more benefits',
+          onClickedPackage: (package) async {
+            // Package selection handling code here
+          },
+        ),
+      );
+    }
+  }
+
+  void performMagic(BuildContext context) {
+    print("asdasd");
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.black,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '✨ HeyBaby Premium',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16),
+                _buildSubscriptionOption(
+                  title: 'Premium Month',
+                  price: '\$9.99',
+                  description: 'Unlimited access for one month',
+                ),
+                SizedBox(height: 16),
+                _buildSubscriptionOption(
+                  title: 'Premium Year',
+                  price: '\$99.99',
+                  description: 'Unlimited access for one year',
+                ),
+                SizedBox(height: 24),
+                Text(
+                  'A purchase will be applied to your account upon confirmation of the amount selected. Subscriptions will automatically renew unless canceled within 24 hours of the end of the current period. You can cancel any time using your account settings.',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSubscriptionOption(
+      {required String title,
+      required String price,
+      required String description}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[800],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  description,
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+              ],
+            ),
+            Text(
+              price,
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void perfomMagic() async {
     setState(() {
       _isLoading = true;
@@ -108,6 +283,7 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
       });
     } else {
       Offerings? offerings;
+
       try {
         offerings = await Purchases.getOfferings();
       } on PlatformException catch (e) {
@@ -364,9 +540,12 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             SizedBox(height: 66),
             if (widget.userData!['userSubscription'] == "Admin") ...[
               ElevatedButton(
-                child: Text('Admin Features'),
+                child: Text('Try Payment'),
                 onPressed: () async {
-                  perfomMagic();
+                  _configureSDK();
+                  // perfomMagic();
+                  // performMagic(context);
+
                   // showDialog(
                   //   context: context,
                   //   builder: (BuildContext context) {

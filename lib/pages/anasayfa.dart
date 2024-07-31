@@ -5,6 +5,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:heybaby/functions/ad_helper.dart';
@@ -14,6 +15,7 @@ import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/functions/jsonFiles.dart';
 import 'package:heybaby/functions/person.dart';
 import 'package:heybaby/pages/functions.dart';
+import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/storyImages.dart';
 import 'package:heybaby/pages/subpages/anaSayfaFoto.dart';
 import 'package:heybaby/pages/subpages/haftalikGuncelleme.dart';
@@ -25,8 +27,12 @@ import 'package:heybaby/pages/subpages/radialMenu.dart';
 import 'package:heybaby/pages/subpages/suTakip.dart';
 import 'package:heybaby/pages/subpages/yapilacaklarPage.dart';
 import 'package:heybaby/pages/takvimPage.dart';
+import 'package:heybaby/revenuecat/constant.dart';
+import 'package:heybaby/revenuecat/paywall.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:purchases_flutter/models/customer_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 class AnaSayfa extends StatefulWidget {
   final List storyImages;
@@ -34,7 +40,9 @@ class AnaSayfa extends StatefulWidget {
   Map<String, dynamic>? userData;
   final bool referansAktif;
   final bool yaklasanAktiviteHome;
+  final bool premiumMode;
   final List referansList;
+  final int selectedWeek;
 
   AnaSayfa(
       {Key? key,
@@ -43,7 +51,9 @@ class AnaSayfa extends StatefulWidget {
       required this.storyImages,
       required this.referansAktif,
       required this.yaklasanAktiviteHome,
-      required this.referansList})
+      required this.premiumMode,
+      required this.referansList,
+      required this.selectedWeek})
       : super(key: key);
 
   @override
@@ -60,12 +70,13 @@ class _AnaSayfaState extends State<AnaSayfa> {
   DateTime bugun = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
   Map<String, String> activities = {};
-  int selectedWeek = 4;
+  // int selectedWeek = 4;
   int yeniHafte = 5;
   int kacGunSonraYeniHafta = 0;
   bool _aktivitelerAcik = false;
   final GlobalKey expansionTileKey = GlobalKey();
   bool _isVisibleYaklasanAktiviteler = true;
+  bool _isLoading = false;
   Map<int, List<String>> hamilelikYapilacaklar = {
     1: [
       "Doktor randevusuna git ve ultrason yaptır",
@@ -544,6 +555,162 @@ class _AnaSayfaState extends State<AnaSayfa> {
     ]
   };
 
+  void performMagic(BuildContext context) {
+    print("asdasd");
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.black,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '✨ HeyBaby Premium',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 16),
+                _buildSubscriptionOption(
+                  title: 'Premium Month',
+                  price: '\$9.99',
+                  description: 'Unlimited access for one month',
+                ),
+                SizedBox(height: 16),
+                _buildSubscriptionOption(
+                  title: 'Premium Year',
+                  price: '\$99.99',
+                  description: 'Unlimited access for one year',
+                ),
+                SizedBox(height: 24),
+                Text(
+                  'A purchase will be applied to your account upon confirmation of the amount selected. Subscriptions will automatically renew unless canceled within 24 hours of the end of the current period. You can cancel any time using your account settings.',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSubscriptionOption(
+      {required String title,
+      required String price,
+      required String description}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[800],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  description,
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+              ],
+            ),
+            Text(
+              price,
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void perfomMagic() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+
+    if (customerInfo.entitlements.all[entitlementID] != null &&
+        customerInfo.entitlements.all[entitlementID]?.isActive == true) {
+      setState(() {
+        _isLoading = false;
+      });
+    } else {
+      Offerings? offerings;
+      try {
+        offerings = await Purchases.getOfferings();
+      } on PlatformException catch (e) {
+        print("Errorrrrr     $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor:
+                Color.fromARGB(255, 126, 52, 253), // Snackbar arka plan rengi
+            duration: Duration(seconds: 3), // Snackbar gösterim süresi
+            behavior: SnackBarBehavior.floating, // Snackbar davranışı
+            shape: RoundedRectangleBorder(
+              // Snackbar şekli
+              borderRadius: BorderRadius.circular(10),
+            ),
+            elevation: 4, // Snackbar yükseltilmesi
+            margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
+          ),
+        );
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (offerings == null || offerings.current == null) {
+        // offerings are empty, show a message to your user
+      } else {
+        // current offering is available, show paywall
+        await showModalBottomSheet(
+          useRootNavigator: true,
+          isDismissible: true,
+          isScrollControlled: true,
+          backgroundColor: Colors.amber,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+          ),
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+                builder: (BuildContext context, StateSetter setModalState) {
+              return Paywall(
+                offering: offerings!.current!,
+              );
+            });
+          },
+        );
+      }
+    }
+  }
+
   orderSoonEvents(calendarListEventsSoon) {
     String _tempKey = "";
     String _tempValue = "";
@@ -731,11 +898,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
     if (data != null) {
       setState(() {
         widget.userData = data;
-        selectedWeek =
-            (((DateTime.now().difference(DateTime.parse(data['sonAdetTarihi'])))
-                    .inDays) ~/
-                7);
-        yeniHafte = selectedWeek + 1;
+
+        yeniHafte = widget.selectedWeek + 1;
         kacGunSonraYeniHafta = 7 -
             (((DateTime.now().difference(DateTime.parse(data['sonAdetTarihi'])))
                     .inDays) %
@@ -1173,7 +1337,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
 
   @override
   void initState() {
-    print("newstoryImages değeri ${widget.newstoryImages.length}");
+    print("selectedWeek değeri ${widget.selectedWeek}");
     Future.delayed(const Duration(milliseconds: 50), () {
       imageandInfoJsonFileLoad();
     });
@@ -1198,6 +1362,43 @@ class _AnaSayfaState extends State<AnaSayfa> {
     // });
 
     _fetchUserData();
+  }
+
+  void _showGuestDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Hesap Oluşturalım"),
+          content: Text("Abone olmak için hesap oluşturmalısınız."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Hesap Oluştur"),
+              onPressed: () {
+                // Hesap oluşturma işlemleri buraya
+                Navigator.of(context).pop();
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RegisterScreen(
+                            userData: widget.userData,
+                            lastPeriodDate: widget.userData?['sonAdetTarihi'],
+                            dogumOnceSonra: widget.userData?['dogumOnceSonra'],
+                          )),
+                );
+              },
+            ),
+            TextButton(
+              child: Text("Geri"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   bool _visibleControlTemp = true;
@@ -1249,7 +1450,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                   padding:
                                       const EdgeInsets.fromLTRB(18, 0, 0, 5),
                                   child: Text(
-                                    "$selectedWeek. " +
+                                    "${widget.selectedWeek}. " +
                                         AppLocalizations.of(context)!
                                             .anasayfaIpucu,
                                     // "$selectedWeek. Haftanıza Özel İpuçlarınız",
@@ -1320,10 +1521,60 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                       0)), // Sağ üst köşeye pozisyonu ayarla
                                                   items: [
                                                     PopupMenuItem<String>(
-                                                      child: Text(
-                                                          AppLocalizations.of(
-                                                                  context)!
-                                                              .anasayfaToken),
+                                                      child: Container(
+                                                        width: 600,
+                                                        child: Column(
+                                                          children: [
+                                                            Text(AppLocalizations
+                                                                    .of(context)!
+                                                                .anasayfaToken),
+                                                            Divider(),
+                                                            widget.premiumMode
+                                                                ? GestureDetector(
+                                                                    onTap: () {
+                                                                      print(widget
+                                                                              .userData![
+                                                                          'userName']);
+                                                                      if (widget
+                                                                              .userData!['userName'] ==
+                                                                          "Guest") {
+                                                                        _showGuestDialog(
+                                                                            context);
+                                                                      } else {
+                                                                        perfomMagic();
+                                                                      }
+                                                                    },
+                                                                    child:
+                                                                        RichText(
+                                                                      text:
+                                                                          TextSpan(
+                                                                        children: [
+                                                                          TextSpan(
+                                                                            text:
+                                                                                AppLocalizations.of(context)!.homeToken1,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 14.0,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          ),
+                                                                          TextSpan(
+                                                                            text:
+                                                                                AppLocalizations.of(context)!.homeToken2,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 14.0,
+                                                                              color: Color(0xFFCCAC00), // Mat sarı renk
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : SizedBox()
+                                                          ],
+                                                        ),
+                                                      ),
                                                     ),
                                                   ],
                                                 );
@@ -1342,44 +1593,44 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                         padding: const EdgeInsets.fromLTRB(
                                             0, 0, 18, 5),
                                         child: InkWell(
-                                          onTap: () {
-                                            final RenderBox button =
-                                                context.findRenderObject()
-                                                    as RenderBox;
-                                            final RenderBox overlay =
-                                                Overlay.of(context)
-                                                        .context
-                                                        .findRenderObject()
-                                                    as RenderBox;
-                                            final RelativeRect position =
-                                                RelativeRect.fromRect(
-                                              Rect.fromPoints(
-                                                button.localToGlobal(
-                                                    Offset.zero,
-                                                    ancestor: overlay),
-                                                button.localToGlobal(
-                                                    button.size.bottomRight(
-                                                        Offset.zero),
-                                                    ancestor: overlay),
-                                              ),
-                                              Offset.zero & overlay.size,
-                                            );
+                                          // onTap: () {
+                                          //   final RenderBox button =
+                                          //       context.findRenderObject()
+                                          //           as RenderBox;
+                                          //   final RenderBox overlay =
+                                          //       Overlay.of(context)
+                                          //               .context
+                                          //               .findRenderObject()
+                                          //           as RenderBox;
+                                          //   final RelativeRect position =
+                                          //       RelativeRect.fromRect(
+                                          //     Rect.fromPoints(
+                                          //       button.localToGlobal(
+                                          //           Offset.zero,
+                                          //           ancestor: overlay),
+                                          //       button.localToGlobal(
+                                          //           button.size.bottomRight(
+                                          //               Offset.zero),
+                                          //           ancestor: overlay),
+                                          //     ),
+                                          //     Offset.zero & overlay.size,
+                                          //   );
 
-                                            showMenu(
-                                              context: context,
-                                              position: position.shift(Offset(
-                                                  button.size.width,
-                                                  0)), // Sağ üst köşeye pozisyonu ayarla
-                                              items: [
-                                                PopupMenuItem<String>(
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .anasayfaToken),
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                          //   showMenu(
+                                          //     context: context,
+                                          //     position: position.shift(Offset(
+                                          //         button.size.width,
+                                          //         0)), // Sağ üst köşeye pozisyonu ayarla
+                                          //     items: [
+                                          //       PopupMenuItem<String>(
+                                          //         child: Text(
+                                          //             AppLocalizations.of(
+                                          //                     context)!
+                                          //                 .anasayfaToken),
+                                          //       ),
+                                          //     ],
+                                          //   );
+                                          // },
                                           child: Text(
                                             "Premium",
                                             style: TextStyle(
@@ -1704,7 +1955,7 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               child: Text(
-                                '$selectedWeek. ${AppLocalizations.of(context)!.anasayfaSizeOzel}',
+                                '${widget.selectedWeek}. ${AppLocalizations.of(context)!.anasayfaSizeOzel}',
                                 // '$selectedWeek. Hafta için\nSize Özel Bilgilere Bakın😇',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -2114,13 +2365,16 @@ void main() {
   runZonedGuarded(() {
     runApp(MaterialApp(
       home: AnaSayfa(
-          storyImages: [
-            // Story Images'larınızı ekleyin
-          ],
-          newstoryImages: [],
-          referansAktif: true,
-          referansList: [],
-          yaklasanAktiviteHome: true),
+        storyImages: [
+          // Story Images'larınızı ekleyin
+        ],
+        newstoryImages: [],
+        referansAktif: true,
+        referansList: [],
+        yaklasanAktiviteHome: true,
+        premiumMode: true,
+        selectedWeek: -1,
+      ),
     ));
   }, (error, stackTrace) {
     // Hata mesajını göster

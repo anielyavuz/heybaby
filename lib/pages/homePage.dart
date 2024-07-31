@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _shouldFetchUserData = true;
   bool _isActivitiesExpanded = true;
   bool _AIStatus = false;
-  late int selectedWeek = -1;
+  late int _selectedWeek = -1;
   int _mainScreenStoryCount = 5;
   bool _premiumMode = false;
   String _response = "";
@@ -381,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildBody() {
     switch (_selectedIndex) {
       case 0:
-        return selectedWeek == -1
+        return _selectedWeek == -1
             ? CircularProgressIndicator()
             : AnaSayfa(
                 storyImages: storyImages,
@@ -389,7 +389,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 userData: userData,
                 referansAktif: referansAktif,
                 referansList: referansList,
-                yaklasanAktiviteHome: _yaklasanAktiviteHome);
+                yaklasanAktiviteHome: _yaklasanAktiviteHome,
+                premiumMode: _premiumMode,
+                selectedWeek: _selectedWeek);
 
       case 1:
         return Calendar(userData: userData);
@@ -433,7 +435,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         userData = data;
         _shouldFetchUserData = false;
-        selectedWeek = (((DateTime.now()
+        _selectedWeek = (((DateTime.now()
                     .difference(DateTime.parse(userData?['sonAdetTarihi'])))
                 .inDays) ~/
             7);
@@ -522,7 +524,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _systemData() async {
-    await Future.delayed(Duration(milliseconds: 450));
+    await Future.delayed(Duration(milliseconds: 650));
     Map<String, dynamic>? data = await FirestoreFunctions.getSystemData();
     if (data != null) {
       // print(data);
@@ -562,19 +564,19 @@ class _MyHomePageState extends State<MyHomePage> {
           _tempStoryImages = data['weeklyStories'];
         }
 
-        print("selectedWeek değeri şuanda $selectedWeek");
+        print("selectedWeek değeri şuanda $_selectedWeek");
         for (var _tempStoryImage in _tempStoryImages) {
           // print("hafta değeri şuanda ${_tempStoryImage['hafta']}");
-          if (selectedWeek > 40) {
+          if (_selectedWeek > 40) {
             if (_tempStoryImage['hafta'] == 40) {
               storyImages2.add(_tempStoryImage);
             }
-          } else if (selectedWeek < 4) {
+          } else if (_selectedWeek < 4) {
             if (_tempStoryImage['hafta'] == 4) {
               storyImages2.add(_tempStoryImage);
             }
           } else {
-            if (_tempStoryImage['hafta'] == selectedWeek) {
+            if (_tempStoryImage['hafta'] == _selectedWeek) {
               storyImages2.add(_tempStoryImage);
             }
           }
@@ -782,41 +784,49 @@ class _MyHomePageState extends State<MyHomePage> {
                       userData!['userSubscription'] == 'Free'
                           ? Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Kalan 💎: ${_tokenClass.token}",
-                                      style: TextStyle(
-                                          fontSize: 14.0, color: Colors.black),
-                                    ),
-                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.all(11.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Kalan 💎: ${_tokenClass.token}",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 _premiumMode
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            AppLocalizations.of(context)!
-                                                .homeToken1,
-                                            style: TextStyle(
-                                                fontSize: 13.0,
-                                                color: Colors.black),
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          print("Premium'a geç");
+                                        },
+                                        child: RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                        context)!
+                                                    .homeToken1,
+                                                style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: AppLocalizations.of(
+                                                        context)!
+                                                    .homeToken2,
+                                                style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: Color(
+                                                      0xFFCCAC00), // Mat sarı renk
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              print("premium login");
-                                            },
-                                            child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .homeToken2,
-                                              style: TextStyle(
-                                                  fontSize: 13.0,
-                                                  color: Colors.black),
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       )
                                     : SizedBox()
                               ],

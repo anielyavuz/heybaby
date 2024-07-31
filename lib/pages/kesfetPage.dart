@@ -336,7 +336,7 @@ class _KesfetPageState extends State<KesfetPage> {
                   _buildKartListesi("Anne & Bebek", _kartlarAnneBebek),
                   _buildKartListesi("İyi Hissedin", _kartlarIyiHissedin),
                   _buildKartListesi(
-                      "Hayatı Kolaylaştıran İpuçları", _kartlarHaftalik),
+                      "Hayatı Kolaylaştıran İpuçları 💎", _kartlarHaftalik),
                   // Buraya ek alt başlıklar ve kartlar eklenebilir.
                 ],
               )
@@ -347,7 +347,7 @@ class _KesfetPageState extends State<KesfetPage> {
                   _buildKartListesi("Mother & Baby", _kartlarAnneBebek_en),
                   _buildKartListesi("Feel Good", _kartlarIyiHissedin_en),
                   _buildKartListesi(
-                      "Tips to Make Life Easier", _kartlarHaftalik_en),
+                      "Tips to Make Life Easier 💎", _kartlarHaftalik_en),
                   // Buraya ek alt başlıklar ve kartlar eklenebilir.
                 ],
               ),

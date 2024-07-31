@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:heybaby/pages/subpages/makaleDetay.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -59,13 +61,32 @@ void main() async {
     appLocale = Locale('en');
   }
 
-  // RevenueCat'i başlatın
-  await Purchases.setDebugLogsEnabled(true);
-  PurchasesConfiguration configuration =
-      PurchasesConfiguration('appl_vFGFjyUkszfdkFPjiszIoVgsvVG');
-  await Purchases.configure(configuration);
-
   runApp(MyApp(appLocale: appLocale));
+
+  // await _configureSDK();
+}
+
+Future<void> _configureSDK() async {
+  await Purchases.setLogLevel(LogLevel.debug);
+
+  PurchasesConfiguration? configuration;
+
+  if (Platform.isAndroid) {
+    // configure for Google play store
+  } else if (Platform.isIOS) {
+    configuration = PurchasesConfiguration("appl_vFGFjyUkszfdkFPjiszIoVgsvVG");
+  }
+
+  if (configuration != null) {
+    await Purchases.configure(configuration);
+  } else {
+    print("Ödeme configuration null");
+  }
+}
+
+Future<void> _paymentUI() async {
+  final paywallResult = await RevenueCatUI.presentPaywallIfNeeded("premium");
+  print('Paywall result: $paywallResult');
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
