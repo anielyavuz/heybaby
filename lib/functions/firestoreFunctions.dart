@@ -4,6 +4,103 @@ import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/pages/subpages/kiloTakip.dart';
 
 class FirestoreFunctions {
+  static Future<Map<dynamic, dynamic>> getTotalUserInApp() async {
+    Map<dynamic, dynamic> _returnValue = {
+      'totalUsers': 0,
+      'loginCountByDay': {},
+      'loginDocsByDay': {},
+      'likedArticles': {},
+      'dislikedArticles': {},
+      'feedBackNotes': []
+    };
+
+    try {
+      // Users collection
+      QuerySnapshot userSnapshot =
+          await FirebaseFirestore.instance.collection("Users").get();
+
+      _returnValue['totalUsers'] = userSnapshot.docs.length;
+
+      // Günlere göre login olan kişi sayısını ve doc.id'leri tutacak harita
+      Map<String, List<String>> loginCountByDay = {};
+
+      // Her kullanıcı belgesi için iterasyon yap
+      for (var doc in userSnapshot.docs) {
+        var data = doc.data() as Map<String, dynamic>?;
+
+        if (data != null && data.containsKey('loginDays')) {
+          List<dynamic> loginDays = data['loginDays'];
+
+          for (String day in loginDays) {
+            if (!loginCountByDay.containsKey(day)) {
+              loginCountByDay[day] = [];
+            }
+            loginCountByDay[day]!.add(doc.id);
+          }
+        }
+      }
+
+      // Günlere göre kişi sayısını çıkar
+      Map<String, int> loginCountSummary =
+          loginCountByDay.map((key, value) => MapEntry(key, value.length));
+
+      _returnValue['loginCountByDay'] = loginCountSummary;
+      _returnValue['loginDocsByDay'] = loginCountByDay;
+
+      // geriBildirim document
+      DocumentSnapshot feedbackDoc = await FirebaseFirestore.instance
+          .collection("System")
+          .doc('geriBildirim')
+          .get();
+
+      if (feedbackDoc.exists) {
+        var feedbackData = feedbackDoc.data() as Map<String, dynamic>?;
+
+        if (feedbackData != null && feedbackData.containsKey('makale')) {
+          List<dynamic> feedBackNotes = feedbackData['note'];
+
+          for (var feedBackNote in feedBackNotes) {
+            _returnValue['feedBackNotes'].add(feedBackNote);
+          }
+
+          List<dynamic> articles = feedbackData['makale'];
+
+          Map<String, int> likedArticles = {};
+          Map<String, int> dislikedArticles = {};
+
+          for (var article in articles) {
+            if (article.containsKey('makaleBaslik') &&
+                article.containsKey('durum')) {
+              String title = article['makaleBaslik'];
+              String status = article['durum'];
+
+              if (status == 'Beğendi') {
+                if (!likedArticles.containsKey(title)) {
+                  likedArticles[title] = 0;
+                }
+                likedArticles[title] = likedArticles[title]! + 1;
+              } else if (status == 'Beğenmedi') {
+                if (!dislikedArticles.containsKey(title)) {
+                  dislikedArticles[title] = 0;
+                }
+                dislikedArticles[title] = dislikedArticles[title]! + 1;
+              }
+            }
+          }
+
+          _returnValue['likedArticles'] = likedArticles;
+          _returnValue['dislikedArticles'] = dislikedArticles;
+        }
+      }
+
+      return _returnValue;
+    } catch (e) {
+      // Firestore'dan veri çekme sırasında bir hata oluştu
+      print('Firestore veri çekme hatası: $e');
+      return _returnValue;
+    }
+  }
+
   static Future<Map<String, dynamic>?> getUserData() async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -667,6 +764,90 @@ class FirestoreFunctions {
     return returnCode;
   }
 
+  static Future<Map> osGuncelle(
+    String _deviceOS,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({"deviceOS": _deviceOS}).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
+  static Future<Map> loginDaysGuncelle(
+    String formattedDate,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      List _tempList = [];
+
+      _tempList.add(formattedDate);
+      try {
+        await FirebaseFirestore.instance.collection("Users").doc(userID).update(
+            {"loginDays": FieldValue.arrayUnion(_tempList)}).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
+  static Future<Map> abonelikGuncelle(
+    Map abonelikDurum,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({
+          "abonelik": abonelikDurum,
+        }).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
   static Future<Map> makaleGeriBildirimHaftalik(
       userName, durum, tarih, makaleBaslik) async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -709,6 +890,8 @@ class FirestoreFunctions {
       List _tempList = [];
       Map _tempMap = {};
       _tempMap['userName'] = userName;
+      _tempMap['userID'] = user.uid;
+
       _tempMap['tarih'] = tarih;
       _tempMap['star'] = star;
       _tempMap['feedBackNote'] = feedBackNote;

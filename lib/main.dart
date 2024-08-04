@@ -60,27 +60,28 @@ void main() async {
   } else {
     appLocale = Locale('en');
   }
-
+  await configureRevenueCat();
   runApp(MyApp(appLocale: appLocale));
-
-  // await _configureSDK();
 }
 
-Future<void> _configureSDK() async {
+Future<void> configureRevenueCat() async {
   await Purchases.setLogLevel(LogLevel.debug);
+  print("Purchases log level set to debug.");
 
   PurchasesConfiguration? configuration;
 
   if (Platform.isAndroid) {
-    // configure for Google play store
+    print("Platform is Android.");
+    // Android için yapılandırma ekleyin
+    configuration = PurchasesConfiguration("google_api_key");
   } else if (Platform.isIOS) {
+    print("Platform is iOS.");
     configuration = PurchasesConfiguration("appl_vFGFjyUkszfdkFPjiszIoVgsvVG");
   }
 
   if (configuration != null) {
     await Purchases.configure(configuration);
-  } else {
-    print("Ödeme configuration null");
+    print("Purchases configured.");
   }
 }
 

@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,6 +31,8 @@ import 'package:heybaby/pages/takvimPage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:purchases_flutter/models/customer_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -508,6 +512,99 @@ class _MyHomePageState extends State<MyHomePage> {
         print("_version Cloud'da yok ekleniyorr....");
         versionGuncelle(_version);
       }
+
+      String _deviceOS = "";
+      if (Platform.isAndroid) {
+        _deviceOS = "Android";
+        // configure for Google play store
+      } else if (Platform.isIOS) {
+        _deviceOS = "IOS";
+      }
+      if (userData!.containsKey('deviceOS')) {
+        if (userData?['deviceOS'] != _deviceOS) {
+          print("_deviceOS Cloud'da güncel değil....");
+
+          osGuncelle(_deviceOS);
+        } else {
+          print("_deviceOS Cloud'da güncel.");
+        }
+      } else {
+        print("_deviceOS Cloud'da yok ekleniyorr....");
+        osGuncelle(_deviceOS);
+      }
+      ////login days
+      ///
+      ///
+      DateTime now = DateTime.now();
+      String day = now.day.toString().padLeft(2, '0');
+      String month = now.month.toString().padLeft(2, '0');
+      String year = now.year.toString();
+      String formattedDate = "$day/$month/$year";
+
+      if (userData!.containsKey('loginDays')) {
+        if (!userData?['loginDays'].contains(formattedDate)) {
+          print("loginDays Cloud'da bugün yok ekleniyor...");
+
+          loginDaysGuncelle(formattedDate);
+        } else {
+          print("loginDays Cloud'da güncel.");
+        }
+      } else {
+        print("loginDays Cloud'da yok oluşturuluyor..");
+        loginDaysGuncelle(formattedDate);
+      }
+
+      ///
+      ///
+      ///Payment Info check
+      ///
+      Map _abonelikDurum = {};
+      try {
+        CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+        if (customerInfo.activeSubscriptions.isNotEmpty) {
+          String activeSubscription = customerInfo.activeSubscriptions.first;
+          print("User has an active subscription: $activeSubscription");
+
+          // Abonelik paketinin detaylarını alın
+          List<EntitlementInfo> entitlements =
+              customerInfo.entitlements.all.values.toList();
+          for (EntitlementInfo entitlement in entitlements) {
+            if (entitlement.isActive) {
+              _abonelikDurum['genelDurum'] = "Premium";
+              _abonelikDurum['entitlementIdentifier'] =
+                  "${entitlement.identifier}";
+              _abonelikDurum['isActive'] = "${entitlement.isActive}";
+            }
+            print(
+                "Entitlement ID: ${entitlement.identifier}, isActive: ${entitlement.isActive}");
+          }
+        } else {
+          _abonelikDurum['genelDurum'] = "Free";
+          _abonelikDurum['entitlementIdentifier'] = "";
+          _abonelikDurum['isActive'] = "";
+
+          print("User does not have an active subscription.");
+        }
+      } catch (e) {
+        print("Failed to get customer info: $e");
+      }
+
+      if (userData!.containsKey('abonelik')) {
+        if (!mapEquals(_abonelikDurum, userData?['abonelik'])) {
+          print("abonelikDurumu Cloud'da senkron değil güncelleniyor...");
+
+          abonelikGuncelle(_abonelikDurum);
+        } else {
+          print("_abonelikDurum Cloud'da güncel.");
+        }
+      } else {
+        print("_abonelikDurum Cloud'da yok oluşturuluyor..");
+        abonelikGuncelle(_abonelikDurum);
+      }
+
+      ///
+      ///
+      ///
     }
   }
 
@@ -521,6 +618,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   versionGuncelle(String _version) async {
     var _result = await FirestoreFunctions.versionGuncelle(_version);
+  }
+
+  osGuncelle(String _deviceOS) async {
+    var _result = await FirestoreFunctions.osGuncelle(_deviceOS);
+  }
+
+  loginDaysGuncelle(String formattedDate) async {
+    var _result = await FirestoreFunctions.loginDaysGuncelle(formattedDate);
+  }
+
+  abonelikGuncelle(Map abonelikDurum) async {
+    var _result = await FirestoreFunctions.abonelikGuncelle(abonelikDurum);
   }
 
   Future<void> _systemData() async {

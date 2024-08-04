@@ -11,6 +11,7 @@ import 'package:heybaby/functions/bildirimTakip.dart';
 import 'package:heybaby/functions/boxes.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/functions/person.dart';
+import 'package:heybaby/pages/adminPages/adminFunctions.dart';
 import 'package:heybaby/pages/adminPages/storyPaylas.dart';
 import 'package:heybaby/pages/authentication.dart';
 import 'package:heybaby/pages/loginPage.dart';
@@ -99,34 +100,56 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
     _loadInterstitialAd();
   }
 
-  Future<void> _configureSDK() async {
-    await Purchases.setLogLevel(LogLevel.debug);
-    print("Purchases log level set to debug.");
+  Future<void> _premiumOl() async {
+    // await Purchases.setLogLevel(LogLevel.debug);
+    // print("Purchases log level set to debug.");
 
-    PurchasesConfiguration? configuration;
+    // PurchasesConfiguration? configuration;
 
-    if (Platform.isAndroid) {
-      print("Platform is Android.");
-      // configure for Google play store
-    } else if (Platform.isIOS) {
-      print("Platform is iOS.");
-      configuration =
-          PurchasesConfiguration("appl_vFGFjyUkszfdkFPjiszIoVgsvVG");
-      print("PurchasesConfiguration created for iOS.");
-    }
+    // if (Platform.isAndroid) {
+    //   print("Platform is Android.");
+    //   // Android için yapılandırma ekleyin
+    // } else if (Platform.isIOS) {
+    //   print("Platform is iOS.");
+    //   configuration =
+    //       PurchasesConfiguration("appl_vFGFjyUkszfdkFPjiszIoVgsvVG");
+    //   print("PurchasesConfiguration created for iOS.");
+    //   await Purchases.configure(configuration);
+    // }
 
-    if (configuration != null) {
-      try {
-        print("Configuring Purchases...");
-        await Purchases.configure(configuration);
-        print("Purchases configured successfully.");
+    try {
+      CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      if (customerInfo.activeSubscriptions.isNotEmpty) {
+        String activeSubscription = customerInfo.activeSubscriptions.first;
+        print("User has an active subscription: $activeSubscription");
+
+        // Abonelik paketinin detaylarını alın
+        List<EntitlementInfo> entitlements =
+            customerInfo.entitlements.all.values.toList();
+        for (EntitlementInfo entitlement in entitlements) {
+          print(
+              "Entitlement ID: ${entitlement.identifier}, isActive: ${entitlement.isActive}");
+        }
+      } else {
+        print("User does not have an active subscription.");
         await _paymentUI();
-      } catch (e) {
-        print("Error during Purchases configuration: $e");
       }
-    } else {
-      print("Ödeme configuration null");
+    } catch (e) {
+      print("Failed to get customer info: $e");
     }
+
+    // if (configuration != null) {
+    //   try {
+    //     print("Configuring Purchases...");
+    //     await Purchases.configure(configuration);
+    //     print("Purchases configured successfully.");
+    //     await _paymentUI();
+    //   } catch (e) {
+    //     print("Error during Purchases configuration: $e");
+    //   }
+    // } else {
+    //   print("Ödeme configuration null");
+    // }
   }
 
   Future<void> _paymentUI() async {
@@ -136,209 +159,6 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
       print('Paywall result: $paywallResult');
     } catch (e) {
       print("Error during presenting paywall: $e");
-    }
-  }
-
-  Future fetchOffers() async {
-    final offerings = await PurchaseApi.fetchOffers();
-    print('oferlist: $offerings');
-    if (offerings.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "No plans found",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.white,
-            ),
-          ),
-          backgroundColor:
-              Color.fromARGB(255, 126, 52, 253), // Snackbar arka plan rengi
-          duration: Duration(seconds: 3), // Snackbar gösterim süresi
-          behavior: SnackBarBehavior.floating, // Snackbar davranışı
-          shape: RoundedRectangleBorder(
-            // Snackbar şekli
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 4, // Snackbar yükseltilmesi
-          margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
-        ),
-      );
-    } else {
-      final packages = offerings
-          .map((offer) => offer.availablePackages)
-          .expand((pair) => pair)
-          .toList();
-
-      Utils.showSheet(
-        context,
-        (context) => PaywallWidget(
-          packages: packages,
-          title: '⭐ Upgrade Your Plan',
-          description: 'Upgrade to a new plan to enjoy more benefits',
-          onClickedPackage: (package) async {
-            // Package selection handling code here
-          },
-        ),
-      );
-    }
-  }
-
-  void performMagic(BuildContext context) {
-    print("asdasd");
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          color: Colors.black,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '✨ HeyBaby Premium',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 16),
-                _buildSubscriptionOption(
-                  title: 'Premium Month',
-                  price: '\$9.99',
-                  description: 'Unlimited access for one month',
-                ),
-                SizedBox(height: 16),
-                _buildSubscriptionOption(
-                  title: 'Premium Year',
-                  price: '\$99.99',
-                  description: 'Unlimited access for one year',
-                ),
-                SizedBox(height: 24),
-                Text(
-                  'A purchase will be applied to your account upon confirmation of the amount selected. Subscriptions will automatically renew unless canceled within 24 hours of the end of the current period. You can cancel any time using your account settings.',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildSubscriptionOption(
-      {required String title,
-      required String price,
-      required String description}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[800],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  description,
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-              ],
-            ),
-            Text(
-              price,
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void perfomMagic() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-
-    if (customerInfo.entitlements.all[entitlementID] != null &&
-        customerInfo.entitlements.all[entitlementID]?.isActive == true) {
-      setState(() {
-        _isLoading = false;
-      });
-    } else {
-      Offerings? offerings;
-
-      try {
-        offerings = await Purchases.getOfferings();
-      } on PlatformException catch (e) {
-        print("Errorrrrr     $e");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              e.toString(),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-            backgroundColor:
-                Color.fromARGB(255, 126, 52, 253), // Snackbar arka plan rengi
-            duration: Duration(seconds: 3), // Snackbar gösterim süresi
-            behavior: SnackBarBehavior.floating, // Snackbar davranışı
-            shape: RoundedRectangleBorder(
-              // Snackbar şekli
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 4, // Snackbar yükseltilmesi
-            margin: EdgeInsets.all(10), // Snackbar kenar boşlukları
-          ),
-        );
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      if (offerings == null || offerings.current == null) {
-        // offerings are empty, show a message to your user
-      } else {
-        // current offering is available, show paywall
-        await showModalBottomSheet(
-          useRootNavigator: true,
-          isDismissible: true,
-          isScrollControlled: true,
-          backgroundColor: Colors.amber,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-          ),
-          context: context,
-          builder: (BuildContext context) {
-            return StatefulBuilder(
-                builder: (BuildContext context, StateSetter setModalState) {
-              return Paywall(
-                offering: offerings!.current!,
-              );
-            });
-          },
-        );
-      }
     }
   }
 
@@ -540,50 +360,13 @@ class _HesapSayfasiState extends State<HesapSayfasi> {
             SizedBox(height: 66),
             if (widget.userData!['userSubscription'] == "Admin") ...[
               ElevatedButton(
-                child: Text('Try Payment'),
+                child: Text('Admin Features'),
                 onPressed: () async {
-                  _configureSDK();
-                  // perfomMagic();
-                  // performMagic(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return AdminFunctions();
+                  }));
 
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return AlertDialog(
-                  //       title: Center(child: Text("Admin Features")),
-                  //       content: Column(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         children: <Widget>[
-                  //           ElevatedButton(
-                  //             onPressed: () {
-                  //               Navigator.pop(context);
-                  //               Navigator.push(context,
-                  //                   MaterialPageRoute(builder: (_) {
-                  //                 return StoryPaylasPage();
-                  //               }));
-                  //             },
-                  //             child: Text("Story Paylaş"),
-                  //           ),
-                  //           ElevatedButton(
-                  //             onPressed: () {
-                  //               _showPurchaseDialog();
-                  //               // if (_interstitialAd != null) {
-                  //               //   _interstitialAd!.show();
-                  //               // } else {
-                  //               //   print(
-                  //               //       'Reklam yüklenmedi veya gösterilemedi.');
-                  //               //   _loadInterstitialAd();
-                  //               // }
-                  //               boxPersons.put('currentToken',
-                  //                   Person(token: 40, subnName: 'myToken'));
-                  //             },
-                  //             child: Text("Test Button"),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     );
-                  //   },
-                  // );
+                  // _premiumOl();
                 },
               ),
               SizedBox(height: 14),
