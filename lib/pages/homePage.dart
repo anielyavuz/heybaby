@@ -28,6 +28,7 @@ import 'package:heybaby/pages/listelerPage.dart';
 import 'package:heybaby/pages/loginPage.dart';
 import 'package:heybaby/pages/notlarPage.dart';
 import 'package:heybaby/pages/takvimPage.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -119,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   AuthService _authService = AuthService();
+  List _subscritionGroup = ['Admin', 'CoHost'];
   int _selectedIndex = 0;
   Map<String, dynamic>? userData;
   bool _shouldFetchUserData = true;
@@ -629,7 +631,31 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   abonelikGuncelle(Map abonelikDurum) async {
+    if (!_subscritionGroup.contains(userData!['userSubscription'])) {
+      print("Abonelik statüsü istisna grubunda değil");
+      var _result = await FirestoreFunctions.abonelikGenelDurumGuncelle(
+          abonelikDurum['genelDurum']);
+    } else {
+      print("Abonelik statüsü istisna grubunda.");
+    }
     var _result = await FirestoreFunctions.abonelikGuncelle(abonelikDurum);
+  }
+
+  reklamLogla() async {
+    DateTime now = DateTime.now();
+
+    // Formatters
+    DateFormat timeFormatter = DateFormat('HH:mm');
+    DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
+
+    // Format the date and time
+    String formattedTime = timeFormatter.format(now);
+    String formattedDate = dateFormatter.format(now);
+
+    // Combine the formatted date and time
+    String formattedDateTime = '$formattedTime - $formattedDate';
+
+    await FirestoreFunctions.reklamLogu("AIBot", formattedDateTime);
   }
 
   Future<void> _systemData() async {
@@ -1024,6 +1050,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 subnName: 'myToken'));
                                       });
                                       _tokenClass.token = 50;
+
+                                      reklamLogla();
                                     } else {
                                       print(
                                           'Reklam yüklenmedi veya gösterilemedi.');

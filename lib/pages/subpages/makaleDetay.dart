@@ -61,6 +61,23 @@ class _MakaleDetayState extends State<MakaleDetay> {
     );
   }
 
+  reklamLogla() async {
+    DateTime now = DateTime.now();
+
+    // Formatters
+    DateFormat timeFormatter = DateFormat('HH:mm');
+    DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
+
+    // Format the date and time
+    String formattedTime = timeFormatter.format(now);
+    String formattedDate = dateFormatter.format(now);
+
+    // Combine the formatted date and time
+    String formattedDateTime = '$formattedTime - $formattedDate';
+
+    await FirestoreFunctions.reklamLogu("Makale Okundu", formattedDateTime);
+  }
+
   reklamGoster() async {
     if (_interstitialAd != null) {
       _interstitialAd!.show();
@@ -82,6 +99,7 @@ class _MakaleDetayState extends State<MakaleDetay> {
 
           Future.delayed(const Duration(milliseconds: 5000), () async {
             await reklamGoster();
+            reklamLogla();
             setState(() {
               _reklamOlustur = false;
             });

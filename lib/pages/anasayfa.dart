@@ -1484,6 +1484,8 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                               style: TextStyle(
                                                 fontSize: 17.0,
                                                 fontWeight: FontWeight.w500,
+                                                color: Color.fromARGB(
+                                                    255, 119, 46, 141),
                                               ),
                                             ),
                                             SizedBox(
@@ -1631,14 +1633,27 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                           //     ],
                                           //   );
                                           // },
-                                          child: Text(
-                                            "Premium",
-                                            style: TextStyle(
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: Color.fromARGB(255, 185,
-                                                  140, 26), // Mat altın sarısı
-                                            ),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Premium",
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Color.fromARGB(
+                                                      255,
+                                                      185,
+                                                      140,
+                                                      26), // Mat altın sarısı
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.diamond,
+                                                size: 24.0,
+                                                color: Color.fromARGB(
+                                                    255, 154, 73, 3),
+                                              )
+                                            ],
                                           ),
                                         ),
                                       )

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:heybaby/functions/ad_helper.dart';
+import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:heybaby/pages/subpages/kesfetMakale.dart';
 import 'package:heybaby/pages/subpages/kesfetMakaleHaftalik.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 class KesfetPage extends StatefulWidget {
   final List stories;
@@ -240,6 +242,23 @@ class _KesfetPageState extends State<KesfetPage> {
     }
   }
 
+  reklamLogla() async {
+    DateTime now = DateTime.now();
+
+    // Formatters
+    DateFormat timeFormatter = DateFormat('HH:mm');
+    DateFormat dateFormatter = DateFormat('dd-MM-yyyy');
+
+    // Format the date and time
+    String formattedTime = timeFormatter.format(now);
+    String formattedDate = dateFormatter.format(now);
+
+    // Combine the formatted date and time
+    String formattedDateTime = '$formattedTime - $formattedDate';
+
+    await FirestoreFunctions.reklamLogu("Haftalik Kesfet", formattedDateTime);
+  }
+
   // TODO: Add _interstitialAd
   InterstitialAd? _interstitialAd;
 
@@ -414,6 +433,8 @@ class _KesfetPageState extends State<KesfetPage> {
                     if (widget.userData!['userSubscription'] == 'Free') {
                       if (_interstitialAd != null) {
                         _interstitialAd!.show();
+
+                        reklamLogla();
 
                         Navigator.push(
                           context,

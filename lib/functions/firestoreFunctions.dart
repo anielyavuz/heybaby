@@ -819,6 +819,35 @@ class FirestoreFunctions {
     return returnCode;
   }
 
+  static Future<Map> abonelikGenelDurumGuncelle(
+    String abonelikGenelDurum,
+  ) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      String userID = user.uid;
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userID)
+            .update({
+          "userSubscription": abonelikGenelDurum,
+        }).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
+  }
+
   static Future<Map> abonelikGuncelle(
     Map abonelikDurum,
   ) async {
@@ -1031,6 +1060,39 @@ class FirestoreFunctions {
     } else {
       print('Kullanıcı giriş yapmamış.');
     }
+  }
+
+  static Future<Map> reklamLogu(_icerik, tarih) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    Map returnCode = {};
+    if (user != null) {
+      List _tempList = [];
+      Map _tempMap = {};
+      _tempMap['icerik'] = _icerik;
+      _tempMap['userID'] = user.uid;
+
+      _tempMap['tarih'] = tarih;
+
+      _tempList.add(_tempMap);
+      try {
+        await FirebaseFirestore.instance
+            .collection("System")
+            .doc('geriBildirim')
+            .update({
+          "reklamLog": FieldValue.arrayUnion(_tempList)
+        }).whenComplete(() {
+          returnCode['status'] = true;
+        });
+      } on FirebaseAuthException catch (e) {
+        returnCode['status'] = false;
+        returnCode['value'] = e.code;
+        print('Failed with error code: ${e.code}');
+        print(e.message);
+      }
+    } else {
+      print('Kullanıcı giriş yapmamış.');
+    }
+    return returnCode;
   }
 
   // static Future<void> addIlacDataRecord(
