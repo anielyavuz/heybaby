@@ -33,6 +33,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:purchases_flutter/models/customer_info_wrapper.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 class AnaSayfa extends StatefulWidget {
   final List storyImages;
@@ -1364,6 +1365,68 @@ class _AnaSayfaState extends State<AnaSayfa> {
     _fetchUserData();
   }
 
+  Future<void> _premiumOl() async {
+    // await Purchases.setLogLevel(LogLevel.debug);
+    // print("Purchases log level set to debug.");
+
+    // PurchasesConfiguration? configuration;
+
+    // if (Platform.isAndroid) {
+    //   print("Platform is Android.");
+    //   // Android için yapılandırma ekleyin
+    // } else if (Platform.isIOS) {
+    //   print("Platform is iOS.");
+    //   configuration =
+    //       PurchasesConfiguration("appl_vFGFjyUkszfdkFPjiszIoVgsvVG");
+    //   print("PurchasesConfiguration created for iOS.");
+    //   await Purchases.configure(configuration);
+    // }
+
+    try {
+      CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      if (customerInfo.activeSubscriptions.isNotEmpty) {
+        String activeSubscription = customerInfo.activeSubscriptions.first;
+        print("User has an active subscription: $activeSubscription");
+
+        // Abonelik paketinin detaylarını alın
+        List<EntitlementInfo> entitlements =
+            customerInfo.entitlements.all.values.toList();
+        for (EntitlementInfo entitlement in entitlements) {
+          print(
+              "Entitlement ID: ${entitlement.identifier}, isActive: ${entitlement.isActive}");
+        }
+      } else {
+        print("User does not have an active subscription.");
+        await _paymentUI();
+      }
+    } catch (e) {
+      print("Failed to get customer info: $e");
+    }
+
+    // if (configuration != null) {
+    //   try {
+    //     print("Configuring Purchases...");
+    //     await Purchases.configure(configuration);
+    //     print("Purchases configured successfully.");
+    //     await _paymentUI();
+    //   } catch (e) {
+    //     print("Error during Purchases configuration: $e");
+    //   }
+    // } else {
+    //   print("Ödeme configuration null");
+    // }
+  }
+
+  Future<void> _paymentUI() async {
+    try {
+      final paywallResult =
+          await RevenueCatUI.presentPaywallIfNeeded("premium");
+      print('Paywall result: $paywallResult');
+    } catch (e) {
+      print("Error during presenting paywall: $e");
+    }
+  }
+
   void _showGuestDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -1537,14 +1600,15 @@ class _AnaSayfaState extends State<AnaSayfa> {
                                                                       print(widget
                                                                               .userData![
                                                                           'userName']);
-                                                                      if (widget
-                                                                              .userData!['userName'] ==
-                                                                          "Guest") {
-                                                                        _showGuestDialog(
-                                                                            context);
-                                                                      } else {
-                                                                        perfomMagic();
-                                                                      }
+                                                                      // if (widget
+                                                                      //         .userData!['userName'] ==
+                                                                      //     "Guest") {
+                                                                      //   _showGuestDialog(
+                                                                      //       context);
+                                                                      // } else {
+                                                                      //   _premiumOl();
+                                                                      // }
+                                                                      _premiumOl();
                                                                     },
                                                                     child:
                                                                         RichText(

@@ -5,6 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:heybaby/functions/firestoreFunctions.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:purchases_flutter/models/customer_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,6 +50,68 @@ class _SettingsPageState extends State<SettingsPage> {
     return formattedDate;
   }
 
+  Future<void> _premiumOl() async {
+    // await Purchases.setLogLevel(LogLevel.debug);
+    // print("Purchases log level set to debug.");
+
+    // PurchasesConfiguration? configuration;
+
+    // if (Platform.isAndroid) {
+    //   print("Platform is Android.");
+    //   // Android için yapılandırma ekleyin
+    // } else if (Platform.isIOS) {
+    //   print("Platform is iOS.");
+    //   configuration =
+    //       PurchasesConfiguration("appl_vFGFjyUkszfdkFPjiszIoVgsvVG");
+    //   print("PurchasesConfiguration created for iOS.");
+    //   await Purchases.configure(configuration);
+    // }
+
+    try {
+      CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+      if (customerInfo.activeSubscriptions.isNotEmpty) {
+        String activeSubscription = customerInfo.activeSubscriptions.first;
+        print("User has an active subscription: $activeSubscription");
+
+        // Abonelik paketinin detaylarını alın
+        List<EntitlementInfo> entitlements =
+            customerInfo.entitlements.all.values.toList();
+        for (EntitlementInfo entitlement in entitlements) {
+          print(
+              "Entitlement ID: ${entitlement.identifier}, isActive: ${entitlement.isActive}");
+        }
+      } else {
+        print("User does not have an active subscription.");
+        await _paymentUI();
+      }
+    } catch (e) {
+      print("Failed to get customer info: $e");
+    }
+
+    // if (configuration != null) {
+    //   try {
+    //     print("Configuring Purchases...");
+    //     await Purchases.configure(configuration);
+    //     print("Purchases configured successfully.");
+    //     await _paymentUI();
+    //   } catch (e) {
+    //     print("Error during Purchases configuration: $e");
+    //   }
+    // } else {
+    //   print("Ödeme configuration null");
+    // }
+  }
+
+  Future<void> _paymentUI() async {
+    try {
+      final paywallResult =
+          await RevenueCatUI.presentPaywallIfNeeded("premium");
+      print('Paywall result: $paywallResult');
+    } catch (e) {
+      print("Error during presenting paywall: $e");
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -75,7 +140,28 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(AppLocalizations.of(context)!.hesapHesapDurumu),
-                Text(premiumStatus),
+                GestureDetector(
+                    onTap: () {
+                      if (premiumStatus == "Free") {
+                        _premiumOl();
+                      }
+                    },
+                    child: Text(
+                      premiumStatus,
+                      style: premiumStatus == "Free"
+                          ? TextStyle(
+                              // fontSize: 12,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color.fromARGB(255, 139, 87, 149),
+                            )
+                          : TextStyle(
+                              // fontSize: 12,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 122, 100, 14),
+                            ),
+                    )),
               ],
             ),
             SizedBox(height: 20),
